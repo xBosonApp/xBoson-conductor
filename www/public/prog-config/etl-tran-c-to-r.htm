@@ -1,0 +1,49 @@
+
+<form id='___prog_config_page' class='smart-form'>
+	<input type='hidden' name='_type' value='none'/>
+
+	<div class='page1'>
+		<p class="alert alert-info"> 列转行 </p>
+
+		<input name='name' label='名称' col='12'/>
+
+		<!-- a line -->
+		<input name='zy_conn' label='源字段' col='6' group='g1'/>
+		<button type='button' id='get_zy_conn' class='btn btn-primary' 
+							label='.' group='g1'>从父节点读取</button>
+
+		<input name='zy_conn' label='分组字段' col='6'/>
+
+		<input name='zy_conn' label='新字段' col='8'/>
+		<input name='zy_conn' label='操作' value='删除' col='4' type='button' />
+
+		<div style='width:100%; clear:both;'></div>
+		<hr class="simple"/>
+		
+		<input name='zy_conn' label='新字段' col='8'/>
+		<input name='zy_conn' label='操作' value='删除' col='4' type='button' />
+
+		<div style='width:100%; clear:both;'></div>
+		<hr class="simple"/>
+		
+		<input name='zy_conn' label='新字段' col='8'/>
+		<input name='zy_conn' label='操作' value='删除' col='4' type='button' />
+		
+		<input type='submit' value='添加' class='ok btn btn-primary' label='' col='4' />
+		<input type='submit' value='应用' class='ok btn btn-primary' label='' col='4' />
+	</div>
+
+
+	<input type='hidden' name='retmessage' label='&nbsp' col='3'/>
+</form>
+
+<script>
+(function() {
+
+var root = $('#___prog_config_page');
+var rc = $('#program_config').data('run_config');
+
+eeb.auto_form_ui('#___prog_config_page');
+
+})();
+</script>

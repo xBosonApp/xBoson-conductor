@@ -1,0 +1,138 @@
+<form id='___prog_config_page' class='smart-form'>
+  <input type='hidden' name='_type'/>
+
+    <p class="alert alert-info">JavaScript</p>
+
+    <input name='name' label='名称' col='12'/>
+
+<hr class="simple" style="width:100%; clear:both;"/>
+
+    <div class='page1'>
+      <label class="label">flow 可用的参数, 点击生成代码</label>
+    </div>
+
+<hr class="simple" style="width:100%; clear:both;"/>
+
+    <div class='page2'>
+      <label class="label">固定参数 / 函数</label>
+
+      <a class='put_code' label='输出到日志' col='3'>log(...)</a>
+      <a class='put_code' label='写业务日志' col='3'>bizlog(...)</a>
+      <a class='put_code' label='流中的数据' col='3'>flow</a>
+      <a class='put_code' label='数学计算' col='3'>Math.</a>
+      <a class='put_code' label='二进制计算' col='3'>var buf = new Buffer</a>
+      <a class='put_code' label='全局变量' col='3'>Global.</a>
+      <a class='put_code' label='设置为手动结束' col='3'>manualOver()</a>
+      <a class='put_code' label='手动结束(设置后有效)' col='3'>over()</a>
+    </div>
+
+
+<hr class="simple" style="width:100%; clear:both;"/>
+
+
+    <section class="col col-md-12">
+      <label class="label">JS 源代码</label>
+      <label class="textarea">
+        <textarea name='js' id='javascript-editor-adv'
+                  col='12' rows='12'></textarea>
+        <button type='button' class='btn btn-default fullScreen' 
+                style='float:right; padding: 2px 5px'>全屏编辑</button>
+      </label>
+    </section>
+
+    <textarea name='test_log' label='日志' col='12' 
+        readonly='true' rows='2'></textarea>
+
+    <hr class="simple" style="width:100%; clear:both;"/>
+    
+    <input type='submit' value='测试脚本' class='test btn btn-primary' label='' col='4' />
+    <input type='submit' value='应用' class='ok btn btn-primary' label='' col='4' />
+  </div>
+
+  <input type='hidden' name='retmessage' label='&nbsp' col='3'/>
+
+</form>
+
+
+<script>
+(function() {
+
+var root      = $('#___prog_config_page');
+var rc        = $('#program_config').data('run_config');
+var eeb_work  = $('#program_config').data('eeb_work');
+var page      = root.find('.page1');
+
+
+root.find('.ok').click(changeType('none'));
+root.find('.test').click(changeType('testjs'));
+
+
+eeb_work.when_close(function() {
+  rc._type = '';
+});
+
+
+eeb_work.parent_data(function(err, flow) {
+  var html = [];
+
+  if (err) {
+    html.push("<div label='错误'>" + err.message + "</div>");
+  }
+  else if (flow) {
+    rc._parm_ = $.extend({}, rc._parm_, flow.data);
+
+    eeb.json2treeui(html, flow.data, function(_val, _name, _path) {
+      var n = _path || _name;
+      html.push("<input name='_parm_." + n + "' value='" + _val + "' size='" + 
+              + Math.max(Math.min(88, _val.length + 6), 10) + "'/>");
+    });
+  }
+
+  page.append(html.join(''));
+  eeb.bind_tree_event(page);
+
+  init_ui();
+});
+
+
+function changeType(_type) {
+  return function() {
+    root.find(':input[name=_type]').val(_type).trigger('change');
+  };
+}
+
+
+function init_ui() {
+  eeb.auto_form_ui('#___prog_config_page');
+
+  var jseditor = eeb.create_ace_editor(rc, root, ':input[name=js]', 'javascript');
+
+  root.find('.put_code').click(function() {
+    jseditor.insert( $(this).html() );
+  });
+
+  root.find('a[truename]').click(function() {
+    jseditor.insert( 'flow.' + $(this).attr('truename') );
+  });
+
+  root.find('.fullScreen').on('click', function() {
+    jseditor.fullScreen();
+  });
+
+  var pb = eeb.create_bind(rc, '#___prog_config_page', function(_nouse, whoclick) {
+    eeb_work.check_config(function(err, data) {
+      console.log(err, data);
+
+      if (!err) { 
+        var tlog = data && data.log;
+        root.find(':input[name=test_log]').val(tlog);
+        // eeb.show_msg_box(null, data.retmessage)
+      } else if (err.js) {
+        eeb.show_msg_box(null, "JS 代码" + err.js);
+      }
+    });
+  });
+}
+
+})();
+</script>

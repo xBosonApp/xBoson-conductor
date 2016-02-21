@@ -1,0 +1,226 @@
+
+<form id='___prog_config_page' class='smart-form'>
+  <input type='hidden' name='_type' value='none'/>
+
+    <p class="alert alert-info">模型输入</p>
+
+    <input name='name' label='名称' col='12'/>
+
+    <select name='zy_conn' label='数据库连接' col='6' group='conn1'/>
+
+    <select name='zy_module' label='业务模型' col='6' group='conn2'/>
+
+    <button type='button' class='btn btn-default' group='conn2'
+            id='update_zy_module' label='.' col='1'>更新模型</button>
+
+    <input name='fout' label='输出到' col='6' group='2' rowname='fout'/>
+    <button type='button' class='btn btn-primary' flowdata_to_rowname='fout'
+            label='.' group='2'>从流中读取</button>
+
+    <section class="col col-md-12 mhide">
+      <label class="label">
+        <span>SQL</span>
+        <!-- <span style='float:right'>行限制 <input name='limit' value='100' size='4'/></span> -->
+      </label>
+      <label class="textarea">
+        <textarea name="sql" rows="6" placeholder="SQL" readonly='true'>
+        </textarea>
+      </label>
+    </section>
+
+
+    <hr class="simple" style="width:100%; clear:both;"/>
+    <div class='page2'>
+      <label class="label">绑定参数</label>
+      <div class='parameter'></div>
+    </div>
+
+    <hr class="simple" style="width:100%; clear:both;"/>
+    <div class='page3'>
+      <label class="label">绑定查询条件</label>
+      <div class='where'></div>
+    </div>
+
+    <hr class="simple" style="width:100%; clear:both;"/>
+    
+    <input type='submit' value='应用' class='ok btn btn-primary' label='' col='4'/>
+
+
+  <div class='mhide'>
+    <!-- BEGIN 数据库连接 -->
+      <input name='conn.host' label='Host'/>
+
+      <select name='conn.driver' label='数据库类型'>
+        <option value='mysql' port='3306'>MySQL</option>
+        <option value='sqlserver' port='1433'>SQL Server</option>
+        <option value='oracle' port='1521'>Oracle</option>
+        <option value='db2' port='50000'>DB 2</option>
+      </select>
+
+      <input name='conn.port' label='端口'/>
+      <input name='conn.database' label='Database / SID'/>
+      <input name='conn.user' label='用户名'/>
+      <input name='conn.password' type='password' label='密码'/>
+    <!-- END 数据库连接 -->
+  </div>
+
+  <input type='hidden' name='retmessage' popmsg='1'/>
+</form>
+
+
+<script src='js/zy-model.js'/>
+<script src='js/dyn-row.js'/>
+
+
+<script>
+(function() {
+
+var root     = $('#___prog_config_page');
+var rc       = $('#program_config').data('run_config');
+var eeb_work = $('#program_config').data('eeb_work');
+
+eeb.auto_form_ui(root);
+eeb.select_field_from_flow(root, eeb_work);
+
+
+var parent_bind = eeb.create_bind(rc, '#___prog_config_page', function(_nouse, whoclick) {
+  rc.sql = bind_sql_parms();
+  eeb_work.check_config();
+});
+
+
+
+// 取得平台模型
+var zy_conn_select  = root.find(':input[name=zy_conn]');
+var zy_model_select = root.find(':input[name=zy_module]');
+
+
+// 首先读取连接列表
+eeb.get_zy_conn_list(zy_conn_select, function() {
+  zy_conn_select.val(rc.zy_conn).trigger('change');
+});
+
+
+// 当连接列表被改变, 更新模型列表
+zy_conn_select.change(function() {
+  zy_model_select.html('');
+  // 应用连接配置
+  eeb.get_zy_conn_detail(root, zy_conn_select.val());
+
+  eeb.get_zy_model_list(zy_model_select, zy_conn_select.val(), 'S,D,I,U', function() {
+    zy_model_select.val(rc.zy_module).trigger('change');
+  });
+});
+
+
+// 应用模型的 sql
+zy_model_select.change(function() {
+  eeb.get_zy_model_sql(root, zy_model_select.val(), '', function(sql, parm) {
+    var inpsql    = root.find(":input[name=sql]");
+    var parameter = root.find(".parameter");
+    var where     = root.find('.where');
+
+    eeb.build_select_sql_bind_parm(parent_bind, rc, 
+        inpsql, where, sql, null, parm.search, null, change_ui);
+
+
+    if (not_select_sql(sql)) {
+      eeb.build_select_sql_bind_parm(parent_bind, rc, 
+          inpsql, parameter, sql, null, parm.type, null, change_ui);
+
+      var tmpsql = [], c=0, a=0;
+
+      for (var i=0; i<sql.length; ++i) {
+        c = sql[i];
+        if (c == '?') {
+          tmpsql.push("{" + a + "}");
+          ++a;
+        } else {
+          tmpsql.push(c);
+        }
+      }
+
+      sql = tmpsql.join('');
+    } else {
+      parameter.html("<label>[无参数]</label>");
+    }
+
+    inpsql.val(sql).trigger('change');
+    inpsql.data('org_sql', sql);
+
+
+    function change_ui(_jroot) {
+      _jroot.find('.bind_parm').each(function() {
+        var thiz  = $(this);
+        var name  = thiz.attr('name');
+        var bdata = thiz.data();
+
+        if (_jroot == where) {
+          bdata.reg = RegExp('\\{' + bdata.p.en + '}', 'gm');
+        } else {
+          bdata.reg = RegExp("\\{" + bdata.i + "}", 'gm');
+        }
+
+        var exp_v = function() { return thiz.val() ? ("'{" + thiz.val() + "}'") : 'null'; };
+        var fix_v = function() { return "'" + thiz.val() + "'" };
+
+        if (this.tagName.toLowerCase() != 'select') {
+          var sflow = $('<button type="button" flowdata_to_rowname="' + name
+              + '" class="btn btn-primary" style="float: right; padding: 2px 5px;"'
+              + '>从流中读取</button>');
+
+          thiz.after(sflow);
+          thiz.attr('rowname', name);
+          thiz.attr('readonly', true);
+
+          bdata.val = exp_v;
+        } else {
+          // 占位用
+          thiz.after('<div style="margin: 4px">&nbsp;</div>');
+          bdata.val = fix_v;
+        }
+      });
+
+      parent_bind.addSub( eeb.create_bind(rc, _jroot) );
+      eeb.select_field_from_flow(_jroot, eeb_work);
+    }
+
+  });
+}); 
+
+
+function bind_sql_parms() {
+  var inpsql = root.find(":input[name=sql]");
+  var _ch_sql = inpsql.data('org_sql');
+
+  root.find('.bind_parm').each(function() {
+    var data = $(this).data();
+    _ch_sql  = _ch_sql.replace(data.reg, data.val());
+  });
+
+  inpsql.val(_ch_sql).trigger('change');
+  return _ch_sql;
+}
+
+
+root.find('#update_zy_module').click(function() {
+  zy_model_select.trigger('change');
+});
+
+
+eeb_work.when_close(function() {
+  rc._type = '';
+});
+
+
+function input_val(iname, value) {
+  root.find(':input[name="' + iname + '"]').val(value).trigger('change');
+}
+
+function not_select_sql(sql) {
+  return sql.toLowerCase().trim().indexOf('select') != 0;
+}
+
+
+})();
+</script>

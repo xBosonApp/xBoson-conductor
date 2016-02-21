@@ -1,0 +1,124 @@
+<form id='___prog_config_page' class='smart-form'>
+	<input type='hidden' name='_type'/>
+
+		<p class="alert alert-info">JavaScript</p>
+
+		<input name='name' label='名称' col='12'/>
+
+<hr class="simple" style="width:100%; clear:both;"/>
+
+		<div class='page100'>
+			<label class="label">可用的参数</label>
+		</div>
+
+<hr class="simple" style="width:100%; clear:both;"/>
+
+		<div class='page200'>
+			<label class="label">固定参数 / 函数</label>
+
+			<a class='put_code' label='列数量' col='3'>cols</a>
+			<a class='put_code' label='行数量' col='3'>rows</a>
+			<a class='put_code' label='当前行(0开始)' col='3'>curr</a>
+      <a class='put_code' label='不保存当前行(默认false)' col='3'>skipcurr</a>
+			<a class='put_code' label='当前上下文' col='3'>this</a>
+      <a class='put_code' label='输出到日志' col='3'>log(...)</a>
+      <a class='put_code' label='写业务日志' col='3'>bizlog(...)</a>
+		</div>
+
+<hr class="simple" style="width:100%; clear:both;"/>
+
+
+    <section class="col col-md-12">
+      <label class="label">JS 源代码</label>
+      <label class="textarea">
+        <textarea name='js' id='javascript-editor-adv'
+                  col='12' rows='12'></textarea>
+        <button type='button' class='btn btn-default fullScreen' 
+                style='float:right; padding: 2px 5px'>全屏编辑</button>
+      </label>
+    </section>
+
+		<textarea name='test_log' label='日志' col='12' 
+				readonly='true' rows='2'></textarea>
+
+		
+		<input type='submit' value='测试脚本' class='test btn btn-primary' label='' col='4' />
+    <input type='submit' value='应用' class='ok btn btn-primary' label='' col='4' />
+	</div>
+
+	<input type='hidden' name='retmessage' label='&nbsp' col='3'/>
+
+</form>
+
+
+<script>
+(function() {
+
+var root 			= $('#___prog_config_page');
+var rc 	 			= $('#program_config').data('run_config');
+var eeb_work 	= $('#program_config').data('eeb_work');
+var page 			= root.find('.page100');
+
+
+root.find('.ok').click(changeType('none'));
+root.find('.test').click(changeType('testjs'));
+
+
+eeb_work.when_close(function() {
+  rc._type = '';
+});
+
+
+eeb_work.parent_data(function(err, data) {
+  if (err) {
+    page.append("<div label='错误'>" + err.message + "</div>");
+  }
+  else if (data) {
+    data.head.forEach(function(fi, i) {
+    	var d = data.data && data.data[i] && data.data[i][0];
+    	rc._parm_[fi] = d || data.type[i];
+    	page.append("<input name='_parm_." + fi + "' label='" + fi + "' col='4'/>");
+    });
+  }
+
+  init_ui();
+});
+
+
+function changeType(_type) {
+  return function() {
+    root.find(':input[name=_type]').val(_type).trigger('change');
+  };
+}
+
+
+function init_ui() {
+	eeb.auto_form_ui('#___prog_config_page');
+
+  var jseditor = eeb.create_ace_editor(rc, root, ':input[name=js]', 'javascript');
+
+  root.find('.put_code').click(function() {
+    jseditor.insert(' ' + $(this).html());
+  });
+
+  root.find('.fullScreen').click(function() {
+    jseditor.fullScreen();
+  });
+
+	var pb = eeb.create_bind(rc, '#___prog_config_page', function(_nouse, whoclick) {
+	  eeb_work.check_config(function(err, data) {
+	    console.log(err, data);
+
+	    if (!err) { 
+	    	var tlog = data && data.log;
+	    	root.find(':input[name=test_log]').val(tlog);
+	    	// eeb.show_msg_box(null, data.retmessage)
+	    } else if (err.js) {
+        eeb.show_msg_box(null, "JS 代码" + err.js);
+      }
+	  });
+	});
+}
+
+})();
+</script>

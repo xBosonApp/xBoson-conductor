@@ -1,0 +1,328 @@
+ <div class="modal fade" id="schedule_api_edit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+ <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">计划任务API编辑</h4>
+      </div>
+      <div class="modal-body">
+      
+      <div class="row">
+        <div class="col-xs-12 col-sm-6">
+          <ul class="ztree"></ul>
+        </div>
+        <div class="col-xs-12 col-sm-6">
+          <form class="smart-form" onsubmit="return false;">
+            <div class="row">
+              <section>
+                <label class="label">API 分类</label>
+                <label class="input">
+                  <input name="urlparam">
+                </label>
+              </section>
+            </div>
+          </form>
+            <div class="row">
+              <section>
+                <label style='margin-left: -3px'>参数<i style="cursor:pointer" name="addkey" class="fa fa-fw fa-plus-circle txt-color-green"></i></label>
+              </section>
+            </div>
+          <form class="smart-form" onsubmit="return false;">
+            <div class="row">
+              <section>
+                <label class="label">完整 URL</label>
+                <label class="textarea">
+                  <textarea name="fullurl" readonly="readonly" oninput="this.style.height = this.scrollHeight + 'px';" onpropertychange="this.style.height = this.scrollHeight + 'px';" style=" background: none repeat scroll 0% 0% white; cursor: default; overflow-y: hidden; height: 48px;"></textarea>
+                </label>
+              </section>
+            </div>
+          </form>
+        </div>
+      </div>
+
+        <form onsubmit="return false;" class="smart-form">
+          <footer>
+            <button type="button" class="btn btn-default">取消</button>
+            <button type="submit" class="btn btn-primary">确定</button>
+          </footer>
+        </form>
+        <!-- FORM End -->
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+
+<script src="lib/js/plugin/x-editable/x-editable.min.js"></script>
+
+<script>
+  (function(){
+    
+    var Host = 'http://' + location.host;
+    
+    var Modal = $('#schedule_api_edit');
+    
+    var URLparam = $('#schedule_api_edit [name=urlparam]');
+    var AddParam = $('#schedule_api_edit [name=addkey]');
+    var FullUrl = $('#schedule_api_edit [name=fullurl]');
+    var ParamListControl = AddParam.closest('div.row');
+    window.ee = ParamListControl;
+    var SubmitBtn = $('#schedule_api_edit footer [type=submit]');
+    var CancleBtn = $('#schedule_api_edit footer [type=button]');
+    
+    var ParentModal = $('#schedule_add_updschedule');
+    var ParentUrl = $('#schedule_add_updschedule [name=task_api]');
+    
+    function BuildRow(){
+      var row = $('<div>').addClass('row').css('margin-left','1px');
+      
+      var keynm = $('<section>').addClass('col col-8');
+      // var keyval = $('<section>').addClass('col col-6');
+      var labelnm = $('<label>').addClass('input').html('参数名');
+      var labelval = $('<label>').addClass('input').html('参数值');
+      var anm = $('<a>').attr({
+        'href':"form-x-editable.html#",
+        'class':"editable editable-click",
+        'name':"key",
+        'data-type':"text",
+        'data-pk':"1",
+        'data-placement':"right",
+        'data-placeholder':"参数名"
+      });
+      var aval = $('<a>').attr({
+        'href':"form-x-editable.html#",
+        'class':"editable editable-click",
+        'name':"value",
+        'data-type':"textarea",
+        'data-pk':"1",
+        'data-placement':"right",
+        'data-placeholder':"参数值"
+      });
+      var cancle = $('  <i class="fa fa-fw fa-times-circle txt-color-red" style="cursor:pointer"></i>');
+      
+      keynm.append(labelnm).append(anm);
+      keynm.append(labelval).append(aval);
+      keynm.append(cancle);
+      
+      row.append(keynm);
+      
+      anm.editable({
+        validate: function (value) {
+          if ($.trim(value) == '')
+            return '参数值';
+        },
+        display:function(value){
+          $(this).html(value);
+          ParamListControl.trigger('_control');
+        }
+      });
+      
+      aval.editable({
+        validate: function (value) {
+          if ($.trim(value) == '')
+            return '参数值';
+        },
+        display:function(value){
+          $(this).html(value);
+          ParamListControl.trigger('_control');
+        }
+      });
+      
+      cancle.click(function(){
+        $(this).closest('div.row').remove();
+        ParamListControl.trigger('_control');
+      });
+      
+      return row
+    }
+    
+    function ParamClean(){
+      var target = AddParam.closest('section');
+      target.siblings().remove();
+    }
+    
+    function Event(){
+      
+      CancleBtn.click(function(){
+        Modal.modal('hide');
+        ParentModal.modal('show');
+      });
+      
+      SubmitBtn.bind('_init',function(e,o){
+        var $this = $(this);
+        
+        $this.unbind('click');
+        
+        if(o){
+          $this.click(function(){
+            Modal.modal('hide');
+            ParentUrl.trigger('_change',[o]);
+            ParentModal.modal('show');
+          });
+        }else{
+          $this.click(function(){
+            zy.extend.msg('请选择API','i');
+          });
+        }
+      });
+      
+      URLparam.change(function(){
+        var $val = $(this).val();
+        FullUrl.trigger('_change',[$val]);
+      })
+      
+      ParamListControl.bind('_control',function(e){
+        var $this = $(this);
+        
+        var ParamList = [];
+        
+        $this.children('div.row').each(function(_i,row){
+          var row = $(row);
+          var keynm = $(row.find('a')[0]).html();
+          var keyval = $(row.find('a')[1]).html();
+          ParamList.push(keynm + '=' + keyval);
+        });
+        
+        FullUrl.trigger('_change',[null,ParamList.join('&')]);
+      });
+      
+      AddParam.click(function(){
+        var $this = $(this);
+        var target = $this.closest('section');
+        var newRow = BuildRow();
+        target.after(newRow);
+        ParamListControl.trigger('_control');
+      });
+      
+      FullUrl.bind('_change',(function(){
+        var type, param, api;
+        return function(e,up,pp,apiinfo){
+          var $this = $(this);
+          
+          if(up) type = up;
+          if(pp || pp == '') param = pp;
+          if(apiinfo) api = apiinfo;
+          
+          if(type && api){
+            var CP = zy.net.parseParam({
+              app:api.app,
+              mod:api.mod,
+              org:zy.g.comm.org
+            });
+            if(!param){
+              param = '';
+            }else{
+              CP = '&' + CP;
+            }
+            var Full = Host + '/ds/' + type + '/' + api.api + '?' + param;
+            $this.html(Full);
+            api.url = Full + CP;
+            console.log(api);
+            SubmitBtn.trigger('_init',[api]);
+          }
+        }
+      })());
+    }
+    
+    function Init(cb){
+      zy.cache.initDicts('ZR.0053', function(){
+        URLparam.zySelect('ZR.0053', false, {
+          width: '100%',
+          allowClear: false
+        });
+        URLparam.select2('val','api');
+        cb&&cb();
+      });
+    }
+    
+    function Tree(){
+      var target = $('#schedule_api_edit .ztree');
+      
+        function _checkData(arr) {
+          var result = [];
+          var match = {};
+          var _m = [];
+          var _mid = {};
+
+          $.each(arr, function (i, v) {
+            _m[v.id] = arr[i];
+            match[v.id] = arr[i];
+            _mid[v.pid] = true;
+          });
+
+          $.each(arr, function (i, v) {
+            var id = v.id.split('--');
+            if (id.length == 2) {
+              if (!_mid[v.id]) {
+                delete match[v.id];
+              }
+            }
+          });
+
+          $.each(match, function (i, v) {
+            var flg = false;
+            if (v.isparient == 'false')
+              flg = true;
+            $.each(match, function (ii, vv) {
+              if (i == vv.pid)
+                flg = true;
+            })
+            if (flg)
+              result.push(v);
+          });
+
+          return result;
+        }
+        
+        var setting = {
+          data: {
+            key: {
+              name: 'name',
+              title: 'id'
+            },
+            simpleData: {
+              enable: true,
+              idKey: "id",
+              pIdKey: "pid"
+
+            }
+          },
+          view: {
+            showTitle: true,
+            selectedMulti: false,
+            showIcon: true,
+            dblClickExpand: false
+          },
+          callback : {
+            onClick : function(event, treeId, treeNode, clickFlag){
+              if(treeNode.isParent) return false;
+              var t = treeNode.id.split('--');
+              FullUrl.trigger('_change',[null,null,{
+                app:t[0],
+                mod:t[1],
+                api:t[2]
+              }])
+            }
+          }
+        };
+        
+        zy.extend.get({
+          apinm:'publish_api_tree',
+          mod:'yyfb',
+          app:'03229cbe4f4f11e48d6d6f51497a883b'
+        },function(msg){
+          $.fn.zTree.init(target,setting,_checkData(msg.result));
+        },{});
+    }
+    
+    Init(function(){
+      Event();
+      Tree();
+      FullUrl.trigger('_change',['api']);
+      SubmitBtn.trigger('_init');
+    })
+    
+    Modal.modal('show');
+  })();
+</script>

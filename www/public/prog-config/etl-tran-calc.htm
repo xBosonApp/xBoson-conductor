@@ -1,0 +1,198 @@
+
+<form id='___prog_config_page' class='smart-form'>
+  <input type='hidden' name='_type' value='none'/>
+
+  
+    <p class="alert alert-info">计算</p>
+    <input name='name' label='名称' col='12'/>
+    
+  <div class='page1'></div>
+
+  <div style='width:100%; clear:both;'></div>
+  <input type='button' value='添加' class='add btn btn-primary' label='' col='4' />
+  <input type='submit' value='应用' class='ok btn btn-primary' label='' col='4' />
+
+  <input type='hidden' name='retmessage' label='&nbsp' col='3'/>
+</form>
+
+
+<div class='row mhide' id='__the_row'>
+  <input rowname='f1' label='字段 A' col='4' group='f1'/>
+  <button type='button' class='btn btn-primary' flowdata_to_rowname='f1'
+          label='.' group='f1'>从流中读取</button>
+
+  <input rowname='f2' label='字段 B' col='4' group='f2'/>
+  <button type='button' class='btn btn-primary' flowdata_to_rowname='f2'
+          label='.' group='f2'>从流中读取</button>
+
+  <input rowname='ft' label='目标字段' col='4'/>
+
+  <p style='clear:both; width:100%'></p>
+
+  <input name='op_name' label='计算方法' col='4' readonly='true' group='op'/>
+  <input rowname='op' type='hidden' label='.' group='op'/>
+  <button type='button' class='btn btn-primary' label='.' group='op'>选择</button>
+
+  <input rowname='len' label='长度 / 精度 / 格式' col='4'/>
+
+  <input class='del' label='&nbsp;' value='删除' col='4' type='button' /> 
+  <hr class="simple" style='width:100%; clear:both;'/>
+</div>
+
+
+<div class='mhide' id='__op_dialog'>
+
+  <p>数学计算 <span class='note'><br/>精度用来保留小数位数</span></p>
+
+  <a op='Bn+'>A + B</a>   <a op='Bn-'>A - B</a>     <a op='Bn*'>A * B</a>
+  <a op='Bn/'>A / B</a>   <a op='n2'>A * A</a>      <a op='nS'>SQRT( A )</a>
+
+  <a op='BnP'>100 * (A / B)</a>        <a op='Bn1'>A - (A * B / 100)</a>
+  <a op='Bn2'>A + (A * B / 100)</a>    <a op='Bn3'>SQRT(A*A + B*B)</a>
+  <a op='n4'>ROUND( A )</a>            <a op='Bn5'>ROUND(A, B)</a>
+  <a op='n7'>CEIL( A )</a>             <a op='n8'>FLOOR( A )</a>
+  <a op='n10'>ABS( A )</a>
+
+
+  <p>位计算 <span class='note'><br/>精度字段被忽略</span></p>
+
+  <a op='Bi1'>A 与 B</a>               <a op='Bi2'>A 或 B</a>
+  <a op='Bi3'>A 异或 B</a>             <a op='Bi4'>A 左移 B 位</a>
+  <a op='Bi5'>A 右移 B 位</a>          <a op='bi6'>A 逐位取反</a>
+
+
+  <p>逻辑计算 <span class='note'><br/>精度字段被忽略, 
+      运行结果取决于操作数的数据类型</span></p>
+
+  <a op='Bl1'>A &gt; B</a>             <a op='Bl2'>A &lt; B</a>
+  <a op='Bl5'>A &gt;= B</a>            <a op='Bl4'>A &lt;= B</a>
+  <a op='Bl3'>A == B</a>               <a op='Bl6'>A != B</a>
+  <a op='bl7'>Not A</a>
+
+
+  <p>字符串计算 <span class='note'><br/>字符串长度超过预设值, 末尾会被截断</span></p>
+
+  <a op='s1'>A 的大写</a>              <a op='s2'>A 的小写</a>
+  <a op='s3'>A 去掉 CR</a>             <a op='s4'>A 去掉 LF</a>
+  <a op='s5'>A 去掉 CRLF</a>           <a op='s8'>A 去掉 TAB</a>
+  <a op='s6'>A 只保留数字</a>          <a op='s9'>A 去掉数字</a>
+  <a op='s7'>A 字符串长度</a>          
+
+  <a op='Bs1'>A 中去掉 B 中的串</a>    <a op='Bs2'>NVL( A, B )</a> 
+  <a op='Bs3'>A + B</a>
+
+
+  <p>日期计算 <span class='note'><br/>可以有 年-月-日 时:分:秒, 或只有日期部分
+      <br/>格式部分指定解析日期时的格式, 或使用默认格式</span>
+      <!-- <a target="_blank" href='http://momentjs.com/docs/#/displaying/format/'>格式文档</a> -->
+  </p>
+
+  <a op='d1'>日期 A 取年</a>           <a op='d2'>日期 A 取月</a>
+  <a op='d3'>日期 A 取年中天</a>       <a op='d4'>日期 A 取月中天</a>
+  <a op='d5'>日期 A 取星期中天</a>     <a op='d6'>日期 A 取年中星期</a>
+  <a op='d7'>日期 A 取小时</a>         <a op='d8'>日期 A 取分钟</a>
+  <a op='d9'>日期 A 取秒</a>
+
+  <a op='Bd1'>日期 A + B 年</a>        <a op='Bd2'>日期 A + B 月</a>
+  <a op='Bd3'>日期 A + B 日</a>        <a op='Bd7'>日期 A + B 星期</a>
+  <a op='Bd4'>日期 A + B 小时</a>      <a op='Bd6'>日期 A + B 分钟</a>
+  <a op='Bd5'>日期 A + B 秒</a>
+
+  <a op='d10'>日期 A 去掉时间</a>
+
+
+  <p>校验计算 <br/><span class='note'>[CRC32/Adler 格式: '10', '16'], 
+      [MD5/SHA-1/SHA-256 格式: 'hex', 'base64' ]</span></p>
+
+  <a op='c1'>CRC32( A )</a>           <a op='c2'>MD5( A )</a>
+  <a op='c3'>SHA-1( A )</a>           <a op='c5'>SHA-256( A )</a>
+  <a op='c4'>Adler( A )</a>
+
+</div>
+
+
+<script src='js/dyn-row.js'/>
+
+
+<script>
+(function() {
+
+var root     = $('#___prog_config_page');
+var rc       = $('#program_config').data('run_config');
+var eeb_work = $('#program_config').data('eeb_work');
+var selectop = init_dialog();
+
+eeb.auto_form_ui('#___prog_config_page');
+
+
+var pb = eeb.create_bind(rc, '#___prog_config_page', function(_nouse, whoclick) {
+  eeb_work.check_config(function(err, data) {
+    console.log(err, data);
+  });
+});
+
+eeb_work.when_close(function() {
+  eeb.zip(rc, 'f1', 'f2', 'ft', 'op', 'len');
+});
+
+
+function init_dialog() {
+  var on_click = null;
+  var di = null;
+
+  var line = '<hr class="simple" style="width:100%; clear:both;"/>';
+  var jdialog = $('#__op_dialog');
+  var jhrefs = jdialog.find('a[op]');
+
+  jdialog.find('p').after(line).before(line);
+  jhrefs.wrap('<section class="col col-md-3"><label class="input"></label></section>');
+
+  jhrefs.click(function() {
+    console.log('cl')
+    if (on_click) {
+      var jthis = $(this);
+      on_click(jthis.attr('op'), jthis.text());
+      di && di.dialog('close');
+    }
+  });
+
+  return function(_on_click) {
+    on_click = _on_click;
+    if (di) {
+      di.dialog('open');
+    } else {
+      di = eeb.easy_dialog(jdialog, root, {width:'80%', close_not_remove:true});
+    }
+  };
+}
+
+
+eeb.dyn_row(rc, '#__the_row', root.find('.add'), root.find('.page1'), pb, when_newrow);
+
+
+function when_newrow(row) {
+  eeb.select_field_from_flow(row, eeb_work);
+
+  eeb.input_val_not_in_flow(
+      row.find(':input[rowname=ft]'), root.find('.ok'), eeb_work);
+
+
+  // 恢复已经选择的运算
+  var op = row.find(':input[rowname=op]').val();
+  var opname = $('#__op_dialog a[op="' + op + '"]').eq(0).text();
+  row.find(':input[name=op_name]').val(opname);
+
+
+  row.find('button[group=op]').click(open_select);
+
+  function open_select() {
+    selectop(function(op, name) {
+      row.find(':input[rowname=op]').val(op).trigger('change');
+      row.find(':input[name=op_name]').val(name);
+    });
+  }
+}
+
+
+})();
+</script>

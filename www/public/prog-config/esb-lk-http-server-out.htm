@@ -1,0 +1,54 @@
+
+<form id='___prog_config_page' class='smart-form'>
+  <input type='hidden' name='_type' value='none'/>
+  <p class="alert alert-info">HTTP 应答</p>
+
+  <input name='name' label='名称' col='12'/>
+
+  <input name='ret_field' label='Http 应答数据' col='6' 
+         group='1' readonly='true' rowname='ret_field'/>
+  <button type='button' class='btn btn-primary' flowdata_to_rowname='ret_field'
+          label='.' group='1'>从流中读取</button>
+
+  <select name='content_type' label='返回类型'>
+  </select>
+
+  <select name='encoding' label='数据编码' col='6'></select>
+
+  <hr class="simple" style="width:100%; clear:both;"/>
+
+  <input type='submit' value='应用' class='ok btn btn-primary' label='' col='4' />
+
+  <input type='hidden' name='retmessage' label='&nbsp' col='3'/>
+</form>
+
+
+<script src='js/mime-select.js'/>
+<script src='js/dyn-row.js'/>
+<script src='js/encoding-select.js'/>
+
+
+<script>
+(function() {
+
+var root     = $('#___prog_config_page');
+var rc       = $('#program_config').data('run_config');
+var eeb_work = $('#program_config').data('eeb_work');
+
+
+eeb.auto_form_ui('#___prog_config_page');
+eeb.select_field_from_flow(root, eeb_work);
+
+
+var pb = eeb.create_bind(rc, '#___prog_config_page', function(_nouse, whoclick) {
+  eeb_work.check_config(function(err, data) {
+    console.log(err, data);
+  });
+});
+
+
+eeb.init_select_to_mime(root.find('select[name=content_type]'), rc.content_type);
+eeb.init_select_to_encoding(root.find('select[name=encoding]'), rc.encoding);
+
+})();
+</script>

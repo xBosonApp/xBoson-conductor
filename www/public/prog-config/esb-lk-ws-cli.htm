@@ -1,0 +1,227 @@
+
+<form id='___prog_config_page' class='smart-form'>
+  <input type='hidden' name='_type' value='none'/>
+
+    <p class="alert alert-info">WebService 客户端</p>
+    <input name='name' label='名称' col='12'/>
+
+
+    <input name='wsdl_url' label='从 URL 获取 XML' col='6' group='1'/>
+    <button type='submit' class='btn btn-primary fromurl' change_type='fromurl'
+            label='.' group='1'>读取并更新 XML</button>
+
+    <input name='wsdl_file' label='从文件获取 XML' col='6' group='2' readonly='true'/>
+    <button type='submit' class='btn btn-primary fromfile' change_type='fromfile'
+            label='.' group='2'>读取并更新 XML</button>
+    <button type='button' class='btn btn-default chosefile' select_file='wsdl_file'
+            label='.' group='2'>选择文件</button>
+
+    <section class="col col-md-12">
+      <label class="label">WSDL XML</label>
+      <label class="textarea">
+        <textarea name='wsdl_xml' popmsg='2'></textarea>
+        <button type='submit' class='btn btn-primary parse_wsdl' 
+                change_type='parse_wsdl' 
+                style='float:right; padding: 2px 5px'>解析服务</button>
+        <button type='button' class='btn btn-default fullScreen' 
+                style='float:right; padding: 2px 5px'>全屏编辑</button>
+      </label>
+    </section>
+
+
+    <select name='soap_fn' label='服务' col='9'></select>
+
+    <input name='fout' label='返回参数输出到' col='3' group='3' rowname='ret_field'/>
+    <button type='button' class='btn btn-primary' flowdata_to_rowname='ret_field'
+          label='.' group='3'>从流中读取</button>
+
+
+  <hr class="simple" style="width:100%; clear:both;"/>
+    <label class='label page1'>请求参数</label>
+    <div class='input_parm'></div>
+
+  <hr class="simple" style="width:100%; clear:both;"/>
+    <label class='label page1'>返回参数</label>
+    <div class='output_parm'></div>
+
+  <hr class="simple" style="width:100%; clear:both;"/>
+    
+    <input type='submit' value='应用' class='ok btn btn-primary' 
+           label='' col='4' change_type='n'/>
+
+  <input type='hidden' name='retmessage' label='&nbsp' col='3'/>
+</form>
+
+
+<div id='web_s_parm_template' class='mhide'>
+  <section class="col col-md-6">
+    <label class="label">
+      <span class='pn'>参数名<span>
+    </label>
+    <label class="input">
+      <div class="btn-group" style="width: 100%;">
+        <input name="soap_in.0" readonly='true'
+               rowname="soap_in.0" placeholder="参数"/>
+        <button type="button" class="btn btn-primary" 
+                flowdata_to_rowname="soap_in.0" 
+                style="float: right; padding: 2px 5px;">从流中读取</button>
+      </div>
+    </label>
+  </section>
+</div>
+
+
+<script src='js/dyn-row.js'/>
+
+
+<script>
+(function() {
+
+var root     = $('#___prog_config_page');
+var rc       = $('#program_config').data('run_config');
+var eeb_work = $('#program_config').data('eeb_work');
+
+var ptemplate = $('#web_s_parm_template').html();
+var xmleditor = eeb.create_ace_editor(rc, root, ':input[name=wsdl_xml]', 'xml');
+var service_list = create_service_list(root.find('select[name=soap_fn]'), 
+                                       root.find('.input_parm'),
+                                       root.find('.output_parm'));
+
+eeb.auto_form_ui('#___prog_config_page');
+eeb.select_file_from_pool(root);
+eeb.change_type_button(root, eeb_work, rc);
+eeb.select_field_from_flow(root, eeb_work);
+
+
+var pb = eeb.create_bind(rc, '#___prog_config_page', function(_nouse, whoclick) {
+  eeb_work.check_config(function(err, data) {
+
+    if (err) return console.log(err);
+    var who = $(whoclick);
+
+    if (who.hasClass('fromurl') || who.hasClass('fromfile')) {
+      rc.soap_in = {};
+      input_val('wsdl_xml', data.ret);
+      xmleditor.setValue(data.ret);
+      eeb.show_msg_box(null, "XML 准备完成");
+      return 'no_succ_msg';
+    }
+    else if (who.hasClass('parse_wsdl')) {
+      service_list.update(data.ret);
+      eeb.show_msg_box(null, "服务列表已更新");
+      return 'no_succ_msg';
+    }
+  });
+});
+xml_to_service();
+
+
+root.find('.fullScreen').click(function() {
+  xmleditor.fullScreen();
+});
+
+
+//
+// 维护服务列表
+// jselect -- 方法列表
+// jinput  -- 输入参数容器 
+// joutput -- 输出参数容器
+//
+function create_service_list(jselect, jinput, joutput) {
+  var slist = {};
+  var SP = ' - ';
+  var skip_parm = { 'targetNSAlias' :1, 'targetNamespace' :1 };
+
+  jselect.change(update_parm);
+  
+
+  function update_parm() {
+    var ser = slist[ jselect.val() ];
+    if (!ser) return;
+
+    var put = function(a, b) { return a+"<b class='note' style='float:right'>"+b+"</b>" };
+    var pin = ser.parm.input;
+    jinput.html('');
+
+    for (var i in pin) {
+      if (skip_parm[i]) continue;
+      
+      var item = $(ptemplate);
+      jinput.append(item);
+      item.find('.label').html( put(i, pin[i]) );
+      var nm = 'soap_in.' + i;
+      item.find('input').attr('name', nm).attr('rowname', nm);
+      item.find('button').attr('flowdata_to_rowname', nm);
+    }
+
+    for (var n in rc.soap_in) {
+      if (!pin[n]) {
+        delete rc.soap_in[n];
+      }
+    }
+
+    pb.addSub( eeb.create_bind(rc, jinput) );
+    eeb.select_field_from_flow(jinput, eeb_work);
+
+    var pout = ser.parm.output;
+    joutput.html('');
+
+    for (var i in pout) {
+      if (skip_parm[i]) continue;
+
+      var item = $(ptemplate);
+      joutput.append(item);
+      item.find('.label').html( put(i, pout[i]) )
+          .css({'border-bottom': '1px dashed #7979FF'});
+      item.find('.input').remove();
+    }
+  }
+
+  function update(data) {
+    slist = {};
+    for (var service in data) {
+      for (var port in data[service]) {
+        for (var fn in data[service][port]) {
+          //
+          // 保存到 soap_fn 属性中的数据结构
+          //
+          var key = JSON.stringify([ service, port, fn ]);
+          slist[ key ] = {
+            disp    : service + SP + port + SP + fn,
+            name    : fn,
+            service : service,
+            port    : port,
+            parm    : data[service][port][fn]
+          };
+        }
+      }
+    }
+
+    jselect.html('');
+    for (var i in slist) {
+      jselect.append('<option value=\'' + i + '\'>' + slist[i].disp + '</options>');
+    }
+    jselect.val(rc.soap_fn);
+    update_parm();
+  }
+
+  // 返回对象, 用于对列表的操作
+  return {
+    update: update,
+  }
+}
+
+
+function xml_to_service() {
+  if (rc.wsdl_xml.length > 3) {
+    root.find('.parse_wsdl').trigger('click');
+  }
+}
+
+function input_val(iname, value) {
+  root.find(':input[name="' + iname + '"]').val(value).trigger('change');
+}
+
+
+})();
+</script>

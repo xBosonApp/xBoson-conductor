@@ -1,0 +1,124 @@
+
+<form id='___prog_config_page' class='smart-form'>
+  <input type='hidden' name='_type' value='none'/>
+
+    <p class="alert alert-info">模型输入</p>
+
+    <input name='name' label='名称' col='12'/>
+
+    <select name='zy_conn' label='数据库连接' col='6' group='conn1'/>
+
+    <select name='zy_module' label='业务模型' col='6' group='conn2'/>
+
+    <button type='button' class='btn btn-default' group='conn2'
+            id='update_zy_module' label='.' col='1'>更新模型</button>
+
+
+    <section class="col col-md-12 mhide">
+      <label class="label">
+        <span>SQL</span>
+        <span style='float:right'>行限制 <input name='limit' value='100' size='4'/></span>
+      </label>
+      <label class="textarea">
+        <textarea name="sql" rows="3" placeholder="SQL">
+        </textarea>
+      </label>
+    </section>
+
+    <h6>绑定参数</h6>
+    <hr class="simple" style="width:100%; clear:both;"/>
+    <div class='parmsql'></div>
+    <hr class="simple" style="width:100%; clear:both;"/>
+    
+    <input type='submit' value='应用' class='ok btn btn-primary' label='' col='4'/>
+
+
+  <div class='mhide'>
+    <!-- BEGIN 数据库连接 -->
+      <input name='conn.host' label='Host'/>
+
+      <select name='conn.driver' label='数据库类型'>
+        <option value='mysql' port='3306'>MySQL</option>
+        <option value='sqlserver' port='1433'>SQL Server</option>
+        <option value='oracle' port='1521'>Oracle</option>
+        <option value='db2' port='50000'>DB 2</option>
+      </select>
+
+      <input name='conn.port' label='端口'/>
+      <input name='conn.database' label='Database / SID'/>
+      <input name='conn.user' label='用户名'/>
+      <input name='conn.password' type='password' label='密码'/>
+    <!-- END 数据库连接 -->
+  </div>
+
+  <input type='hidden' name='retmessage' popmsg='1'/>
+</form>
+
+
+<script src='js/zy-model.js'/>
+
+
+<script>
+(function() {
+
+var root     = $('#___prog_config_page');
+var rc       = $('#program_config').data('run_config');
+var eeb_work = $('#program_config').data('eeb_work');
+
+eeb.auto_form_ui(root);
+
+
+var parent_bind = eeb.create_bind(rc, '#___prog_config_page', function(_nouse, whoclick) {
+  eeb_work.check_config();
+});
+
+
+
+// 取得平台模型
+var zy_conn_select  = root.find(':input[name=zy_conn]');
+var zy_model_select = root.find(':input[name=zy_module]');
+
+
+// 首先读取连接列表
+eeb.get_zy_conn_list(zy_conn_select, function() {
+  zy_conn_select.val(rc.zy_conn).trigger('change');
+});
+
+
+// 当连接列表被改变, 更新模型列表
+zy_conn_select.change(function() {
+  zy_model_select.html('');
+  // 应用连接配置
+  eeb.get_zy_conn_detail(root, zy_conn_select.val());
+
+  eeb.get_zy_model_list(zy_model_select, zy_conn_select.val(), 'S', function() {
+    zy_model_select.val(rc.zy_module).trigger('change');
+  });
+});
+
+
+// 应用模型的 sql
+zy_model_select.change(function() {
+  eeb.get_zy_model_sql(root, zy_model_select.val(), 'S', function(sql, parm) {
+    eeb.build_select_sql_bind_parm(parent_bind, rc, 
+        root.find(":input[name=sql]"), root.find(".parmsql"), sql, parm);
+  });
+}); 
+
+
+root.find('#update_zy_module').click(function() {
+  zy_model_select.trigger('change');
+});
+
+
+eeb_work.when_close(function() {
+  rc._type = '';
+});
+
+
+function input_val(iname, value) {
+  root.find(':input[name="' + iname + '"]').val(value).trigger('change');
+}
+
+})();
+</script>

@@ -1,0 +1,27 @@
+
+<form id='___prog_config_page' class='smart-form'>
+	<input name='name' label='名称'/>
+	<input name='id' label='ID'/>
+	<input name='col.0' label='col 1'/>
+	<input name='col.1' label='col 2'/>
+	<input name='col.2' label='col 3'/>
+	<input name='col.3' label='col 4'/>
+
+	<input type='submit' value='修改' class='ok btn btn-primary' label=''/>
+</form>
+
+
+<script>
+(function() {
+
+var rc = $('#program_config').data('run_config');
+var eeb_work = $('#program_config').data('eeb_work');
+
+eeb.auto_form_ui('#___prog_config_page', [2, 4, 1]);
+
+eeb.create_bind(rc, '#___prog_config_page', function() {
+	eeb_work.check_config();
+});
+
+})();
+</script>

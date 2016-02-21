@@ -1,0 +1,173 @@
+
+<form id='___prog_config_page' class='smart-form'>
+  <input type='hidden' name='_type' value='none'/>
+
+    <p class="alert alert-info">模型输出</p>
+
+    <input name='name' label='名称' col='12'/>
+
+    <select name='zy_conn' label='数据库连接' col='6' group='conn1'/>
+
+    <select name='zy_module' label='业务模型' col='6' group='conn2'/>
+
+    <button type='button' class='btn btn-default' group='conn2'
+            id='update_zy_module' label='.' col='1'>更新模型</button>
+
+
+    <section class="col col-md-12 mhide">
+      <label class="label">
+        <span>SQL</span>
+        <span style='float:right'>行限制 <input name='limit' value='100' size='4'/></span>
+      </label>
+      <label class="textarea">
+        <textarea name="sql" rows="3" placeholder="SQL">
+        </textarea>
+      </label>
+    </section>
+
+    <div class='table_mapping'></div>
+    <br style="width:100%; clear:both;"/>
+
+    <input type='submit' value='应用' class='ok btn btn-primary' label='' col='4'/>
+
+
+
+  <div class='mhide'>
+    <!-- BEGIN 数据库连接 -->
+      <input name='conn.host' label='Host'/>
+
+      <select name='conn.driver' label='数据库类型'>
+        <option value='mysql' port='3306'>MySQL</option>
+        <option value='sqlserver' port='1433'>SQL Server</option>
+        <option value='oracle' port='1521'>Oracle</option>
+        <option value='db2' port='50000'>DB 2</option>
+      </select>
+
+      <input name='conn.port' label='端口'/>
+      <input name='conn.database' label='Database / SID'/>
+      <input name='conn.user' label='用户名'/>
+      <input name='conn.password' type='password' label='密码'/>
+    <!-- END 数据库连接 -->
+  </div>
+
+  <input type='hidden' name='retmessage' popmsg='1'/>
+</form>
+
+<script src='js/lib/dom.jsPlumb-1.7.4-min.js'/>
+<script src='js/fields-mapping.js'/>
+<script src='js/zy-model.js'/>
+
+
+<script>
+(function() {
+
+var root     = $('#___prog_config_page');
+var rc       = $('#program_config').data('run_config');
+var eeb_work = $('#program_config').data('eeb_work');
+
+eeb.auto_form_ui(root);
+
+
+var fieldsmap = eeb.createFieldsMapping(rc, root.find('.table_mapping'), eeb_work);
+
+
+var parent_bind = eeb.create_bind(rc, '#___prog_config_page', function(_nouse, whoclick) {
+  eeb_work.check_config();
+});
+
+
+
+// 取得平台模型
+var zy_conn_select  = root.find(':input[name=zy_conn]');
+var zy_model_select = root.find(':input[name=zy_module]');
+
+
+// 首先读取连接列表
+eeb_work.when_open(function() {
+  eeb.get_zy_conn_list(zy_conn_select, function() {
+    zy_conn_select.val(rc.zy_conn).trigger('change');
+  });
+});
+
+
+// 当连接列表被改变, 更新模型列表
+zy_conn_select.change(function() {
+  zy_model_select.html('');
+  // 应用连接配置
+  eeb.get_zy_conn_detail(root, zy_conn_select.val());
+
+  eeb.get_zy_model_list(zy_model_select, zy_conn_select.val(), 'D,I,U', function() {
+    zy_model_select.val(rc.zy_module).trigger('change');
+  });
+});
+
+
+// 应用模型的 sql
+zy_model_select.change(function() {
+  eeb.get_zy_model_sql(root, zy_model_select.val(), 'D,I,U', function(sql, parm) {
+
+    // console.log(parm)
+
+    var fields = [];
+
+    parm.type.forEach(function(t, i) {
+      fields.push({ 
+        field: i, 
+        typename: t.datatype, 
+        display: t.en && (t.cn + ' (' + t.en + ')')
+      });
+    });
+
+    parm.search.forEach(function(t, i) {
+      fields.push({
+        field: t.en, 
+        typename: t.datatype, 
+        display: (t.cn || t.en) + ' [查询条件]' 
+      });
+    });
+
+    fieldsmap.clearAndSetFields(fields);
+  });
+}); 
+
+
+eeb_work.when_close(function() {
+  rc._type = '';
+});
+
+
+root.find('#update_zy_module').click(function() {
+  zy_model_select.trigger('change');
+});
+
+
+
+// 获取字段 按钮
+root.find('.get_fields').click(function(event, not_del_filter) {
+  var table_field = root.find(':input[name=table]');
+  var table = table_field.val();
+
+  if (!table) {
+    eeb.show_msg(table_field, '必须先选择表');
+    return false;
+  }
+
+  if (not_del_filter != 'not_del_filter') {
+    tar_field_filter = null;
+  }
+
+  changeReqType('get_fields');
+});
+
+
+
+function input_val(iname, value) {
+  root.find(':input[name="' + iname + '"]').val(value).trigger('change');
+}
+
+function changeReqType(type) {
+  input_val('_type', type || 'none');
+}
+
+})();
+</script>

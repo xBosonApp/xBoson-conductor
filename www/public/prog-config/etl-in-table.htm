@@ -1,0 +1,118 @@
+
+<form id='___prog_config_page' class='smart-form'>
+  <input type='hidden' name='_type' value='none'/>
+
+  <p class="alert alert-info">表输入</p>
+
+  <input name='name' label='名称' col='12'/>
+
+
+<!-- BEGIN 数据库连接 -->
+  <input name='conn.host' label='Host'/>
+
+  <select name='conn.driver' label='数据库类型'>
+    <option value='mysql' port='3306'>MySQL</option>
+    <option value='sqlserver' port='1433'>SQL Server</option>
+    <option value='oracle' port='1521'>Oracle</option>
+    <option value='db2' port='50000'>DB 2</option>
+  </select>
+
+  <input name='conn.port' label='端口'/>
+  <input name='conn.database' label='Database / SID'/>
+  <input name='conn.user' label='用户名'/>
+  <input name='conn.password' type='password' label='密码'/>
+<!-- END 数据库连接 -->
+
+
+  <section class="col col-md-12">
+    <label class="label">
+      <span>SQL</span>
+      <span style='float:right'>行限制 <input name='limit' value='100' size='4'/></span>
+    </label>
+    <label class="textarea">
+      <textarea name="sql" rows="7" placeholder="SQL" id='sql-editor-adv'>
+      </textarea>
+      <button type='submit' class='btn btn-default gen_sql' change_type='get_tables'
+              style="float: right; padding: 2px 10px;">生成 SQL</button>
+      <button type='button' class='btn btn-default fullScreen' 
+                style='float:right; padding: 2px 5px'>全屏编辑</button>
+    </label>
+  </section>
+  
+  <input type='submit' value='应用' class='ok btn btn-primary' 
+         label='' col='4' change_type='ok' />
+  <input type='submit' value='测试连接' class='tconn btn btn-primary' 
+         label='' col='4' change_type='check_conn' />
+  <input type='submit' value='测试 SQL' class='tsql btn btn-primary' 
+         label='' col='4' change_type='check_sql' />
+
+
+  <input type='hidden' name='retmessage' popmsg='1'/>
+  <input type='hidden' name='table'/>
+  <input type='submit' class='mhide create_sql' change_type='gen_sql'/>
+</form>
+
+
+<script src='js/lib/dom.jsPlumb-1.7.4-min.js'/>
+<script src='js/fields-mapping.js'/>
+
+
+<script>
+(function() {
+
+var root     = $('#___prog_config_page');
+var rc       = $('#program_config').data('run_config');
+var eeb_work = $('#program_config').data('eeb_work');
+
+
+eeb.auto_form_ui(root);
+eeb.change_type_button(root, eeb_work, rc);
+var sql_eidtor = eeb.create_ace_editor(rc, root, ':input[name=sql]', 'sql');
+
+root.find('.fullScreen').click(function() {
+  sql_eidtor.fullScreen();
+});
+
+
+eeb.create_bind(rc, '#___prog_config_page', function(_nouse, who) {
+  // console.log('config', _nouse)
+
+  eeb_work.check_config(function(err, data) {
+    who = $(who);
+
+    if (who.val() == '测试 SQL') {
+      // eeb_work.test();
+    }
+    else if (who.hasClass('gen_sql')) {
+      if (!err) {
+        eeb.build_tables_html(root, data, function(tname) {
+          input_val('table', tname);
+          root.find('.create_sql').trigger('click');
+        });
+        return 'no_succ_msg';
+      }
+    } 
+    else if (who.hasClass('create_sql')) {
+      if (!err) {
+        input_val('sql', data.sql);
+        sql_eidtor.setValue(data.sql);
+        return 'no_succ_msg';
+      }
+    }
+  });
+});
+
+
+// 切换数据库, 填入端口号
+root.find(':input[name="conn.driver"]').change(function() {
+  var p = $('option[value="' + this.value + '"]').attr('port');
+  root.find(':input[name="conn.port"]').val(p).trigger('change');
+});
+
+
+function input_val(iname, value) {
+  root.find(':input[name="' + iname + '"]').val(value).trigger('change');
+}
+
+})();
+</script>

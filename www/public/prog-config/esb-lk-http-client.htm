@@ -1,0 +1,110 @@
+
+<form id='___prog_config_page' class='smart-form'>
+  <input type='hidden' name='_type' value='none'/>
+
+    <p class="alert alert-info">HTTP 客户端</p>
+    <input name='name' label='名称' col='12'/>
+
+
+    <input name='host' label='HOST' col='3'/>
+    <input name='port' label='PORT' col='3'/>
+    <select name='method' label='方法' col='3'>
+      <option value='GET'>GET</option>
+      <option value='POST'>POST</option>
+    </select>
+    <select name='encoding' label='数据编码' col='3'></select>
+
+
+    <input name='path' label='路径' col='6'/>
+    <input name='fout' label='应答输出到' col='3' group='2' rowname='fout'/>
+    <button type='button' class='btn btn-primary' flowdata_to_rowname='fout'
+            label='.' group='2'>从流中读取</button>
+
+    <select name='post_t' label='处理方式' col='3'>
+      <option value='t'>纯文本</option>
+      <option value='b'>二进制</option>
+    </select>
+
+    <hr class="simple" style="width:100%; clear:both;"/>
+    <div class='page1'></div>
+    <hr class="simple" style="width:100%; clear:both;"/>
+    <div class='page2'></div>
+    <hr class="simple" style="width:100%; clear:both;"/>
+
+    
+    <input type='button' value='添加参数' class='add btn btn-primary' label='' col='4' />
+    <input type='button' value='添加头域' class='addh btn btn-primary' label='' col='4' />
+    <input type='submit' value='应用' class='ok btn btn-primary' label='' col='4' />
+
+  <input type='hidden' name='retmessage' label='&nbsp' col='3'/>
+</form>
+
+<div class='row mhide' id='__the_row'>
+  <input rowname='pn' label='参数名' col='5'/>
+  <input rowname='pv' label='值来源' col='5' group='5' readonly='true'/>
+  <button type='button' class='btn btn-primary' flowdata_to_rowname='pv'
+          label='.' group='5'>从流中读取</button>
+
+  <input class='del' label='操作' value='删除' col='2' type='button' />
+
+  <div style='width:100%; clear:both;'></div>
+</div>
+
+
+<div class='row mhide' id='__the_header_row'>
+  <input rowname='hn' label='头域名' col='5'/>
+  <input rowname='hv' label='值来源' col='5' group='5' readonly='true'/>
+  <button type='button' class='btn btn-primary' flowdata_to_rowname='hv'
+          label='.' group='5'>从流中读取</button>
+
+  <input class='del' label='操作' value='删除' col='2' type='button' />
+
+  <div style='width:100%; clear:both;'></div>
+</div>
+
+
+<script src='js/dyn-row.js'/>
+<script src='js/encoding-select.js'/>
+
+
+<script>
+(function() {
+
+var root     = $('#___prog_config_page');
+var rc       = $('#program_config').data('run_config');
+var eeb_work = $('#program_config').data('eeb_work');
+
+// 为了做兼容之前的配置
+if (!rc.hv) rc.hv = [];
+if (!rc.hn) rc.hn = [];
+
+
+eeb.auto_form_ui('#___prog_config_page');
+eeb.init_select_to_encoding(root.find('select[name=encoding]'), rc.encoding);
+eeb.select_field_from_flow(root, eeb_work);
+
+
+var pb = eeb.create_bind(rc, '#___prog_config_page', function(_nouse, whoclick) {
+  eeb_work.check_config(function(err, data) {
+    console.log(err, data);
+  });
+});
+
+
+eeb.dyn_row(rc, '#__the_row', root.find('.add'), root.find('.page1'), pb, when_newrow);
+eeb.dyn_row(rc, '#__the_header_row', root.find('.addh'), root.find('.page2'), pb, when_newrow);
+
+
+function when_newrow(row) {
+  eeb.select_field_from_flow(row, eeb_work);
+}
+
+
+eeb_work.when_close(function() {
+  eeb.zip(rc, 'pn', 'pv');
+  eeb.zip(rc, 'hn', 'hv');
+});
+
+
+})();
+</script>

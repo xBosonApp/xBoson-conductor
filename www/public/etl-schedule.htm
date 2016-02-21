@@ -1,0 +1,754 @@
+<setenv/>
+
+<!-- Modal -->
+<div style="display:none;" id='template'>
+  <section class="col col-6">
+    <label class="label">日期</label>
+    <label class="input" id="date"></label>
+  </section>
+  <section class="col col-6">
+    <label class="label">月</label>
+    <label class="input" id="month">
+      <select class="form-control" name="time_month">
+        <option value='1'>一月</option>
+        <option value='2'>二月</option>
+        <option value='3'>三月</option>
+        <option value='4'>四月</option>
+        <option value='5'>五月</option>
+        <option value='6'>六月</option>
+        <option value='7'>七月</option>
+        <option value='8'>八月</option>
+        <option value='9'>九月</option>
+        <option value='10'>十月</option>
+        <option value='11'>十一月</option>
+        <option value='12'>十二月</option>
+      </select>
+    </label>
+  </section>
+  <section class="col col-6">
+    <label class="label">周</label>
+    <label class="input" id="week">
+      <select class="form-control" name="time_dayofweek">
+        <option value='2'>周一</option>
+        <option value='3'>周二</option>
+        <option value='4'>周三</option>
+        <option value='5'>周四</option>
+        <option value='6'>周五</option>
+        <option value='7'>周六</option>
+        <option value='1'>周日</option>
+      </select>
+    </label>
+  </section>
+  <section class="col col-6">
+    <label class="label">日</label>
+    <label class="input" id="days-364">
+      <input name="schedule_interval">
+      <b class="tooltip tooltip-bottom-right">有效值为1-364</b>
+    </label>
+  </section>
+  <section class="col col-6">
+    <label class="label">日</label>
+    <label class="input" id="days">
+      <select name="time_day" class="form-control"></select>
+    </label>
+  </section>
+  <section class="col col-6">
+    <label class="label">小时</label>
+    <label class="input" id="hh"></label>
+  </section>
+  <section class="col col-6">
+    <label class="label">分钟</label>
+    <label class="input" id="mm"></label>
+  </section>
+  <section class="col col-6">
+    <label class="label">秒</label>
+    <label class="input" id="ss"></label>
+  </section>
+</div>
+
+<div style="display:none;" id='template2'>
+  <section class="col col-6">
+    <label class="label">时间</label>
+    <label class="input" id="hh-mm-ss"></label>
+  </section>
+  <section class="col col-6">
+    <label class="label">时间</label>
+    <label class="input" id="mm-ss"></label>
+  </section>
+  <section class="col col-6">
+    <label class="label">时间</label>
+    <label class="input" id="ss"></label>
+  </section>
+</div>
+
+<div style="display:none;" id='template3'>
+  <section class="col col-6">
+    <label class="label">终止日期</label>
+    <label class="input" id='run_end_time'>
+    </label>
+  </section>
+  <section class="col col-6">
+    <label class="label">执行次数</label>
+    <label class="input">
+      <input name="run_times">
+    </label>
+  </section>
+</div>
+
+<link rel="stylesheet" type="text/css" href="### zy.server###schedule/bootstrap-datetimepicker.min.css">
+
+<div class="modal fade" id="schedule_add_updschedule" 
+     tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true" data-backdrop="static">
+     
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">ETL 计划管理（<span></span>）</h4>
+      </div>
+
+      <div class="modal-body no-padding" id='schedule_content' style="overflow-x: hidden;">
+
+        <!-- FORM Start -->
+        <form method="post" onsubmit="return false;" class="smart-form">
+          <fieldset>
+            <div class="row">
+              <section class="col col-6">
+                <input type="hidden" name="scheduleid" placeholder="作业ID">
+                <label class="label">作业名称</label>
+                <label class="input">
+                  <input type="text" name="schedulenm" placeholder="作业名称">
+                  <b class="tooltip tooltip-bottom-right">作业名称为必填项目</b>
+                </label>
+              </section>
+              <section class="col col-6">
+                <label class="label">周期</label>
+                <label class="select">
+                  <select type="text" name="schedule_cycle" placeholder="周期"></select>
+                  <b class="tooltip tooltip-bottom-right">周期为必填项目</b>
+                </label>
+              </section>
+            </div>
+
+            <div class="row">
+              <section class="col col-6">
+                <label class="label">流程关联</label>
+                <label class="select">
+                  <select name="__rid" placeholder="流程名称"></select>
+                  <b class="tooltip tooltip-bottom-right">流程名称为必选项目</b>
+                </label>
+              </section>
+              <section class="col col-6">
+                <label class="label">采集点</label>
+                <label class="select">
+                  <select name="__gid" placeholder="采集点名称"></select>
+                  <b class="tooltip tooltip-bottom-right">采集点名称为可选项目</b>
+                </label>
+              </section>
+            </div>
+
+            <div class="row">
+              <section class="col col-6">
+                <label class="label">特例关联</label>
+                <label class="select">
+                  <select name="__vid" placeholder="流程名称"></select>
+                  <b class="tooltip tooltip-bottom-right">流程名称为必选项目</b>
+                </label>
+              </section>
+            </div>
+
+            <div class="row mhide">
+              <section class="col col-10">
+                <label class="label">API</label>
+                <label class="textarea">
+                  <textarea name="task_api" readonly="readonly" oninput="this.style.height = this.scrollHeight + 'px';"
+                            onpropertychange="this.style.height = this.scrollHeight + 'px';"
+                            style=" background: none repeat scroll 0% 0% white; cursor: default; overflow-y: hidden; height: 48px;"></textarea>
+                </label>
+              </section>
+              <section class="col col-2">
+                <label class="label">
+                  <label class="toggle"><input type="checkbox" name="inner_api" checked="false">
+                    <i data-swchon-text="内部" data-swchoff-text="外部"></i></label>
+                </label>
+                <button class="btn btn-default btn-sm" type="submit" name="api_edit" style="margin-top: 30px">API编辑
+                </button>
+              </section>
+            </div>
+
+            <div class="row">
+              <div id="first_zone">
+              </div>
+              <div id="second_zone">
+              </div>
+            </div>
+            <div class="row" id="third_zone">
+            </div>
+
+            <section>
+              <label class="label">备注</label>
+              <label class="textarea">
+                <textarea rows="2" name="mark" placeholder="描述"></textarea>
+              </label>
+            </section>
+          </fieldset>
+          <footer class='mhide' style='display:none !important'>
+            <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+            <button type="submit" class="btn btn-primary">确定</button>
+          </footer>
+        </form>
+        <!-- FORM End -->
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
+<script src="### zy.server###lib/js/plugin/jquery-form/jquery.form.min.js"/>
+<script src='### zy.server###lib/js/plugin/bootstrap-datepicker/bootstrap-datepicker.js'/>
+<script src="### zy.server###lib/js/plugin/bootstrap-timepicker/bootstrap-timepicker.min.js"/>
+<script src='### zy.server###lib/js/plugin/bootstrap-datepicker/bootstrap-datepicker.zh-CN.js'/>
+<script src="### zy.server###schedule/timepicker.js?t=1"/>
+<script src="### zy.server###schedule/datepicker.js?t=1"/>
+
+<!-- SCRIPTS ON PAGE EVENT -->
+<script type="text/javascript">
+
+// tab键
+// document.onkeydown = function (event) {
+//   var key = event.keyCode;
+//   if (key == 9) {
+//     console.log(888)
+//     if($('.bootstrap-timepicker-widget ')){
+//       $('[name=schedule_interval]').timepicker('hideWidget')
+//       $('[name=task_time]').timepicker('hideWidget')
+//     }
+//   }
+// };
+
+var schedule_edit = function (scheduleid, disable, data_loader, data_saver, _jparent) {
+
+
+  var timeInput = zy_time();
+  var dateInput = zy_date();
+  var ok_fn = null;
+  var dia_opt = { title: '计划管理', close_not_remove: true, width: 600,
+    buttons: { '确定': function() { ok_fn && ok_fn(); } } };
+
+  var jcontent      = $('#schedule_content');
+  var Modal         = eeb.easy_dialog(jcontent, _jparent, dia_opt);
+  var ModalTitle    = $('#schedule_add_updschedule .modal-title span');
+  var Form          = jcontent.find('form');
+  var TaskCycle     = jcontent.find('[name=schedule_cycle]');
+  var APIUrl        = jcontent.find('[name=task_api]');
+  var ApiBtn        = jcontent.find('[name=api_edit]');
+  var TaskMask      = jcontent.find('[name=mark]');
+  var FullDateC     = $('#template #date');
+  var Month         = $('#template [name=time_month]');
+  var Days          = $('#template [name=time_day]');
+  var APIout        = jcontent.find('[name=inner_api]');
+  var SubmitBtn     = jcontent.find('footer [type=submit]');
+  var runid_select  = jcontent.find('select[name=__rid]');
+  var gid_select    = jcontent.find('select[name=__gid]');
+  var vid_select    = jcontent.find('select[name=__vid]');
+
+  var Fzone = $('#first_zone');
+  var Szone = $('#second_zone');
+  var Tzone = $('#third_zone');
+
+
+  //模态隐藏控件消失
+  Modal.on('hide.bs.modal', function () {
+    // console.log(11)
+    if ($('.bootstrap-timepicker-widget '))
+      $('.bootstrap-timepicker-widget ').remove();
+  });
+
+  var basic_config = {
+    '10': {
+      'name': '立即执行',
+      'dep': null,
+      'showEnd': false
+    },
+    '20': {
+      'name': '一次性任务',
+      'dep': {
+        'first_zone': ['date'],
+        'second_zone': ['hh-mm-ss']
+      },
+      'showEnd': false
+    },
+    '30': {
+      'name': '每年',
+      'dep': {
+        'first_zone': ['month', 'days'],
+        'second_zone': ['hh-mm-ss']
+      },
+      'showEnd': true
+    },
+    '31': {
+      'name': '每月',
+      'dep': {
+        'first_zone': ['days'],
+        'second_zone': ['hh-mm-ss']
+      },
+      'showEnd': true
+    },
+    '40': {
+      'name': '每周',
+      'dep': {
+        'first_zone': ['week'],
+        'second_zone': ['hh-mm-ss']
+      },
+      'showEnd': true
+    },
+    '50': {
+      'name': '每日',
+      'dep': {
+        'first_zone': [],
+        'second_zone': ['hh-mm-ss']
+      },
+      'showEnd': true
+    },
+    '60': {
+      'name': '每n天',
+      'dep': {
+        'first_zone': ['days-364'],
+        'second_zone': ['hh-mm-ss']
+      },
+      'showEnd': true
+    },
+    '70': {
+      'name': '每n小时',
+      'dep': {
+        'first_zone': ['hh'],
+        'second_zone': ['mm-ss']
+      },
+      'showEnd': true
+    },
+    '80': {
+      'name': '每n分钟',
+      'dep': {
+        'first_zone': ['mm'],
+        'second_zone': ['mm-ss']
+      },
+      'showEnd': true
+    },
+    '90': {
+      'name': '每n秒',
+      'dep': {
+        'first_zone': ['ss'],
+        'second_zone': []
+      },
+      'showEnd': true
+    }
+  };
+
+  function Title() {
+    if (scheduleid && disable) {
+      ModalTitle.html('查看');
+      return false
+    }
+
+    if (scheduleid && !disable) {
+      ModalTitle.html('修改');
+      return false
+    }
+
+    ModalTitle.html('添加');
+  }
+
+  function Input2Dom() {
+    var FullTime = timeInput.hh().attr('readonly', 'readonly');
+    var _23Time = timeInput.hour().attr('readonly', 'readonly');
+    var _59Time = timeInput.ss().attr('readonly', 'readonly');
+    var _59Time2 = timeInput.ss().attr('readonly', 'readonly');
+    var FullDate = dateInput.date().attr('readonly', 'readonly');
+    var mm_ss = timeInput.mm().attr('readonly', 'readonly');
+
+    var end = dateInput.date().attr('name', 'run_end_time').attr('readonly', 'readonly');
+    jcontent.find('#run_end_time').append(end);
+    jcontent.find('#hh-mm-ss').append(FullTime);
+    jcontent.find('#mm-ss').append(mm_ss);
+    jcontent.find('#hh').append(_23Time);
+    jcontent.find('#mm').append(_59Time);
+    jcontent.find('#ss').append(_59Time2);
+    jcontent.find('#date').append(FullDate);
+  }
+
+  function Id2section(id, container) {
+    return container.find('#' + id).closest('section');
+  }
+
+  function Hander(o) {
+
+    AllHide();
+
+    //终止日期 and 执行次数显示与否
+    o['showEnd'] ? Tzone.show() : Tzone.hide();
+
+    var c = o['dep'];
+
+    if (!c) return null;
+
+    var f = c['first_zone'];
+    var s = c['second_zone'];
+
+    $.each(f, function (_i, id) {
+      var section = Id2section(id, $('#template'));
+      section.clone(true).appendTo(Fzone);
+    });
+
+    $.each(s, function (_i, id) {
+      var section = Id2section(id, $('#template2'));
+      section.clone(true).appendTo(Szone);
+    });
+
+    if (o.showEnd) $('#template3').children().clone(true).appendTo(Tzone);
+
+    Input2Dom();
+
+    $('#first_zone [name=task_time]').attr('name', 'schedule_interval');
+  }
+
+  function AllHide() {
+    Fzone.empty();
+    Szone.empty();
+    Tzone.empty();
+  }
+
+
+  function Event() {
+    APIUrl.bind('_change', function (e, o) {
+      var $this = $(this);
+      if (o) $this.val(o.url);
+    });
+
+    APIout.change(function () {
+      var flg = $(this).prop('checked');
+      if (flg) {
+        APIUrl.attr('readonly', 'readonly');
+        ApiBtn.show();
+      } else {
+        APIUrl.removeAttr('readonly');
+        ApiBtn.hide();
+      }
+    });
+
+    SubmitBtn.click(ok_fn = function () {
+      if (!check()) return false;
+
+      var param = Form.form2json();
+      param.inner_api = Number(param.inner_api);
+      if (param.task_time) {
+        var tt = param.task_time.split(':');
+        var length = tt.length;
+        switch (length) {
+          case 3:
+            param.time_hour = tt[0];
+            param.time_min = tt[1];
+            param.time_sec = tt[2];
+            break;
+          case 2:
+            param.time_min = tt[0];
+            param.time_sec = tt[1];
+            break;
+          case 1:
+            param.time_sec = tt[0];
+            break;
+        }
+      }
+
+      if (param.task_date) {
+        var td = param.task_date.split('-');
+        var length = td.length;
+        switch (length) {
+          case 3:
+            param.time_year = td[0];
+            param.time_month = td[1];
+            param.time_day = td[2];
+            break;
+          case 2:
+            param.time_month = td[0];
+            param.time_day = td[1];
+            break;
+          case 1:
+            param.time_day = td[0];
+            break;
+        }
+      }
+
+      param.id = scheduleid;
+
+      data_saver && data_saver(param, function(msg) {
+        //zy.extend.msg('成功', 's');
+        Modal.dialog('close');
+      });
+
+
+      // var apinm = scheduleid ? 'change' : 'task';
+
+      // zy.extend.post({
+      //   apinm: apinm,
+      //   app: 'a20a0c6a82fb4cb085cb816e5526d4bc',
+      //   mod: 'cron'
+      // }, function (msg) {
+      //   zy.extend.msg('成功', 's');
+      //   schedule_app.Pagination(1);
+      //   Modal.modal('hide');
+      // }, param);
+    });
+
+    ApiBtn.click(function (event) {
+      Modal.dialog('close');
+      zy.net.loadHTML('schedule/schedule_manage/api_list.html', $('#schedule_api'))
+    });
+
+    TaskCycle.change(function (event) {
+      var $val = $(this).val();
+      basic_config[$val] && Hander(basic_config[$val]);
+    });
+
+    Month.change(function (event) {
+      var $val = $(this).val();
+      Days.trigger('_change', [$val]);
+    });
+
+    Days.bind('_change', function (e, month) {
+      var $this = $(this);
+      $this.empty();
+      var daysofmonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+      var index = month || 1;
+      var days = daysofmonth[index - 1];
+      for (var i = 1; i <= days; i++) {
+        var option = $('<option>');
+        option.html(i);
+        option.val(i);
+        option.appendTo($this);
+      }
+    });
+  }
+
+  function HanderDayAndTime(o) {
+
+    if (o.schedule_cycle == '20') {
+      var t = [];
+      t.push(o.time_year);
+      t.push(o.time_month);
+      t.push(o.time_day);
+      o.task_date = t.join('-');
+    }
+
+    var tt = [];
+
+    if (o.time_sec) tt.push(o.time_sec);
+    if (o.time_min) tt.push(o.time_min);
+    if (o.time_hour) tt.push(o.time_hour);
+
+    tt = tt.reverse();
+    o.task_time = tt.join(':');
+
+    o.inner_api = Number(o.inner_api);
+  }
+
+  function init(cb) {
+    unbindEvent();
+
+    TaskCycle_selector(function() {
+      joblist_selector(function() {
+        cluster_selector(function() {
+          varnish_selector(function() {
+            load_data(cb);  
+          });
+        });
+      });
+    });
+
+
+    function TaskCycle_selector(next) {
+      eeb.get_zy_dict('ZR.0055', function(options_html) {
+        TaskCycle.html(options_html);
+
+        TaskCycle.select2({
+          width: '100%', allowClear: false
+        }).select2('val', '10');
+        next && next();
+      }, true);
+    }
+
+
+    function load_data(next) {
+      if (data_loader) {
+        data_loader(function(data) {
+          HanderDayAndTime(data);
+          next && next(data);
+        });
+      } else {
+        next && next(data);
+      }
+    }
+
+
+    function joblist_selector(next) {
+      service_to_select('joblist', { wnid: eeb.get_wnid(), t:1, all: true },
+          runid_select, 'ID', 'NAME', false, over);
+
+      function over() {
+        runid_select.change(function() {
+          var jnm = jcontent.find('[name=schedulenm]');
+          if (!jnm.val()) {
+            jnm.val( runid_select.find('option:selected').text() );
+          }
+        });
+        next && next();
+      }
+    }
+
+
+    function cluster_selector(next) {
+      service_to_select('grp_list', {all: true}, 
+          gid_select, 'ID', 'NAME', true, next);
+    }
+
+
+    function varnish_selector(next) {
+      var parm = eeb.parse_url_parm().query;
+      parm.t   = 1;
+      parm.all = 1;
+      
+      service_to_select('varnish_list', parm, 
+          vid_select, 'VID', 'NAME', true, next);
+    }
+
+
+    function service_to_select(service, parm, jselect, kname, vname, hasNotSelect, next) {
+      eeb.callService(service, parm, function(ret) {
+        var html = eeb.createOptions();
+        hasNotSelect && html.push('', '[无]');
+        
+        ret.forEach(function(obj) {
+          html.push(obj[kname], obj[vname]);
+        });
+
+        html.setto(jselect);
+        next && next();
+      });
+    }
+    
+
+    // zy.cache.initDicts('ZR.0055', function () {
+    //   TaskCycle.zySelect('ZR.0055', false, {
+    //     width: '100%',
+    //     allowClear: false
+    //   });
+
+    //   if (scheduleid) {
+    //     zy.extend.get({
+    //       apinm: 'taskinfo',
+    //       app: 'a20a0c6a82fb4cb085cb816e5526d4bc',
+    //       mod: 'cron'
+    //     }, function (msg) {
+    //       HanderDayAndTime(msg.result[0]);
+    //       cb && cb(msg.result[0]);
+    //     }, {scheduleid: scheduleid})
+    //   } else {
+    //     TaskCycle.select2('val', '10');
+    //     cb && cb();
+    //   }
+    // });
+  }
+
+  function check() {
+    var schedulenm = jcontent.find('[name=schedulenm]');
+    if (schedulenm.val() == '') return zy.extend.msg('请输入任务名', 'i');
+    if (APIUrl.val() == '') return zy.extend.msg('请选择API', 'i');
+
+    var result = [];
+
+    Fzone.find('input').each(function () {
+      var $this = $(this);
+      if ($this.val() == '') {
+        var nm = $this.parent().prev().html();
+        result.push(nm);
+      }
+    });
+
+    Szone.find('input').each(function () {
+      var $this = $(this);
+      if ($this.val() == '') {
+        var nm = $this.parent().prev().html();
+        result.push(nm);
+      }
+    });
+
+    if (result.length > 0) return zy.extend.msg(result.join(',') + '为必填项', 'i');
+
+    var sday = jcontent.find('[name=schedule_interval]');
+
+    if (sday.length > 0) {
+      var $val = sday.val();
+      if ($val == '') return zy.extend.msg('请输入' + sday.parent().prev().html(), 'i');
+      if (isNaN($val)) return zy.extend.msg('请输入有效数字', 'i');
+      if (Math.round($val) != $val) return zy.extend.msg('请输入正整数', 'i');
+      if ($val > 364 || $val < 1) return zy.extend.msg('有效范围为1-364', 'i');
+    }
+
+    var RunTims = jcontent.find('[name=run_times]');
+
+    if (RunTims.is(':visible')) {
+      var temp = RunTims.val();
+      if (temp != '') {
+        if (isNaN(temp)) return zy.extend.msg('执行次数为数字', 'i');
+        if (temp.length > 8) return zy.extend.msg('执行次数不可超过8为数字', 'i');
+        if (temp < 1) return zy.extend.msg('执行次数为正整数', 'i');
+        if (Math.round(temp) != temp) return zy.extend.msg('执行次数为正整数', 'i');
+      }
+    }
+
+    return true;
+  }
+
+  function unbindEvent() {
+    jcontent.find('*')
+        .unbind().off('click').off('change');
+  }
+
+  function setApi(data) {
+    // console.log('setapi', data)
+    // 这个值是无效的, 在别处写入
+    APIUrl.val('/eeb/service?fn=run&t=1&rid=' + data.id);
+  }
+
+  //主流程!!
+  init(function (data) {
+    AllHide();
+    Event();
+    Days.trigger('_change', [1]);
+    Title();
+    // Modal.modal('show');
+    if (data) Form.json2form(data);
+    TaskCycle.trigger('change');
+    if (data) {
+      Form.json2form(data);
+      APIout.prop('checked', Boolean(data.inner_api));
+      APIout.trigger('change');
+    }
+    Form.formDisable(disable);
+    Form.find('footer .btn-default').btnDisable(false);
+    setApi(data);
+
+    var _parm = eeb.parse_url_parm();
+    if (_parm.query.rid) {
+      runid_select.val(_parm.query.rid);
+    }
+    runid_select.select2({width: '100%'});
+    gid_select.select2({width: '100%'});
+    vid_select.select2({width: '100%'});
+  });
+
+  return Modal;
+};
+</script>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+  <meta name="description" content="智云 - Web Portal"/>
+  <meta name="keywords" content="智融, 智云"/>
+  <meta name="author" content="智融IT"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+  <title>智云 - Web Portal</title>
+
+  <script src='js/lib/jquery-2.0.3.min.js'/>
+  <script src='js/lib/jquery.snippet.min.js'/>
+  <script src='js/lib/jquery-ui-1.10.3.min.js'/>
+  <script src='js/lib/jtopo-0.4.8-min.js'/>
+
+  <script src='js/export-fn.js'/>
+  <script src='js/dict-local.js'/>
+  <script src='js/tag-util.js'/>
+
+  <link rel="stylesheet" href="css/basic.css">
+  <link rel="stylesheet" href="css/jquery-ui.min.css">
+
+</head>
+
+<body>
+  <div class='head_inf'>
+    <if var="__SLicE_save.title">
+      <slice ref='title'/>
+    </if>
+    <div style='color:#999; pedding: 80px 0 0 0; font-size:8px'>This is ETL/ESB Demo</div>
+  </div>
+
+  <div class='main_frame'>
+    <div class='tool_bar jtopo_toolbar' id='tool_bar'>
+      <slice ref='tool_bar'/>
+    </div>
+
+    <div class='user_operate'>
+      <div class='left'>
+        <div class='menu'>
+          <slice ref='menu'/>
+        </div>
+        <div class='functions'>
+          <slice ref='functions'/>
+        </div>
+      </div>
+      <div class='right'>
+        <!-- <canvas id="canvas" width='800' height='560'></canvas>  -->
+        <slice ref='operator_content'/>
+      </div>
+    </div>
+
+    <div class='show_state' id='__show_state__'>
+      state
+    </div>
+  </div>
+
+</body>
+</html>

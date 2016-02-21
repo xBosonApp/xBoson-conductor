@@ -1,0 +1,401 @@
+<link rel="stylesheet" href="css/filedrop.css">
+
+
+<div class='mhide __file_pool_dialog'>
+  <ul>
+    <li><a href="#__fp_upload_new">上传新文件</a></li>
+    <li><a href="#__file_pool_list">文件列表</a></li>
+  </ul>
+
+  <div id="__fp_upload_new">
+    <fieldset id="__upload_zone">
+      <legend>拖拽文件到这里</legend>
+      <div class='fp-upload-field'>
+        <p>或点击这里选择文件 <em>浏览...</em></p>
+      </div>
+      <div class='_progress'></div>
+    </fieldset>
+  </div>
+
+  <div id='__file_pool_list'>
+    <legend>
+      <span>选择文件</span>
+      <a href='#' class='btn btn-default get'>下载</a> 
+      <a href='#' class='btn btn-default rep'>替换</a> 
+      <a href='#' class='btn btn-default del'>删除</a> 
+      <span class='currdir note' style='float: right;'></span>
+    </legend>
+    <form class='smart-form'>
+    </form>
+    <div style='width:100%; clear:both'/>
+    <iframe src='' class='mhide'/>
+  </div>
+</div>
+
+
+<section class="col col-md-6 mhide" id='__file_item_template'>
+  <label class="input">
+    <img src='img/file-icon/csv.png' style='height:40px; float:left'/>
+    <div style='word-break: break-all'>
+      <span class="filename"></span><br/>
+      <span class='note mt'></span>
+    </div>
+  </label>
+</section>
+
+
+<script src='js/lib/filedrop-min.js'/>
+
+
+<script>
+//
+// 这个文件用 eeb.load_file() 引入
+//
+(function() {
+
+// $('#__file_pool_dialog').tabs();
+
+
+var _root     = getRoot();
+var fit       = $('#__file_item_template');
+var down_file = _root.find("#__file_pool_list iframe");
+var fplist    = _root.find("#__file_pool_list form");
+var rep_html  = _root.find('#__fp_upload_new').html();
+var btn_grp   = eeb.button_group();
+
+
+//
+// 导出函数 Function(opt)
+// _opt : { 
+//    title         : String-- 标题
+//    parent        : jdom  -- 父窗口
+//    no_upload     : bool  -- true 则不许要有上传文件选项, 默认 false
+//    no_download   : bool  -- true 则不许要有下载文件选项, 默认 false
+//    no_delete     : bool  -- true 则不许要有删除文件选项, 默认 false
+//    no_replace    : bool  -- true 则不许要有替换文件选项, 默认 false
+//    buttons       : Object-- { 'name' : Function(jdialog, filedata) ... }
+//    dbclick       : Function(jdialog, filedata) 当双击时调用
+//    file_getter   : Function(rcb) -- 见 init_file_from(),
+// }
+//
+window.eeb.open_file_pool = function(_opt) {
+  var opt = { 
+    title  : '文件池', 
+    width  : '88%', 
+    height : document.body.offsetHeight * 0.8,
+    parent : null,
+  };
+
+  $.extend(true, opt, _opt);
+
+  if (opt.buttons) {
+    for (var name in opt.buttons) {
+      opt.buttons[ name ] = _proxy(opt.buttons[ name ]);
+    }
+  }
+
+  // 火狐是有多破
+  function _proxy(processer_fn) {
+    return function() {
+      var jdialog = $(this);
+
+      get_select_file(function(fname, filedata) {
+        processer_fn(jdialog, filedata);
+      });
+    }
+  }
+
+  if (opt.no_upload) {
+    _root.find('a[href="#__fp_upload_new"]').remove();
+    _root.find('#__fp_upload_new').remove();
+  }
+
+  if (opt.no_download) {
+    _root.find('.get').hide();
+  }
+
+  if (opt.no_delete) {
+    _root.find('.del').hide();
+  }
+
+  if (opt.no_replace) {
+    _root.find('.rep').hide();
+  }
+
+  if (opt.dbclick) {
+    fplist.off('dblclick').dblclick(function() {
+      get_select_file(function(fname, filedata) {
+        opt.dbclick(_root, filedata);
+      });
+    });
+  }
+
+  if (!opt.no_upload) {
+    create_upfile_zone('__upload_zone');
+  }
+
+
+  eeb.easy_dialog(_root, opt.parent, opt);
+  _root.tabs();
+  _update();
+
+
+  function _update() {
+    if (opt.file_getter) {
+      init_file_from(opt.file_getter);
+    } else {
+      get_files();
+    }
+  }
+
+
+  function _show() {
+    _root.dialog('open');
+  }
+
+
+  // 改变当前目录提示
+  function _set_dir(dirs) {
+    _root.find('.currdir').html(dirs);
+  }
+
+
+  function _clean() {
+    fplist.html('');
+  }
+
+  bind_event();
+
+  return {
+    update  : _update,
+    show    : _show,
+    set_dir : _set_dir,
+    clean   : _clean,
+  }
+};
+
+
+//
+// file_getter   : Function(rcb) 
+//       -- rcb(err, list) 返回一个文件数组 
+//       -- list: [ { t:'类型', n:'名称', mt:'时间' } ]
+//
+function init_file_from(file_getter) {
+  fplist.html('');
+  btn_grp.reset();
+
+  var p = eeb.easy_progress();
+  p.begin();
+
+  file_getter(function(err, list) {
+    p.end();
+    if (err) {
+      fplist.append('<div>' + err.message + '</div>');
+      return;
+    }
+
+    list.forEach(function(f, i) {
+      var mt = new Date(f.mt).toLocaleString();
+      //
+      // 这里处理文件类型, 切换不同的文件图标
+      //
+      if (!f.t) f.t = getFileType(f.n);
+      var icon = 'img/file-icon/' + f.t + '.png';
+
+      var file = fit.clone();
+      file.find('.filename').html(f.n).data('filedata', f);
+      file.find('.mt').html('[ ' + mt + ' ]');
+      file.find('img').attr('src', icon);
+      file.show();
+
+      fplist.append(file); 
+      btn_grp.add(file);
+    });
+  });
+}
+
+
+function bind_event() {
+
+  _root.find('.rep').off('click').click(function() {
+    var thiz = $(this);
+
+    get_select_file(function(fname) {
+      var opt = {
+        width  : '77%',
+        height : document.body.offsetHeight * 0.7,
+        title  : '上传文件替换 ' + fname
+      };
+
+      var repdialog = eeb.easy_dialog(rep_html, thiz, opt);
+
+      repdialog.find('fieldset').each(function() {
+        create_upfile_zone(this, true, fname);
+
+        // hack ! 标题抽风, 这里修正
+        setTimeout(function() {
+          var fix = repdialog.find(':input[name=fd-file]')
+          fix.css({position:'relative'});
+          setTimeout(function() {
+            fix.css({position:'absolute'});
+          }, 1);
+        }, 500);
+      });
+    });
+  });
+
+
+  _root.find('.get').off('click').click(function() {
+    get_select_file(function(fname) {
+      var url = '/eeb/service?fn=fp_get&fname=' + fname + '&wnid=' + eeb.get_wnid();
+      down_file.attr('src', url);
+    });
+  });
+
+
+  _root.find('.del').off('click').click(function() {
+    get_select_file(function(fname) {
+      eeb.callService('fp_del', {fname:fname}, function(msg) {
+        get_files();
+        eeb.show_msg_box(null, msg);
+      });
+    });
+  });
+}
+
+
+function get_files() {
+  var parm = {
+    openid : eeb.getOpenID(),
+    org    : eeb.getOrg()
+  };
+
+  init_file_from(function(rcb) {
+    eeb.callService('fp_list', parm, function(filelist) {
+      filelist.forEach(function(f) {
+        f.n = f.f;
+      });
+      rcb(null, filelist);
+    }, rcb);
+  });
+}
+
+
+function getRoot() {
+  var vroot = $('.__file_pool_dialog');
+  if (vroot.length == 1) {
+    vroot.data('__is_file_pool_template', 1);
+  } else {
+    vroot.each(function() {
+      if ($(this).data('__is_file_pool_template')) {
+        vroot = $(this);
+        return false;
+      }
+    });
+  }
+  return vroot;
+}
+
+
+//
+// rcb: Function(name, filedata)
+//
+function get_select_file(rcb) {
+  var file = btn_grp.selector();
+  if (!file) {
+    eeb.show_msg_box(null, "先选择一个文件");
+    return;
+  }
+
+  file = file.find('.filename'); 
+  var name = file.html();
+  rcb(name, file.data('filedata'));
+  btn_grp.clear_select();
+}
+
+
+function getFileType(name) {
+  var i = name.indexOf('.');
+  var t;
+  if (i >= 0) {
+    t = name.substr(i+1);
+  }
+  return t || 'file';
+}
+
+
+//
+// 创建一个上传文件组件
+// dom_id       -- String 组件 id 或 dom 对象
+// replase_file -- Bool 是否覆盖原文件, 默认 false
+// target_name  -- 指定保存文件名, 默认使用上传文件名
+//
+function create_upfile_zone(dom_id, replase_file, save_name) {
+
+  var root = $((typeof dom_id == 'string') ? '#' + dom_id : dom_id);
+  var zone = new FileDrop(dom_id);
+  var upfile_progress = root.find("._progress");
+
+
+  zone.event('send', function (files) {
+    files.each(function (file) {
+
+      if (file.size == 0) {
+        eeb.show_msg_box(null, "禁止上传空文件");
+        return;
+      }
+
+      file.event('done', function (xhr) {
+        console.log(xhr.responseText);
+        var ret = JSON.parse(xhr.responseText);
+        var msg = ret.ret ? ret.msg : ret.data;
+        eeb.show_msg_box(null, msg);
+        get_files();
+      });
+
+      file.event('progress', function (sent, total) {
+        var pc = sent / total;
+        var tc = $('<div><em>' + file.name + '</em> 上传了 ' 
+                  + Math.round(pc * 100) + '%...</div><br/>');
+
+        upfile_progress.append(tc);
+
+        if (pc == 1) {
+          tc.fadeOut(3000, function() {
+            tc.remove();
+          });
+        }
+      });
+
+      file.event('error', function (e, xhr) {
+        var ret = JSON.parse(xhr.responseText);
+        eeb.show_msg_box(xhr.status, ret.msg);
+      });
+
+      var url = '/eeb/service?fn=fp_up&fname=' + (save_name || file.name)
+              + '&wnid=' + eeb.get_wnid();
+
+      if (replase_file) {
+        url += '&rep=true';
+      }
+
+      file.sendTo(url);
+    });
+  });
+
+
+  // // React on successful iframe fallback upload (this is separate mechanism
+  // // from proper AJAX upload hence another handler):
+  // zone.event('iframeDone', function (xhr) {
+  //   alert('Done uploading via <iframe>, response:\n\n' + xhr.responseText);
+  // });
+
+
+  // // A bit of sugar - toggling multiple selection:
+  // fd.addEvent(fd.byID('multiple'), 'change', function (e) {
+  //   zone.multiple(e.currentTarget || e.srcElement.checked);
+  // });
+}
+
+})();
+</script>

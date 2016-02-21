@@ -1,0 +1,316 @@
+
+<form id='___prog_config_page' class='smart-form'>
+	<input type='hidden' name='_type' value='none'/>
+
+  <div class='page1'>
+		<p class="alert alert-info"> 表输出 </p>
+
+		<input name='name' label='名称' col='12'/>
+
+
+    <!-- BEGIN 数据库连接 -->
+    <input name='conn.host' label='Host'/>
+
+    <select name='conn.driver' label='数据库类型'>
+      <option value='mysql' port='3306'>MySQL</option>
+      <option value='sqlserver' port='1433'>SQL Server</option>
+      <option value='oracle' port='1521'>Oracle</option>
+      <option value='db2' port='50000'>DB 2</option>
+    </select>
+
+    <br style='width:100%; clear:both;'/>
+
+    <input name='conn.port' label='端口'/>
+    <input name='conn.database' label='Database / SID'/>
+    <input name='conn.user' label='用户名'/>
+    <input name='conn.password' type='password' label='密码'/>
+    <!-- END 数据库连接 -->
+
+    <br style='width:100%; clear:both;'/>
+
+
+    <input group='ttt' label='目标数据库表' col='6' name='table'/>
+    <button type='submit' group='ttt'
+            label='.' class='get_tables btn btn-primary'>获取表名</button>
+    <button type='submit' group='ttt'
+            label='.' class='get_fields btn btn-default'>获取字段</button>
+
+    <select name='type' label='更新类型'>
+      <option value='ins'>插入</option>
+      <option value='qi'>插入 [快速]</option>
+      <option value='upd'>更新</option>
+      <option value='i&u'>更新/插入</option>
+      <option value='del'>删除</option>
+    </select>
+
+    <br style='width:100%; clear:both;'/>
+
+    <div class='tmap'>
+      <h6>字段映射</h6>
+      <hr class="simple" style='width:100%; clear:both;'/>
+      <div class='table_mapping'></div>
+      <hr class="simple" style='width:100%; clear:both;'/>
+    </div>
+
+    <div class='twhere'>
+      <h6>查询条件</h6>
+      <hr class="simple" style='width:100%; clear:both;'/>
+      <div class='where_mapping'></div>
+      <hr class="simple" style='width:100%; clear:both;'/>
+    </div>
+
+
+    <br style='width:100%; clear:both;'/>
+		
+<!-- 		<input type='submit' value='测试映射' 
+           class='check_table btn btn-primary' col='4' label=''/> -->
+    <input type='button' value='添加查询条件' 
+           class='add btn btn-primary' col='4' label=''/>
+
+    <input type='submit' value='应用' 
+           class='ok btn btn-primary' col='4' label='' />
+  </div>
+
+	<input type='hidden' name='retmessage' popmsg='1'/>
+</form>
+
+
+
+<div class='row mhide page2' id='__the_row'>
+  <input rowname='field' label='目标表字段' class='get_src_fields'
+         col='3' group='1' readonly='true' />
+  <button class='btn btn-primary get_src_fields_btn' type='submit' 
+          group='1' label='&nbsp;' >从数据库中读取</button>
+
+  <select rowname='comp' label='比较' col='2'>
+    <option value='5'>等于</option>
+    <option value='1'>大于</option>
+    <option value='2'>小于</option>
+    <option value='3'>大于等于</option>
+    <option value='4'>小于等于</option>
+    <option value='6'>包含</option>
+    <option value='7'>范围</option>
+    <option value='8'>IS NULL</option>
+    <option value='9'>IS NOT NULL</option>
+  </select>
+
+  <section class="col col-md-3">
+    <label class="label">源表字段<input type="radio" ctrl="cfield">
+    </label>
+    <label class="input cfield">
+      <div class="btn-group" style="width: 100%;">
+        <input rowname="cfield" readonly="true" placeholder="源表字段" />
+        <button type="button" flowdata_to_rowname="cfield" style="float: right; padding: 2px 5px;"
+                class='btn btn-primary' >从流中读取</button>
+      </div>
+    </label>
+  </section>
+
+  <section class="col col-md-2">
+    <label class="label">(或)值 <input type="radio" ctrl="f_val"> 
+    </label>
+    <label class="input f_val">
+      <input rowname="f_val"/>
+    </label>
+  </section>
+
+  <input class='del' label='操作' value='删除' col='2' type='button' />
+
+  <div style='width:100%; clear:both;'></div>
+</div>
+
+
+<script src='js/dyn-row.js'/>
+<script src='js/lib/dom.jsPlumb-1.7.4-min.js'/>
+<script src='js/fields-mapping.js'/>
+
+
+<script>
+(function() {
+
+var root     = $('#___prog_config_page');
+var rc       = $('#program_config').data('run_config');
+var eeb_work = $('#program_config').data('eeb_work');
+
+// 目标表过滤器, 为空使用所有字段, 否则如果字段不在这个map中则被忽略
+var tar_field_filter = null;
+var fieldsmap = eeb.createFieldsMapping(rc, root.find('.table_mapping'), eeb_work);
+
+
+eeb.auto_form_ui(root);
+
+
+var pb = eeb.create_bind(rc, '#___prog_config_page', function(_nouse, whoclick) {
+  // console.log(rc.mapping);
+
+  eeb_work.check_config(function(err, data) {
+    var who = $(whoclick);
+    // console.log('<>',who[0])
+
+    if (err) {
+      if (err.field) {
+        eeb.show_msg_box(null, '必须设置一个查询条件');
+        return 'no_err_msg';
+      }
+    }
+    
+    if (who.hasClass('get_tables')) {
+    	if (err) {
+        eeb.show_msg_box(null, '连接配置不正确');
+    	} else {
+        eeb.build_tables_html(root, data, function(tname) {
+          input_val('table', tname);
+          root.find('.get_fields').trigger('click');
+        });
+        return 'no_succ_msg';
+	    }
+    }
+    else if (who.hasClass('get_fields')) {
+      if (!err) {
+        fieldsmap.clearAndSetFields(data.fields);
+        return 'no_succ_msg';
+      }
+    }
+    else if (who.hasClass('get_src_fields_btn')) {
+      if (!err) {
+        who.data('setfield')(data);
+        return 'no_succ_msg';
+      }
+    }
+  });
+});
+
+
+eeb_work.when_open(function() {
+  if ( root.find(':input[name=table]').val() ) {
+    root.find('.get_fields').trigger('click');
+  }
+});
+
+
+eeb_work.when_close(function() {
+  eeb.zip(rc, 'field', 'f_val', 'cfield', 'comp');
+  rc._type = '';
+});
+
+
+// 添加条件 按钮
+eeb.dyn_row(rc, '#__the_row', root.find('.add'), root.find('.where_mapping'), pb, when_newrow);
+
+
+function when_newrow(row) {
+
+  var text = row.find('.get_src_fields');
+  eeb.select_field_from_flow(row, eeb_work);
+  row.find('.get_src_fields_btn').click(get_fields).data('setfield', select_field);
+
+
+  function select_field(data) {
+    eeb.select_field_from_table(root, data, text);
+  }
+
+  function init_show() {
+    if ( row.find('*[rowname=cfield]').val() ) {
+      return 'cfield';
+    } else {
+      return 'f_val';
+    }
+  }
+
+  eeb.radio_visibility(row.find("*[ctrl]"), row, init_show, function(_show, _hide) {
+    _hide.forEach(function(c) {
+      row.find(':input[rowname=' + c + ']').val('').trigger('change');
+    });
+  });
+}
+
+
+// 切换不同的更新类型
+root.find('select[name=type]').change(function() {
+  var v = $(this).val();
+  var sel = root.find('.add, .twhere');
+  var tm  = root.find('.tmap');
+
+  if (v == 'ins' || v=='qi' || v == null) {
+    sel.hide();
+  } else {
+    sel.show();
+  }
+
+  if (v == 'del') {
+    tm.hide();
+  } else {
+    tm.show();
+  }
+
+  // 更新之, 因隐藏 div 无法正确绘制图形
+  get_fields();
+}).trigger('change');
+
+
+
+// 获取字段 按钮
+root.find('.get_fields').click(get_fields);
+
+
+function get_fields(event, not_del_filter) {
+  var table_field = root.find(':input[name=table]');
+  var table = table_field.val();
+
+  if (!table) {
+    eeb.show_msg_box(null, '必须先选择表');
+    return false;
+  }
+
+  changeReqType('get_fields');
+}
+
+
+// 获取表 按钮
+root.find('.get_tables').click(function() {
+  var conn_has_null = false;
+  root.find(':input[name*="conn."]').each(function() {
+    if ($(this).attr('name') == 'conn.database') return;
+    if (! $(this).val()) {
+      conn_has_null = true;
+    }
+  });
+
+  if (conn_has_null) {
+    eeb.show_msg_box(null, '连接配置不正确');
+    return false;
+  }
+
+  changeReqType('get_tables');
+  root.find('.tables_but').html('正在获取...');
+});
+
+
+// 测试 check_table 按钮
+root.find('.check_table').click(function() {
+  changeReqType('check_table');
+});
+
+// 主页面 应用
+root.find('.ok').click(function() {
+  changeReqType('none');
+});
+
+// 切换数据库, 填入端口号
+root.find(':input[name="conn.driver"]').change(function() {
+  var p = $('option[value="' + this.value + '"]').attr('port');
+  root.find(':input[name="conn.port"]').val(p).trigger('change');
+});
+
+
+function input_val(iname, value) {
+  root.find(':input[name="' + iname + '"]').val(value).trigger('change');
+}
+
+function changeReqType(type) {
+  input_val('_type', type || 'none');
+}
+
+
+})();
+</script>

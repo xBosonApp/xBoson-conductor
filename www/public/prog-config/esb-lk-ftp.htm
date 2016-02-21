@@ -1,0 +1,273 @@
+
+<form id='___prog_config_page' class='smart-form'>
+  <input type='hidden' name='_type' value='none'/>
+
+  <p class="alert alert-info">FTP 客户端</p>
+
+  <input name='name' label='名称' col='12'/>
+
+
+  <input name='host' label='FTP 服务器地址' col='6'/>
+  <input name='port' label='端口' col='3'/>
+  <input name='timeout' label='超时 [秒]' col='3'/>
+  <input name='user' label='登录用户' col='6'/>
+  <input name='password' label='密码' type='password' col='6'/>
+
+<hr class="simple" style="width:100%; clear:both;"/>
+
+  <select name='mode' label='操作模式'>
+    <option value='get'>下载</option>
+    <option value='put'>上传</option>
+    <option value='append'>附加到文件末尾</option>
+    <option value='delete'>删除文件</option>
+    <option value='rename'>重命名</option>
+    <option value='list'>列出目录</option>
+  </select>
+
+  <input name='newname' label='重命名为'/>
+
+  <select name='transport' label='传输模式'>
+    <option value='ascii'>文本</option>
+    <option value='binary'>二进制</option>
+  </select>
+
+  <input name='file' label='文件' col='12' group='f'/>
+  <button class='btn btn-primary select-file' type='submit'
+          label='.' group='f' change_type='list'>浏览服务器文件</button>  
+
+
+<hr class="simple" style="width:100%; clear:both;"/>
+
+  <input name='in' label='输入' col='6' 
+         group='3' rowname='fin'/>
+  <button type='button' class='btn btn-primary' flowdata_to_rowname='fin'
+          label='.' group='3'>从流中读取</button>  
+  
+  <input name='out' label='输出到' col='6' 
+         group='2' rowname='fout'/>
+  <button type='button' class='btn btn-primary' flowdata_to_rowname='fout'
+          label='.' group='2'>从流中读取</button>  
+
+
+<hr class="simple" style="width:100%; clear:both;"/>
+
+  <input type='submit' value='测试连接' class='tconn btn btn-primary' 
+         label='' col='4' change_type='check_conn' />
+
+  <input type='submit' value='应用' class='ok btn btn-primary' 
+         label='' col='4' change_type=''/>
+
+  <input type='hidden' name='retmessage' popmsg='1'/>
+</form>
+
+
+<script src='js/fields-mapping.js'/>
+<script src='js/dyn-row.js'/>
+
+
+<script>
+(function() {
+
+var root     = $('#___prog_config_page');
+var rc       = $('#program_config').data('run_config');
+var eeb_work = $('#program_config').data('eeb_work');
+var page     = root.find('.page1');
+var selectf  = root.find('.select-file');
+var DIR_TYPE = 'd';
+var file_dlg = create_file_selector();
+
+
+eeb.auto_form_ui(root);
+eeb.change_type_button(root, eeb_work, rc);
+eeb.select_field_from_flow(root, eeb_work);
+selectf.click(function() {
+  file_dlg.clean();
+  file_dlg.show();
+});
+
+
+eeb.create_bind(rc, '#___prog_config_page', function(_nouse, who) {
+    eeb_work.check_config(function(err, data) {
+    who = $(who);
+
+    if (who.hasClass('select-file')) {
+      if (err) {
+        return pop_cdir();
+      }
+      file_dlg.setfilelist(data.data);
+      file_dlg.update();
+      return 'no_succ_msg';
+    }
+  });
+});
+
+
+eeb_work.parent_data(function(err, flow) {
+  if (err) return;
+});
+
+
+var _all     = $();
+var file     = get_f_name('file');
+var newname  = get_f_name('newname');
+var fin      = get_f_name('in');
+var fout     = get_f_name('out');
+var trans    = get_f_name('transport');
+
+
+// 切换数据库, 填入端口号
+root.find(':input[name=mode]').change(function() {
+  _all.hide();
+  switch (this.value) {
+     case 'rename':
+      newname.show();
+      file.show();
+      break;
+
+    case 'append':
+    case 'put':
+      fin.show();
+      file.show();
+      break;
+
+    case 'get':
+      trans.show();
+    case 'list':
+      fout.show();
+    case 'delete':
+      file.show();
+      break;
+  }
+}).trigger('change');
+
+
+// 在 auto_form_ui 之后调用
+function get_f_name(name) {
+  var ret = root.find('[name=' + name + ']').parents('section');
+  _all = _all.add(ret);
+  return ret;
+}
+
+
+function input_val(iname, value) {
+  root.find(':input[name="' + iname + '"]').val(value).trigger('change');
+}
+
+
+function create_file_selector(overfn) {
+  var file_dia;
+  var filelist = [];
+  var ret = {
+    update      : update,
+    show        : show,
+    clean       : clean,
+    setfilelist : setfilelist,
+  };
+
+  _init();
+  return ret;
+
+  function _init() {
+    eeb.load_file('file-pool.htm', function() {
+      file_dia = eeb.open_file_pool({
+        title       : '选择 FTP 服务器上的文件 ',
+        parent      : root,
+        file_getter : file_getter,
+        dbclick     : ondbclick,
+        
+        close_not_remove : true,
+        autoOpen    : false,
+        no_upload   : 1,
+        no_download : 1,
+        no_delete   : 1,
+        no_replace  : 1,
+
+        buttons     : {
+          '打开文件夹' : open_folder,
+          '选择文件'   : select_file,
+        },
+      });
+      overfn && overfn();
+    });
+  }
+
+
+  function ondbclick(jdialog, filedata) {
+    if (filedata.type == DIR_TYPE) {
+      open_folder(jdialog, filedata);
+    } else {
+      select_file(jdialog, filedata);
+    }
+  }
+
+
+  function open_folder(jdialog, filedata) {
+    if (filedata.type != DIR_TYPE) {
+      eeb.show_msg_box('错误', filedata.name + ' 不是目录');
+      return;
+    }
+    if (filedata.name == '.') return;
+    if (filedata.name == '..') {
+      pop_cdir();
+    } else {
+      rc.cdir += filedata.name + '/';
+    }
+    // console.log(rc.cdir);
+    selectf.trigger('click');
+    // jdialog.dialog('close');
+  }
+
+
+  function select_file(jdialog, filedata) {
+    var fname = rc.cdir + filedata.name;
+    root.find('[name=file]').val(fname).trigger('change');
+    jdialog.dialog('close');
+  }
+
+
+  function file_getter(rcb) {
+    filelist.forEach(function(f) {
+      f.t  = f.type == DIR_TYPE ? 'folder' : 'file';
+      f.mt = f.date;
+      f.n  = f.name;
+    });
+    rcb(null, filelist);
+  }
+
+
+  function update() {
+    if (file_dia) {
+      file_dia.update();
+      file_dia.set_dir('[ ' + rc.cdir + ' ]');
+    } 
+  }
+
+  function show() {
+    if (file_dia) {
+      file_dia.show();
+    } 
+  }
+
+  function clean() {
+    file_dia && file_dia.clean();
+  }
+
+  function setfilelist(_fl) {
+    filelist = _fl;
+  }
+}
+
+
+function pop_cdir() {
+  var dir = rc.cdir.split('/');
+  if (dir.length > 2) {
+    dir.pop();
+    dir.pop();
+    dir.push('');
+  }
+  rc.cdir = dir.join('/') || '/';
+}
+
+
+})();
+</script>

@@ -1,0 +1,68 @@
+
+<form id='___prog_config_page' class='smart-form'>
+  <input type='hidden' name='_type' value='none'/>
+
+    <p class="alert alert-info">变量</p>
+
+    <input name='name' label='名称' col='12'/>
+
+    <input name='vn' label='变量名' col='6'/>
+    <select name='fr' label='数据来源' col='6'>
+      <option value='1'>从流中选择</option>
+      <option value='2'>固定值</option>
+    </select>
+
+    <div cc='1'>
+      <input name='val' label='手动变量' col='6'/>
+    </div>
+    <div cc='2'>
+      <input name='val2' label='流变量' col='6' group='1' rowname='val2'/>
+      <button type='button' class='btn btn-primary' flowdata_to_rowname='val2'
+            label='.' group='1'>从流中读取</button>
+    </div>
+
+    <hr class="simple" style="width:100%; clear:both;"/>
+    
+    <input type='submit' value='应用' class='ok btn btn-primary' label='' col='4' />
+
+  <input type='hidden' name='retmessage' label='&nbsp' col='3'/>
+</form>
+
+
+<script src='js/dyn-row.js'/>
+
+
+<script>
+(function() {
+
+var root     = $('#___prog_config_page');
+var rc       = $('#program_config').data('run_config');
+var eeb_work = $('#program_config').data('eeb_work');
+
+
+eeb.auto_form_ui('#___prog_config_page');
+eeb.select_field_from_flow(root, eeb_work);
+
+
+var pb = eeb.create_bind(rc, '#___prog_config_page', function(_nouse, whoclick) {
+  eeb_work.check_config(function(err, data) {
+    console.log(err, data);
+  });
+});
+
+
+
+root.find('select[name=fr]').change(function() {
+  var v = $(this).val();
+  root.find('div[cc]').each(function() {
+    var t = $(this);
+    if (t.attr('cc') != v) {
+      t.show();
+    } else {
+      t.hide();
+    }
+  });
+}).trigger('change');
+
+})();
+</script>

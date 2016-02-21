@@ -1,0 +1,48 @@
+<div>
+  <h3>功能</h3>
+  <div class='well'>
+    <p>为 UDP 提供基础连接设置, 一旦连接到服务器后后, socket 对象将被传递给后续目标.</p>
+    <p>后续目标通常是 javascript, 在其中编写处理数据的代码; flow.udp_client.socket 可以获取这个对象.</p>
+    <p>用户在使用完成必须调用 flow.udp_client.close() 来关闭连接.</p>
+    <p>基于 UDP 的组件不能进行配置时测试.</p>
+
+  </div>
+  <hr class='simple'/>
+
+  <h3>例子</h3>
+  <p>flow.udp_client 这个对象提供了两个方法, 用来方便操作, 下例中进行了演示</p>
+
+<pre>
+//
+// 设置一个 js 目标, 在 UDP 客户端后面, js 目标代码如下
+// 进入异步模式
+//
+manualOver();
+
+//
+// 发送的数据可以是 String/Buffer
+//
+var msg = 'Send Test';
+
+flow.udp_client.send(msg, function(err) {
+  //
+  // 如果错误设置 err
+  //
+  err && log(err.message);
+  //
+  // 关闭连接, 释放资源
+  //
+  flow.udp_client.close();
+  //
+  // 异步调用结束, 进入下一个目标
+  //
+  over();
+});
+
+// 如果想直接操作下面文档中的 api, 则使用 flow.udp_client.socket 对象
+</pre>
+
+  <hr class='simple'/>
+
+  <include src='prog-help/udp-socket-api.htm'/>
+</div>

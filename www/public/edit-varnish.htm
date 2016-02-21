@@ -1,0 +1,54 @@
+<ehtml>
+
+<slice define='title'>
+</slice>
+
+<slice define='tool_bar'>
+  <include src="tool_bar.htm"/>
+</slice>
+
+<slice define='menu'>
+  设置特例
+  <div><a href='###query.rp###?wnid=###query.wnid###'>返回</a></div>
+</slice>
+
+<slice define='functions'>
+  <include src="flow-canvas.htm"/>
+
+  <div id='__varnish_item_template' class='mhide'>
+    <div class="alert alert-block" style='margin-bottom: 1px'>
+      <span class='name'></span><small class="label pull-right state"></small>
+      <div style="width:100%; text-align: right; clear:both">
+        <button class="btn btn-primary btn-xs delete"> 删除 </button>
+      </div>
+    </div>
+  </div>
+
+  <div id='__varnish_help' class='mhide'>
+    <h3>关于特例配置的说明</h3>
+    <hr class='simple'/>
+    <ul>
+      <li>当前选择的模板仅作为配置参考, 运行时的配置以作业指定的流为准. </li>
+      <li>特例配置与目标的对应关系以 '名称' 作为匹配条件, 当特例配置的名称与目标中的名称相同时,
+          目标中的配置被特例配置覆盖.</li>
+      <li>每一个目标都有一个程序类型, 特例中的配置必须和目标中的程序类型相同.</li>
+      <li>当不匹配发生时, 不匹配的特例配置会做出标记, 但是并不影响当前特例的配置, 
+          也不会影响运行时的效果, 不匹配的特例配置会被忽略.</li>
+      <li>特例配置仅保存目标中被修改的项目, 未修改的项目仍然以流中的配置为准.</li>
+      <li>当切换模板后, 如果特例配置的名称和程序类型与模板中的目标名称和程序类型匹配, 
+          则配置会应用到这个目标上.</li>
+    </ul>
+    <p class="alert alert-info" style='margin-top: 50px'>
+      <i class="fa fa-info"></i> 尽可能保证使用的模板流与作业对应的流是相同的,
+      可避免二义性.
+    </p>
+  </div>
+
+  <script src='js/edit-varnish.js'></script>
+</slice>
+
+<slice define='operator_content'>
+  <div class='canvas_content'></div>
+</slice>
+
+</ehtml>

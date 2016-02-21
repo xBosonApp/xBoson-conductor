@@ -1,0 +1,59 @@
+
+<form id='___prog_config_page' class='smart-form'>
+  <input type='hidden' name='_type' value='none'/>
+
+
+    <p class="alert alert-info">CSV 文件输出</p>
+
+    <input name='name' label='名称' col='12' />
+
+
+    <input name='out_file' label='输出文件名 (无需扩展名)' col='8'/>
+
+
+    <select name='encoding' label='编码' col='4'>
+    </select>
+
+
+    <select name='need_head' label='输出数据头' col='4'>
+      <option value='1'>数据含有列头</option>
+      <option value='0'>不输出列头</option>
+    </select>
+
+    <hr class="simple" style='width:100%; clear:both;'/>
+
+    <input type='submit' value='应用' class='ok btn btn-primary' label='' col='4' />
+
+  <input type='hidden' name='retmessage' label='&nbsp' col='3'/>
+</form>
+
+
+<script src='js/encoding-select.js'/>
+<script src='js/dyn-row.js'/>
+
+
+<script>
+(function() {
+
+var root     = $('#___prog_config_page');
+var rc       = $('#program_config').data('run_config');
+var eeb_work = $('#program_config').data('eeb_work');
+
+
+eeb.auto_form_ui('#___prog_config_page');
+eeb.init_select_to_encoding(root.find('select[name=encoding]'), rc.encoding);
+
+
+var pb = eeb.create_bind(rc, '#___prog_config_page', function(_nouse, whoclick) {
+  eeb_work.check_config(function(err, data) {
+    console.log(err, data);
+  });
+});
+
+
+eeb_work.when_close(function() {
+  rc._type = '';
+});
+
+})();
+</script>

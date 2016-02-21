@@ -1,0 +1,93 @@
+
+<form id='___prog_config_page' class='smart-form'>
+  <input type='hidden' name='_type' value='none'/>
+
+
+    <p class="alert alert-info">HTTP 客户端</p>
+
+    <input name='name' label='名称' col='12' />
+
+    <input name='host' label='主机' col='6'/>
+    <input name='port' label='端口' col='3'/>
+
+    <select name='method' label='Http 方法' col='3'>
+      <option value='post'>Post</option><!-- 
+      <option value='get'>Get</option>
+      <option value='put'>Put</option>
+      <option value='delete'>Delete</option>
+      <option value='put'>Put</option>
+      <option value='options'>Options</option> -->
+    </select>
+
+    <input name='path' label='路径' col='6'/>
+    <input name='timeout' label='超时 (秒)' col='3'/>
+
+    <select name='in_enc' label='应答编码' col='3'>
+    </select>
+
+    <div class='page1'></div>
+    <hr class="simple" style='width:100%; clear:both;'/>
+
+    <input type='submit' value='测试连接' change_type='check_conn' 
+           class='tst btn btn-primary' label='' col='3' />
+
+    <input type='button' value='添加列' 
+           class='add btn btn-primary' label='' col='3' />
+
+    <input type='submit' value='应用' change_type='none'
+           class='ok btn btn-primary' label='' col='3' />
+
+  <input type='hidden' name='retmessage' label='&nbsp' col='3'/>
+</form>
+
+
+<div class='row mhide' id='__the_row'>
+  <hr class="simple" style='width:100%; clear:both;'/>
+  <input rowname='cols' label='列/参数名' col='10'/>
+  <!-- <input rowname='parm' label='返回参数名' col='5'/> -->
+
+  <input class='del' label='操作' value='删除' col='2' type='button' />
+
+  <div style='width:100%; clear:both;'></div>
+</div>
+
+
+<script src='js/dyn-row.js'/>
+<script src='js/encoding-select.js'/>
+
+
+<script>
+(function() {
+
+var root     = $('#___prog_config_page');
+var rc       = $('#program_config').data('run_config');
+var eeb_work = $('#program_config').data('eeb_work');
+
+
+eeb.auto_form_ui('#___prog_config_page');
+eeb.change_type_button(root, eeb_work, rc);
+eeb.init_select_to_encoding(root.find('select[name=in_enc]'), rc.in_enc);
+
+
+var pb = eeb.create_bind(rc, '#___prog_config_page', function(_nouse, whoclick) {
+  eeb_work.check_config(function(err, data) {
+    console.log(err, data);
+  });
+});
+
+
+eeb_work.when_close(function() {
+  rc._type = '';
+  eeb.zip(rc, 'cols');
+});
+
+
+eeb.dyn_row(rc, '#__the_row', root.find('.add'), root.find('.page1'), pb, when_newrow);
+
+
+function when_newrow(row) {
+}
+
+
+})();
+</script>

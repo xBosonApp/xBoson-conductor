@@ -1,0 +1,92 @@
+
+<form id='___prog_config_page' class='smart-form'>
+  <input type='hidden' name='_type' value='none'/>
+
+
+    <p class="alert alert-info">HTTP 推送</p>
+
+    <input name='name' label='名称' col='12' />
+
+    <input name='host' label='主机' col='6'/>
+    <input name='port' label='端口' col='6'/>
+    <input name='path' label='路径' col='6'/>
+
+    <select name='method' label='Http 方法' col='6'>
+      <option value='post'>Post</option>
+      <!-- <option value='get'>Get</option> -->
+    </select>
+
+
+    <div class='page1'></div>
+    <hr class="simple" style='width:100%; clear:both;'/>
+
+    <input type='button' value='添加参数' class='add btn btn-primary' label='' col='3' />
+    <input type='submit' value='测试连接' class='tst btn btn-primary' label='' col='3' />
+    <input type='submit' value='应用' class='ok btn btn-primary' label='' col='3' />
+
+  <input type='hidden' name='retmessage' label='&nbsp' col='3'/>
+</form>
+
+
+
+<div class='row mhide' id='__the_row'>
+  <input rowname='an' label='参数名' col='5'/>
+  <input rowname='av' label='参数值' col='5'/>
+  <input class='del' label='操作' value='删除' col='2' type='button' /> 
+</div>
+
+
+<script src='js/dyn-row.js'/>
+
+
+<script>
+(function() {
+
+var root     = $('#___prog_config_page');
+var rc       = $('#program_config').data('run_config');
+var eeb_work = $('#program_config').data('eeb_work');
+
+
+eeb.auto_form_ui('#___prog_config_page');
+
+
+var pb = eeb.create_bind(rc, '#___prog_config_page', function(_nouse, whoclick) {
+  eeb_work.check_config(function(err, data) {
+    console.log(err, data);
+  });
+});
+
+
+eeb_work.when_close(function() {
+  eeb.zip(rc, 'an', 'av');
+  rc._type = '';
+});
+
+
+eeb.dyn_row(rc, '#__the_row', root.find('.add'), root.find('.page1'), pb, when_newrow);
+
+
+function when_newrow(row) {
+}
+
+
+root.find('.tst').click(function() {
+  changeReqType('check_conn');
+});
+
+
+root.find('.ok').click(function() {
+  changeReqType('none');
+});
+
+
+function input_val(iname, value) {
+  root.find(':input[name="' + iname + '"]').val(value).trigger('change');
+}
+
+function changeReqType(type) {
+  input_val('_type', type || 'none');
+}
+
+})();
+</script>

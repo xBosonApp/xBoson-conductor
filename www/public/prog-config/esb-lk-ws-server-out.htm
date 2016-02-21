@@ -1,0 +1,95 @@
+
+<form id='___prog_config_page' class='smart-form'>
+  <input type='hidden' name='_type' value='none'/>
+  <p class="alert alert-info">HTTP 应答</p>
+
+  <input name='name' label='名称' col='12'/>
+
+<hr class="simple" style="width:100%; clear:both;"/>
+
+    <label class='label page1'>返回参数</label>
+    <div class='page1 out_parms'/>
+
+<hr class="simple" style="width:100%; clear:both;"/>
+
+  <input type='button' value='添加返回参数' class='mhide addout'/>
+  <input type='submit' value='应用' class='ok btn btn-primary' label='' col='4' />
+
+  <input type='hidden' name='retmessage' label='&nbsp' col='3'/>
+</form>
+
+
+<div class='row mhide' id='__the_row_out_parms'>
+  <input rowname='outn' label='参数名' col='4' readonly='true'/>
+  <input rowname='outt' label='类型' col='4' readonly='true'/>
+  <input rowname='outv' label='来源' col='4' group='1' readonly='true'/>
+  <button type='button' class='btn btn-primary' flowdata_to_rowname='outv'
+          label='.' group='1'>从流中读取</button>
+
+  <div style='width:100%; clear:both;'></div>
+</div>
+
+
+<script src='js/mime-select.js'/>
+<script src='js/dyn-row.js'/>
+<script src='js/encoding-select.js'/>
+
+
+<script>
+(function() {
+
+var root     = $('#___prog_config_page');
+var rc       = $('#program_config').data('run_config');
+var eeb_work = $('#program_config').data('eeb_work');
+
+
+eeb.auto_form_ui('#___prog_config_page');
+eeb.select_field_from_flow(root, eeb_work);
+
+
+var pb = eeb.create_bind(rc, '#___prog_config_page', function(_nouse, whoclick) {
+  eeb_work.check_config(function(err, data) {
+    console.log(err, data);
+  });
+});
+
+
+eeb_work.when_close(function() {
+  eeb.zip(rc, 'outn', 'outv', 'outt');
+});
+
+
+var dr = eeb.dyn_row(rc, '#__the_row_out_parms', root.find('.addout'), 
+            root.find('.out_parms'), pb, when_newrow_out, true);
+
+function when_newrow_out(row, data) {
+  if (data) {
+    eeb.select_field_from_flow(row, eeb_work);
+    row.find('[rowname=outn]').val(data.n).trigger('change');
+    row.find('[rowname=outt]').val(data.t).trigger('change');
+  }
+}
+
+
+eeb_work.parent_data(function(err, data) {
+  var ov = root.find('.out_parms');
+
+  if (err) {
+    ov.html(err.message);
+  }
+  else if (!data.type.wss) {
+    ov.html('起始节点必须是 `WebService 服务端`');
+  }
+  else if (data.type.wss.n.length < 1) {
+    ov.html('没有输出参数');
+  }
+  else {
+    data.type.wss.n.forEach(function(n, i) {
+      dr.add_row(i, { n : n, t : data.type.wss.t[i] });
+    });
+  }
+});
+
+
+})();
+</script>

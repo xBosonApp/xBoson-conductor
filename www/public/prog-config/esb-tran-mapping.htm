@@ -1,0 +1,138 @@
+
+<form id='___prog_config_page' class='smart-form'>
+  <input type='hidden' name='_type' value='none'/>
+
+    <p class="alert alert-info">数据映射</p>
+
+    <input name='name' label='名称' col='12'/>
+
+    <label class="jssrc" style="height: 100%; width:100%"
+         label='来源' col='6'><button class='mhide' type='button'/></label>
+
+    <label class="jsdest" style="height: 100%; width:100%"
+           label='目的' col='6' group='1'>
+        <button class='mhide' type='button'>X</button>
+    </label>
+    <button type='button' class='btn btn-primary copy' 
+            label='' group='1'>从来源复制</button>
+
+  <hr class="simple" style="width:100%; clear:both;"/>
+    
+    <input type='submit' value='应用' class='ok btn btn-primary' label='' col='4' />
+
+  <input type='hidden' name='retmessage' label='&nbsp' col='3'/>
+</form>
+
+<link rel="stylesheet" type="text/css"
+      href="js/lib/jsoneditor/jsoneditor.min.css">
+
+<script src='js/lib/jsoneditor/jsoneditor.min.js'/>
+<script src='js/dyn-row.js'/>
+
+
+<script>
+(function() {
+
+var root     = $('#___prog_config_page');
+var rc       = $('#program_config').data('run_config');
+var eeb_work = $('#program_config').data('eeb_work');
+
+
+eeb.auto_form_ui('#___prog_config_page');
+
+var src_ed = js_editor('.jssrc', null, { mode: 'view' });
+var des_ed = js_editor('.jsdest', rc.target, { editable: edit_desc });
+
+
+root.on('submit', function() {
+  rc.target = des_ed.get();
+});
+
+
+var pb = eeb.create_bind(rc, '#___prog_config_page', function(_nouse, whoclick) {
+  eeb_work.check_config(function(err, data) {
+    console.log(err, data);
+  });
+});
+
+
+eeb_work.parent_data(function(err, flow) {
+  if (err) {
+    return eeb.show_msg_box(null, err.message || err);
+  }
+  src_ed.set(flow.data);
+});
+
+
+
+root.find('.copy').click(function() {
+  var _val = src_ed.get();
+  var path = [];
+
+  _obj(_val);
+
+  function _obj(v) {
+    for (var n in v) {
+      path.push(n);
+      c_type(v, n);
+      path.pop();
+    }
+  }
+
+  function c_type(v, n) {
+    if (v[n] == null) {
+      v[n] = path.join('.');
+    } else if (typeof v[n] == 'object') {
+      if (v[n].constructor === Array) {
+        _arr(v[n]);
+      } else {
+        _obj(v[n]);
+      }
+    } else {
+      v[n] = path.join('.');
+    }
+  }
+
+  function _arr(v) {
+    var len = v.length;
+    for (var i=0; i<len; ++i) {
+      path.push(i);
+      c_type(v, i);
+      path.pop();
+    }
+  }
+
+  des_ed.set( _val );
+});
+
+
+function edit_desc(_node) {
+  // 该方法执行时, UI 元素尚未创建, 休眠等待元素创建完成
+  setTimeout(find_values, 1);
+
+  function find_values() {
+    root.find('.jsdest').find('.value:not([fromflow])').click(function() {
+      var thiz = $(this);
+      var ff = eeb.select_field_from_flow(root, eeb_work);
+
+      ff.open_dialog(function(selector_attr) {
+        thiz.trigger('focus');
+        thiz.html(selector_attr);
+      });
+    }).attr('fromflow', 1);
+  }
+
+  return { field: true, value: true };
+}
+
+
+function js_editor(_selector, _json, _opt) {
+  var editor = null;
+  root.find(_selector).each(function() {
+    editor = new JSONEditor(this, _opt, _json);
+  });
+  return editor;
+}
+
+})();
+</script>

@@ -1,0 +1,63 @@
+<form id='___prog_config_page' class='smart-form'>
+  <input type='hidden' name='_type' value='none'/>
+
+    <p class="alert alert-info">删除字段</p>
+    <input name='name' label='名称' col='12'/>
+
+  <div class='page1'></div>
+    
+  <hr class="simple"/>
+  <input type='button' value='添加字段' class='add btn btn-primary' label='' col='4' />
+  <input type='submit' value='应用' class='ok btn btn-primary' label='' col='4' />
+
+  <input type='hidden' name='retmessage' label='&nbsp' col='3'/>
+</form>
+
+
+<div class='row mhide' id='__the_row'>
+	<input rowname='field' label='字段' readonly='true' col='8' group='g2'/>
+
+	<button type='button' class='btn btn-primary' flowdata_to_rowname='field'
+					label='.' group='g2'>从流中读取</button>
+
+	<input class='del' label='操作' value='删除' col='4' type='button' />
+
+	<div style='width:100%; clear:both;'></div>
+</div>
+
+
+<script src='js/dyn-row.js'/>
+
+
+<script>
+(function() {
+
+var root     = $('#___prog_config_page');
+var rc       = $('#program_config').data('run_config');
+var eeb_work = $('#program_config').data('eeb_work');
+var id       = 1;
+
+eeb.auto_form_ui('#___prog_config_page');
+
+
+var pb = eeb.create_bind(rc, '#___prog_config_page', function(_nouse, whoclick) {
+  eeb_work.check_config(function(err, data) {
+    console.log(err, data);
+  });
+});
+
+eeb_work.when_close(function() {
+  eeb.zip(rc, 'field');
+});
+
+
+eeb.dyn_row(rc, '#__the_row', root.find('.add'), root.find('.page1'), pb, when_newrow);
+
+
+function when_newrow(row) {
+	eeb.select_field_from_flow(row, eeb_work);
+}
+
+
+})();
+</script>

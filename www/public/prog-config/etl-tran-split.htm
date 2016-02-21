@@ -1,0 +1,56 @@
+
+<form id='___prog_config_page' class='smart-form'>
+	<input type='hidden' name='_type' value='none'/>
+
+
+		<p class="alert alert-info"> 列拆分为多行 </p>
+
+		<input name='name' label='名称' col='12'/>
+
+
+
+		<input name='fs' rowname='fs' label='要拆分的字段' col='4' group='conn1'/>
+		<button type='button' class='btn btn-primary' flowdata_to_rowname='fs'
+						label='.' group='conn1'>从父节点读取</button>
+
+		<input name='ft' label='新字段名称' col='4'/>
+		<input name='sp' label='分隔符' col='2'/>
+
+		
+		<div style='width:100%; clear:both;'></div>
+		<hr class="simple"/>
+		
+		
+		<input type='submit' value='应用' class='ok btn btn-primary' label='' col='4' />
+	</div>
+
+
+	<input type='hidden' name='retmessage' label='&nbsp' col='3'/>
+</form>
+
+
+<script src='js/dyn-row.js'/>
+
+
+<script>
+(function() {
+
+var root     = $('#___prog_config_page');
+var rc       = $('#program_config').data('run_config');
+var eeb_work = $('#program_config').data('eeb_work');
+
+eeb.auto_form_ui('#___prog_config_page');
+
+
+var pb = eeb.create_bind(rc, '#___prog_config_page', function(_nouse, whoclick) {
+  eeb_work.check_config(function(err, data) {
+    console.log(err, data);
+  });
+});
+
+
+eeb.input_val_not_in_flow(root.find('*[name=ft]'), root.find('.ok'), eeb_work);
+eeb.select_field_from_flow(root, eeb_work);
+
+})();
+</script>

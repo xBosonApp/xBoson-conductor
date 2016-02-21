@@ -1,0 +1,868 @@
+<style type="text/css">
+h4 {
+  margin: 50px 0 25px 0;
+}
+h2, h1 {
+  margin-top: 40px;
+}
+</style>
+
+<h1 class='text-center'>Java Script 帮助文档</h1>
+
+<h4>■ <a name="mulu">目录</a></h4>
+
+<h6>基础语法</h6>
+<ul>
+<li><a href="#duixiang">对象</a></li>
+<li><a href="#shuxing">属性</a></li>
+<li><a href="#fangfa">方法</a></li>
+<li><a href="#bianliang">变量</a></li>
+<li><a href="#zhushi">注释（/* ... */）</a></li>
+<li><a href="#daxiaoxie">大小写</a></li>
+<li><a href="#stIf">条件判断（if）</a></li>
+<li><a href="#stSwitch">条件判断（switch）</a></li>
+<li><a href="#stWhile">循环（while）</a></li>
+<li><a href="#stDo">循环（do）</a></li>
+<li><a href="#stFor">循环（for）</a></li>
+<li><a href="#stBreak">跳出循环（break）</a></li>
+<li><a href="#stContinue">继续循环（continue）</a></li>
+<li><a href="#stLabel">标记（label）</a></li>
+<li><a href="#stWith">使用对象（with）</a></li>
+</ul>
+
+<h6>运算符</h6>
+<ul>
+<li><a href="#fushi">赋值运算符</a></li>
+<li><a href="#suanshu">算术运算符</a></li>
+<li><a href="#guanxi">关系运算符</a></li>
+<li><a href="#luoji">逻辑运算符</a></li>
+<li><a href="#tiaojian">条件运算符</a></li>
+<li><a href="#douhao">逗号运算符</a></li>
+<li><a href="#wei">位运算符</a></li>
+<li><a href="#kuozhan">扩展赋值运算符</a></li>
+<li><a href="#youxian">运算符的优先级</a></li>
+
+</ul>
+
+<h6>数值/字符串/固定值</h6>
+<ul>
+<li><a href="#shuzhi">数值</a></li>
+<li><a href="#zifuchuan">字符串</a></li>
+<li><a href="#teshuzhi">特殊值</a></li>
+</ul>
+<h6>内置函数</h6>
+<ul>
+<li><a href="#shuzhi">数值转换</a></li>
+<li><a href="#zifuchuan">字符串转换</a></li>
+<li><a href="#bianma">编码</a></li>
+<li><a href="#panduan">值的判断</a></li>
+<li><a href="#jiaoben">执行脚本</a></li>
+</ul>
+<div style='width:100%; text-align: right;'>
+<a href="http://www.w3school.com.cn/jsref/index.asp" 
+   target="_blank" autofocus="autofocus">另: W3S JavaScript 参考</a>
+</div>
+
+<hr>
+<h2>基础语法</h2>
+<h4>■ <a name="duixiang">对象</a></h4>
+<div class=i>
+<p>JavaScript继承了面向对象的编程思想，窗体、文档、表单等都可以被看成对象。对象有以下这些。</p>
+<pre class=c>
+□ <!--<a href="object.htm">-->对象（Object）<!--</a>-->
+├□ <!--<a href="number.htm">-->数值（Number）<!--</a>-->
+├□ <!--<a href="string.htm">-->字符串（String）<!--</a>-->
+├□ <!--<a href="boolean.htm">-->布尔值（Boolean）<!--</a>-->
+├□ <!--<a href="array.htm">-->数组（Array）<!--</a>-->
+├□ <!--<a href="math.htm">-->数学函数（Math）<!--</a>-->
+├□ <!--<a href="date.htm">-->日期（Date）<!--</a>-->
+├□ <!--<a href="function.htm">-->函数（Function）<!--</a>-->
+├□ <!--<a href="regexp.htm">-->正则表达式（RegExp）<!--</a>-->
+└□ <!--<a href="window.htm">-->窗口（Window）<!--</a>-->
+　├□ <!--<a href="navigator.htm">-->浏览器（Navigator）<!--</a>-->
+　│├□ <!--<a href="other.htm#objPlugin">-->插件（Plugin）<!--</a>-->
+　│└□ <!--<a href="other.htm#objMimeType">-->MIME类型（MimeType）<!--</a>-->
+　├□ <!--<a href="window.htm">-->框架（Frame）<!--</a>-->
+　├□ <!--<a href="event.htm">-->事件（Event）<!--</a>-->
+　├□ <!--<a href="history.htm">-->履历（History）<!--</a>-->
+　├□ <!--<a href="location.htm">-->本地化（Location）<!--</a>-->
+　├□ <!--<a href="other.htm#objScreen">-->屏幕信息（Screen）<!--</a>-->
+　└□ <!--<a href="document.htm">-->文档（Document）<!--</a>-->
+　　├□ <!--<a href="layer.htm">-->层（Layer）<!--</a>-->
+　　├□ <!--<a href="image.htm">-->图像（Image）<!--</a>-->
+　　├□ <!--<a href="other.htm#objLink">-->链接（Link）<!--</a>-->
+　　├□ <!--<a href="anchors.htm">-->锚（Anchor）<!--</a>-->
+　　├□ <!--<a href="other.htm#objApplet">-->小程序（Applet）<!--</a>-->
+　　├□ <!--<a href="form.htm">-->表单（Form）<!--</a>-->
+　　│├□ <!--<a href="form.htm#ElmText">-->文本（Text）<!--</a>-->
+　　│├□ <!--<a href="form.htm#ElmText">-->密码（Password）<!--</a>-->
+　　│├□ <!--<a href="form.htm#ElmText">-->文件上传（File）<!--</a>-->
+　　│├□ <!--<a href="form.htm#ElmText">-->隐藏元素（Hidden）<!--</a>-->
+　　│├□ <!--<a href="form.htm#ElmText">-->文本领域（Textarea）<!--</a>-->
+　　│├□ <!--<a href="form.htm#ElmButton">-->复选框（Checkbox）<!--</a>-->
+　　│├□ <!--<a href="form.htm#ElmButton">-->单选框（Radio）<!--</a>-->
+　　│├□ <!--<a href="form.htm#ElmButton">-->按钮（Button）<!--</a>-->
+　　│├□ <!--<a href="form.htm#ElmButton">-->提交按钮（Submit）<!--</a>-->
+　　│├□ <!--<a href="form.htm#ElmButton">-->重置按钮（Reset）<!--</a>-->
+　　│└□ <!--<a href="form.htm#ElmSelect">-->下拉列表（Select）<!--</a>-->
+　　│　└□ <!--<a href="form.htm#ElmOption">-->条目（Option）<!--</a>-->
+　　└□ <!--<a href="element.htm">-->元素（Elements）<!--</a>-->
+　　　└□ <!--<a href="style.htm">-->样式（Style）<!--</a>-->
+</pre>
+
+</div>
+
+<h4>■ <a name="shuxing">属性</a></h4>
+<div class=i>
+<p>对象拥有可以调用或是设定值的属性。比如说 navigator 对象有以下属性。</p>
+<pre class=c>
+navigator.appName       // 浏览器的名字
+navigator.appVersion    // 浏览器的版本
+</pre>
+</div>
+
+<h4>■ <a name="fangfa">方法</a></h4>
+<div class=i>
+<p>对象还拥有可以调用处理过程的方法。比如说 window 对象有以下方法。</p>
+<pre class=c>
+window.alert("Hello");           // 显示警告对话框
+window.open("xx.htm", "_blank"); // 在新窗口中打开目标文档
+</pre>
+</div>
+
+<h4>■ <a name="bianliang">变量</a></h4>
+<div class=i>
+<p>除了对象、属性、方法，JavaScript里还可以使用变量。变量是一个起了名字的容器，可以给它赋予数值、字符串等值。下面的例子的意义是“把5这个值赋予名为xx的变量”，而不是“xx等于5”。</p>
+<pre class=c>
+xx = 5;
+</pre>
+<p>变量名可以使用包括下划线（_）的半角英文数字，但是不能以数字开头。另外，不能使用JavaScript已经预先定义好的名字，比如 if 或 while 等等。</p>
+<pre class=c>
+○ count_of_today
+○ abc123
+× 123abc
+× if
+○ if_while
+</pre>
+<p>声明变量时使用var。</p>
+<pre class=c>
+var xx, yy, zz;
+xx = 5;
+yy = 8;
+zz = xx + yy;
+</pre>
+</div>
+
+<h4>■ <a name="zhushi">注释（/* ... */）</a></h4>
+<div class=i>
+<p>和 C++ 一样，从 // 开始到这一行的结束都是注释。</p>
+<pre class=c>
+xx = 5;   // 在这里写注释
+</pre>
+<p>/* 与 */ 之间也是注释。</p>
+<pre class=c>
+/* 这里的文字都是注释。*/
+</pre>
+<p>/* ... */ 可以用来注释复数行。</p>
+<pre class=c>
+/*
+ * 这里的文字都是注释。
+ */
+</pre>
+<p>/* ... */ 无法嵌套使用。</p>
+<pre class=c>
+/* 注释无法 /* 嵌套 */ 使用。*/ ← error
+</pre>
+</div>
+
+<h4>■ <a name="daxiaoxie">大小写</a></h4>
+<div class=i>
+<p>注意：JavaScript在使用变量和函数的时候是区分大小写的。比如以下变量名是不同的变量。</p>
+<pre class=c>
+filename = "aaa.htm";
+FileName = "bbb.htm";
+FILENAME = "ccc.htm";
+</pre>
+</div>
+
+<h4>■ <a name="stIf">条件判断（if）</a></h4>
+<div class=item>◆ <a name="if">if (<i>expression</i>) <i>statements1</i> </a><a name="else">else <i>statements2</i></a></div>
+<div class=i>
+<p><i>expression</i> 的值为 true 则执行 <i>statements1</i>，值为为 false 则执行 <i>statements2</i>。在下面的例子中，变量 n 的值比10小则弹出 SMALL 对话框，否则就弹出 BIG 对话框。</p>
+<pre class=c>
+if (n &lt; 10) {
+    alert("SMALL");
+} else {
+    alert("BIG");
+}
+</pre>
+<p>else的部分也可以不写。</p>
+<pre class=c>
+if (n &lt; 10) {
+    alert("SMALL");
+}
+</pre>
+<p>也可以像下面这样写if语句。</p>
+<pre class=c>
+if (n &lt; 10) {
+    alert("SMALL");       // 比10小的话弹出 SMALL 对话框
+} else if (n &gt; 20) {
+    alert("BIG");         // 比20大的话弹出 BIG 对话框
+} else {
+    alert("NORMAL");      // 其他情况弹出 NORMAL 对话框
+}
+</pre>
+</div>
+
+<h4>■ <a name="stSwitch">条件判断（switch）</a></h4>
+<div class=item>◆ <a name="switch">switch (<i>expression</i>) { </a><a name="case">case <i>value</i>: <i>statements</i>; ... }</a></div>
+<div class=i>
+<p>按 <i>expression</i> 的值的不同执行各种处理。在下面的例子中，xx 的值为1时，弹出 ONE 对话框，xx 的值为2时，弹出 TWO 对话框，xx 的值为3或4时，弹出 THREEorFOUR 对话框，其他情况则弹出 OTHER 对话框。</p>
+<pre class=c>
+switch (xx) {
+case 1:
+    alert("ONE");
+    break;
+case 2:
+    alert("TWO");
+    break;
+case 3:
+case 4:
+    alert("THREEorFOUR");
+    break;
+default:
+    alert("OTHER");
+    break;
+}
+</pre>
+</div>
+
+<h4>■ <a name="stWhile">循环（while）</a></h4>
+<div class=item>◆ <a name="while">while (<i>expression</i>) <i>statements</i></a></div>
+<div class=i>
+<p><i>expression</i> 的值为 true 时，循环执行 <i>statements</i> 中的处理。下面的例子输出0123456789。</p>
+<pre class=c>
+n = 0;
+while (n &lt; 10) {
+    document.write(n);
+    n++;
+}
+</pre>
+</div>
+
+<h4>■ <a name="stDo">循环（do）</a></h4>
+<div class=item>◆ <a name="do">do <i>statements</i> while (<i>expression</i>)</a></div>
+<div class=i>
+<p><i>expression</i> 的值为 true 时，循环执行 <i>statements</i> 中的处理。下面的例子输出0123456789。与 while (……) {……} 的不同点是，就算 <i>expression</i> 的值一开始就是false，<i>statements</i> 的处理也会被执行一次。</p>
+<pre class=c>
+n = 0;
+do {
+    document.write(n);
+    n++;
+} while (n &lt; 10);
+</pre>
+</div>
+
+<h4><a name="stFor">■ 循环（for）</a></h4>
+<div class=item>◆ <a name="for">for (<i>expression1</i>; <i>expression2</i>; <i>expression3</i>) <i>statements</i></a></div>
+<div class=i>
+<p>先执行 <i>expression1</i> 的处理，然后在 <i>expression2</i> 的值为true的时候循环执行 <i>statements</i> 和 <i>expression3</i> 的处理。下面的例子循环了10次，输出0123456789。</p>
+<pre class=c>
+for (i = 0; i &lt; 10; i++) {
+    document.write(i);
+}
+</pre>
+</div>
+<div class=item>◆ <a name="for2">for (<i>variable</i> in <i>array</i>) <i>statements</i></a></div>
+<div class=i>
+<p>遍历数组的各元素执行处理。下面的例子输出 ABC。</p>
+<pre class=c>
+xx = new Array(3);
+xx[0] = "A";
+xx[1] = "B";
+xx[2] = "C";
+for (i in xx) {
+    document.write(xx[i]);
+}
+</pre>
+<p>for可以用来调查对象所拥有的属性。但也有些属性查不到（拥有DontEnum属性的属性）。</p>
+<pre class=c>
+for (i in navigator) {
+    document.write(i, "&lt;br&gt;");
+}
+</pre>
+</div>
+
+<h4><a name="stBreak">■ 跳出循环（break）</a></h4>
+<div class=item>◆ <a name="break">break</a></div>
+<div class=item>◆ <a name="break2">break <i>label</i></a></div>
+<div class=i>
+<p>使用 break 可以跳出最接近的一层循环。包括 for、while、do 循环或 switch 语句的 case 部分。下面的例子输出01234。</p>
+<pre class=c>
+for (i = 0; i &lt; 10; i++) {
+    if (i == 5) {
+        break;
+    }
+    document.write(i);
+}
+</pre>
+<p>用 <i>label</i> 可以用来一次跳到循环的最外面。JavaScript 1.2 以后版本支持。在下面的例子里，一旦 xx 大于 20 就会跳出最外面的 for 循环。</p>
+<pre class=c>
+abc:
+  for (i = 0; i &lt; 10; i++) {
+      for (j = 0; j &lt; 10; j++) {
+          xx = i * 10 + j;
+          if (xx &gt; 20) {
+              break abc;
+          }
+          document.write(xx + "&lt;br&gt;");
+      }
+  }
+</pre>
+</div>
+
+<h4><a name="stContinue">■ 继续循环（continue）</a></h4>
+<div class=item>◆ <a name="continue">continue</a></div>
+<div class=item>◆ <a name="continue2">continue <i>label</i></a></div>
+<div class=i>
+<p>跳过循环内的剩余代码，从最接近的循环再次开始执行。在下面的例子里，跳过5，输出012346789。</p>
+<pre class=c>
+for (i = 0; i &lt; 10; i++) {
+    if (i == 5) {
+        continue;
+    }
+    document.write(i);
+}
+</pre>
+<p>用 <i>label</i> 可以跳跃到指定的循环继续执行。JavaScript 1.2 以后版本支持。</p>
+<pre class=c>
+abc:
+  for (i = 0; i &lt; 10; i++) {
+      for (j = 0; j &lt; 10; j++) {
+          xx = i * 10 + j;
+          if (xx == 55) {
+              continue abc;
+          }
+      }
+  }
+</pre>
+</div>
+
+<h4><a name="stLabel">■ 标记（label）</a></h4>
+<div class=item>◆ <i>label</i>:</div>
+<div class=i>
+<p>用 label 可以在JavaScript代码中设置标记。break语句和continue语句都可以使用它。JavaScript 1.2 以后版本支持。</p>
+<pre class=c>
+label1:
+  for (i = 0; i &lt; 10; i++) {
+      for (j = 0; j &lt; 10; j++) {
+          if (func(i, j) {
+              break label1;
+          }
+      }
+  }
+</pre>
+</div>
+
+<h4><a name="stWith">■ 使用对象（with）</a></h4>
+<div class=item>◆ <a name="with">with (<i>obj</i>) <i>statements</i></a></div>
+<div class=i>
+<p>使用 <i>obj</i> 指定的对象执行处理。比如下面的例子，</p>
+<pre class=c>
+document.write(document.bgColor);
+document.write(document.fgColor);
+</pre>
+<p>用 with 可以写成这种形式。</p>
+<pre class=c>
+with (document) {
+    write(bgColor);
+    write(fgColor);
+}
+</pre>
+</div>
+
+<hr>
+<h2>运算符</h2>
+
+<h4>■ 一览</h4>
+<div class=i>
+<a href="#and">&amp;&amp;</a>,
+<a href="#aneq">&amp;=</a>,
+<a href="#band">&amp;</a>,
+<a href="#bnot">~</a>,
+<a href="#bor"> | </a>,
+<a href="#bxor">^</a>,
+<a href="#comma">, </a>,
+<a href="#cond">?  :</a>,
+<a href="#dec1">--</a>,
+<a href="#dec2">--</a>,
+<a href="#dieq">/=</a>,
+<a href="#division">/</a>,
+<a href="#eq">==</a>,
+<a href="#eqq">===</a>,
+<a href="#gt">&gt;</a>,
+<a href="#gte">&gt;=</a>,
+<a href="#inc1">++</a>,
+<a href="#inc2">++</a>,
+<a href="#lseq">&lt;&lt;=</a>,
+<a href="#lshift">&lt;&lt;</a>,
+<a href="#lt">&lt;</a>,
+<a href="#lte">&lt;=</a>,
+<a href="#mieq">-=</a>,
+<a href="#minus">-</a>,
+<a href="#mod">%</a>,
+<a href="#moeq">%=</a>,
+<a href="#mueq">*=</a>,
+<a href="#multiple">*</a>,
+<a href="#ne">!=</a>,
+<a href="#neqq">!==</a>,
+<a href="#noeq">^=</a>,
+<a href="#not"> ! </a>,
+<a href="#or">||</a>,
+<a href="#oreq">|=</a>,
+<a href="#pleq">+=</a>,
+<a href="#plus">+</a>,
+<a href="#rseq">&gt;&gt;=</a>,
+<a href="#rshift">&gt;&gt;</a>,
+<a href="#set">=</a>,
+<a href="#urseq">&gt;&gt;&gt;=</a>,
+<a href="#urshift">&gt;&gt;&gt;</a>
+</div>
+
+<h4>■ <a name="fushi">赋值运算符</a></h4>
+<div class=item>◆ <a name="set"><i>var</i> = <i>exp</i></a></div>
+<div class=i>
+<p>把值 <i>exp</i> 赋予变量 <i>var</i> 。等于号（=）不是相等而是赋值的意思。</p>
+<pre class=c>
+xx = 5;      // 把 5 赋值给 xx
+yy = xx;     // 把 xx 的值（= 5）赋予 yy
+zz = "ABC";  // 把值 "ABC" 赋予变量 zz
+</pre>
+<p>下面的语句的意思是把变量 xx 的值加上2，再赋值给变量 xx 。如果 xx 本来的值为5，那么这条语句运行完后 xx 的值就变成7。</p>
+<pre class=c>
+xx = xx + 2:  // 把 xx 的值加上 2 再赋值给 xx
+</pre>
+<p>下面的语句的意思是把 5 赋值给变量 yy 和 xx 。</p>
+<pre class=c>
+yy = xx = 5;   // 把 5 赋值给变量 yy 和 xx
+</pre>
+</div>
+
+<h4>■ <a name="suanshu">算术运算符</a></h4>
+<div class=item>◆ <a name="plus"><i>exp1</i> + <i>exp2</i></a></div>
+<div class=item>◆ <a name="minus"><i>exp1</i> - <i>exp2</i></a></div>
+<div class=item>◆ <a name="multiple"><i>exp1</i> * <i>exp2</i></a></div>
+<div class=item>◆ <a name="division"><i>exp1</i> / <i>exp2</i></a></div>
+<div class=item>◆ <a name="mod"><i>exp1</i> % <i>exp2</i></a></div>
+<div class=i>
+<p><i>exp1</i> 与 <i>exp2</i> 的加法、减法、乘法、除法计算。运算符 % 用来求 <i>exp1</i> 除以 <i>exp2</i> 的余数。</p>
+<pre class=c>
+xx = 3 + 2;   // 把 3 + 2 的结果 5 赋值给变量 xx
+xx = 3 - 2;   // 把 3 - 2 的结果 1 赋值给变量 xx
+xx = 3 * 2;   // 把 3 * 2 的结果 6 赋值给变量 xx
+xx = 3 / 2;   // 把 3 / 2 的结果 1.5 赋值给变量 xx
+xx = 3 % 2;   // 把 3 % 2 的结果 1 赋值给变量 xx
+</pre>
+<p>使用运算符 + 的时候要注意，当 <i>exp1</i> 和 <i>exp2</i> 之中有一个是（或两者都是）字符串的时候，运算符 + 将产生连接字符串的作用，而非算术运算符的作用。比如说下面的例子，xx 的值不会是 127 。</p>
+<pre class=c>
+xx = "123" + 4;   // xx 被赋予的值为"1234"
+</pre>
+<p>注意输入在表单里的值也会被看成是字符串，如果想当作数值使用的话，可以在使用前先减0。运算符 - 只有算术运算符的功能，如果把字符串"123" 减去 3 的话，结果会是数值 120 。</p>
+<pre class=c>
+&lt;script type="text/javascript"&gt;
+&lt;!--
+function func() {
+    alert(document.F1.T1.value + 4);        // 结果为"1234"
+    alert((document.F1.T1.value - 0) + 4);  // 结果为127
+}
+// --&gt;
+&lt;/script&gt;
+&lt;form name="F1" action="#"&gt;
+&lt;input type="text" name="T1"&gt;
+&lt;input type="button" value="OK" onclick="func()"&gt;
+&lt;/form&gt;
+</pre>
+</div>
+
+<div class=item>◆ <a name="inc1"><i>var</i>++</a></div>
+<div class=item>◆ <a name="inc2">++<i>var</i></a></div>
+<div class=item>◆ <a name="dec1"><i>var</i>--</a></div>
+<div class=item>◆ <a name="dec2">--<i>var</i></a></div>
+<div class=i>
+<p>xx++ 是 xx 的值加 1 的意思。xx-- 是 xx 的值减 1 的意思。xx++ 会先使用 xx 的值再把 xx 加1，++xx 则先把 xx 加1再使用 xx 的值。xx-- 和 --xx 也一样。</p>
+<pre class=c>
+a = 5; a++:     // a 的值为6
+a = 5; b = a++; // a 的值为6，b 的值为5
+a = 5; b = ++a; // a 的值为6，b 的值为6
+</pre>
+</div>
+
+<h4><a name="guanxi">■ 关系运算符</a></h4>
+
+<div class=item>◆ <a name="eq"><i>exp1</i> == <i>exp2</i></a></div>
+<div class=item>◆ <a name="ne"><i>exp1</i> != <i>exp2</i></a></div>
+<div class=i>
+<p>== 运算符判断 <i>exp1</i> 和 <i>exp2</i> 是否相等，相等的话返回值为 true（真），不相等的话返回值为 false（假）。!= 运算符判断 <i>exp1</i> 和 <i>exp2</i> 是否不等，不相等的话返回值为 true（真），相等的话返回值为 false（假）。数值和字符串都能使用。</p>
+<pre class=c>
+if (xx == 5) {
+    alert("xx is five.");
+}
+if (yy != "ABC") {
+    alert("yy is not ABC.");
+}
+</pre>
+<p>数值和字符串互相比较的时候，通常都会自动转换类型。比如下面代码的比较结果为 true。</p>
+<pre class=c>
+if ("123" == 123) {
+    alert("true");
+}
+</pre>
+</div>
+
+<div class=item>◆ <a name="lt"><i>exp1</i> &lt; <i>exp2</i></a></div>
+<div class=item>◆ <a name="lte"><i>exp1</i> &lt;= <i>exp2</i></a></div>
+<div class=item>◆ <a name="gt"><i>exp1</i> &gt; <i>exp2</i></a></div>
+<div class=item>◆ <a name="gte"><i>exp1</i> &gt;= <i>exp2</i></a></div>
+<div class=i>
+<p>比较 <i>exp1</i> 和 <i>exp2</i> 的大小并返回 true（真）或 false（假）。上面的运算符分别为小于（&lt;）、小于等于（&lt;=）、大于（&gt;）、大于等于（&gt;=）。</p>
+<pre class=c>
+if (xx &lt; 123) {
+    alert("xx 比 123 小。");
+}
+</pre>
+<p>当这些运算符用来比较字符串的时候，会以英文字母的顺序来比较。</p>
+<pre class=c>
+if (xx &lt; "H") {
+    alert("xx 的顺序在 H 前面。");
+}
+</pre>
+</div>
+
+<div class=item>◆ <a name="eqq"><i>exp1</i> === <i>exp2</i></a></div>
+<div class=item>◆ <a name="neqq"><i>exp1</i> !== <i>exp2</i></a></div>
+<div class=i>
+<p>上面两个运算符属于精准判断。当数值和字符串互相比较的时候，== 运算符与 != 运算符都会自动转换类型进行判断，而 === 运算符与 !== 运算符则不进行自动转换，数值与字符串的比较结果永远是 false 。</p>
+<pre class=c>
+if ( 123  ==   123 ) { …… }    // true（真）
+if ("123" ==  "123") { …… }    // true（真）
+if ("123" ==   123 ) { …… }    // true（真）
+if ( 123  ==  "123") { …… }    // true（真）
+if ( 123  ===  123 ) { …… }    // true（真）
+if ("123" === "123") { …… }    // true（真）
+if ("123" ===  123 ) { …… }    // false（假）
+if ( 123  === "123") { …… }    // false（假）
+</pre>
+</div>
+
+<h4><a name="luoji">■ 逻辑运算符</a></h4>
+
+<div class=item>◆ <a name="and"><i>exp1</i> &amp;&amp; <i>exp2</i></a></div>
+<div class=i>
+<p>当 <i>exp1</i> 为真，并且，<i>exp2</i> 也为真的时候，返回值为真，否则返回值为假。下面的例子里，当 mon 大于等于 1，并且小于等于 12 的时候，运行 if 语句内的代码。</p>
+<pre class=c>
+if ((1 &lt;= mon) &amp;&amp; (mon &lt;= 12)) {
+    alert("xx is between 1 and 12.");
+}
+</pre>
+</div>
+
+<div class=item>◆ <a name="or"><i>exp1</i> || <i>exp2</i></a></div>
+<div class=i>
+<p>当 <i>exp1</i> 为真，或者，<i>exp2</i> 为真的时候，返回值为真,否则返回值为假。下面的例子里，当 xx 的值为 "ABC"，或者为 "abc" 的时候，运行 if 语句内的代码。</p>
+<pre class=c>
+if ((xx == "ABC") || (xx == "abc")) {
+    alert("xx is ABC.");
+}
+</pre>
+</div>
+
+<div class=item>◆ <a name="not">!<i>exp1</i></a></div>
+<div class=i>
+<p>当 <i>exp1</i> 的值为假的时候，返回值为真。</p>
+<pre class=c>
+if (!(xx == 5)) {
+    alert("xx is not five.");
+}
+</pre>
+</div>
+
+<h4><a name="tiaojian">■ 条件运算符</a></h4>
+
+<div class=item>◆ <a name="cond"><i>exp1</i> ? <i>exp2</i> : <i>exp3</i></a></div>
+<div class=i>
+<p><i>exp1</i> 的值为真的时候，返回值为 <i>exp2</i> ，否则返回值为 <i>exp3</i> 。下面的例子里，当 xx 大于等于 5 的时候，把返回值 "big" 赋值给变量 yy ，否则就把返回值 "small" 赋值给 yy 。</p>
+<pre class=c>
+yy = (xx &gt;= 5) ? "big" : "small";
+</pre>
+</div>
+
+<h4><a name="douhao">■ 逗号运算符</a></h4>
+
+<div class=item>◆ <a name="comma"><i>exp1</i>, <i>exp2</i></a></div>
+<div class=i>
+<p>永远返回 <i>exp2</i> 的值。但是要注意，逗号运算符比赋值运算符的优先度低，所以代码 xx = 1, 2; 会被解释为 (xx = 1), 2; 。另外，在函数的参数列表中用逗号（,）隔开各参数，这里的逗号不会被解释成逗号运算符。</p>
+<pre class=c>
+b=2;
+c=7;
+d=7;
+a1=(++b,--c);   // 返回值为--c也就是6，所以a1的值为6
+a2=++b,--d;     // 赋值运算符优先于逗号运算符，所以a2的值为++b也就是3
+</pre>
+</div>
+
+<h4><a name="wei">■ 位运算符</a></h4>
+
+<div class=item>◆ <a name="band"><i>exp1</i> &amp; <i>exp2</i></a></div>
+<div class=item>◆ <a name="bor"><i>exp1</i> | <i>exp2</i></a></div>
+<div class=item>◆ <a name="bxor"><i>exp1</i> ^ <i>exp2</i></a></div>
+<div class=item>◆ <a name="bnot">~<i>exp1</i></a></div>
+<div class=i>
+<p>把 <i>exp1</i> 和 <i>exp2</i> 看成4字节的整数，进行 AND（&amp;）、OR（|）、XOR(^）、NOT（~）运算。</p>
+<pre class=c>
+xx = 0x87654321 &amp; 0xffff0000;  // xx 的值为 0x87650000
+xx = 0x87654321 | 0xffff0000;  // xx 的值为 0xffff4321
+xx = 0xffff0000 ^ 0xff00ff00;  // xx 的值为 0x00ffff00
+xx = ~0xffff0000;              // xx 的值为 0x0000ffff
+</pre>
+</div>
+
+<div class=item>◆ <a name="lshift"><i>exp1</i> &lt;&lt; <i>exp2</i></a></div>
+<div class=item>◆ <a name="rshift"><i>exp1</i> &gt;&gt; <i>exp2</i></a></div>
+<div class=item>◆ <a name="urshift"><i>exp1</i> &gt;&gt;&gt; <i>exp2</i></a></div>
+<div class=i>
+<p>把 <i>exp1</i> 看成4字节的整数，将 <i>exp1</i> 左移（&lt;&lt;）、右移（&gt;&gt;）、补零右移（&gt;&gt;&gt;） <i>exp2</i> 位。&gt;&gt; 在左端补最大的数字，而 &gt;&gt;&gt; 在左端补零。</p>
+<pre class=c>
+xx = 0x12345678 &lt;&lt; 8;  // xx 的值为 0x34567800
+xx = 0x12345678 &gt;&gt; 8;  // xx 的值为 0x00123456
+xx = 0x87654321 &gt;&gt; 8;  // xx 的值为 0xff876543
+xx = 0x87654321 &gt;&gt;&gt; 8; // xx 的值为 0x00876543
+</pre>
+<p>看不懂无所谓，做普通网页基本用不到。</p>
+</div>
+
+<h4><a name="kuozhan">■ 扩展赋值运算符</a></h4>
+
+<div class=item>◆ <a name="pleq"><i>var</i> += <i>exp</i></a></div>
+<div class=item>◆ <a name="mieq"><i>var</i> -= <i>exp</i></a></div>
+<div class=item>◆ <a name="mueq"><i>var</i> *= <i>exp</i></a></div>
+<div class=item>◆ <a name="dieq"><i>var</i> /= <i>exp</i></a></div>
+<div class=item>◆ <a name="moeq"><i>var</i> %= <i>exp</i></a></div>
+<div class=item>◆ <a name="aneq"><i>var</i> &amp;= <i>exp</i></a></div>
+<div class=item>◆ <a name="oreq"><i>var</i> |= <i>exp</i></a></div>
+<div class=item>◆ <a name="noeq"><i>var</i> ^= <i>exp</i></a></div>
+<div class=item>◆ <a name="lseq"><i>var</i> &lt;&lt;= <i>exp</i></a></div>
+<div class=item>◆ <a name="rseq"><i>var</i> &gt;&gt;= <i>exp</i></a></div>
+<div class=item>◆ <a name="urseq"><i>var</i> &gt;&gt;&gt;= <i>exp</i></a></div>
+<div class=i>
+<p>比如 xx += 5; 是 xx = xx + 5; 的意思。同样，xx -= 5; 是 xx = xx - 5; 的意思。以此类推。</p>
+<pre class=c>
+xx += 5;    // 相当于 xx = xx + 5;
+xx -= 5;    // 相当于 xx = xx - 5;
+xx *= 5;    // 相当于 xx = xx * 5;
+xx /= 5;    // 相当于 xx = xx / 5;
+xx %= 5;    // 相当于 xx = xx % 5;
+xx &amp;= 0xff; // 相当于 xx = xx &amp; 0xff;
+xx |= 0xff; // 相当于 xx = xx | 0xff;
+xx ^= 0xff; // 相当于 xx = xx ^ 0xff;
+xx &lt;&lt;= 8;   // 相当于 xx = xx &lt;&lt; 8;
+xx &gt;&gt;= 8;   // 相当于 xx = xx &gt;&gt; 8;
+xx &gt;&gt;&gt;= 8;  // 相当于 xx = xx &gt;&gt;&gt; 8;
+</pre>
+</div>
+
+<h4><a name="youxian">■ 运算符的优先级</a></h4>
+<div class=i>
+<p>运算符的优先级如下表所示。即使你可以背出各运算符的优先级，但不代表每个看代码的人都能背出，所以推荐尽量把优先运行的运算符用括号括起来，让每个人都能看明白。</p>
+<table class=p border=1 cellspacing=0 cellpadding=3 width="85%">
+<tr class=h><th>优先级</th><th>运算符</th></tr>
+<tr><th rowspan=15 class=h><div>↑</div><div>高</div><br><br><br><div>低</div><div>↓</div></th>
+<td>数组（[]） 括号（( )）</td></tr>
+<tr><td>増減（++ --） 负号（-） 取反（~） NOT（!）</td></tr>
+<tr><td>乘除余（* / %）</td></tr>
+<tr><td>加减（+ -) 连接字符串（+）</td></tr>
+<tr><td>位移（&lt;&lt; &gt;&gt; &lt;&lt;&lt;）</td></tr>
+<tr><td>比较（&lt; &lt;= &gt;= &gt;）</td></tr>
+<tr><td>比较（== != === !==）</td></tr>
+<tr><td>AND（&amp;）</td></tr>
+<tr><td>XOR（^）</td></tr>
+<tr><td>OR（|）</td></tr>
+<tr><td>且（&amp;&amp;）</td></tr>
+<tr><td>或（||）</td></tr>
+<tr><td>条件（? :）</td></tr>
+<tr><td>赋值（=） 扩展赋值（+=等）</td></tr>
+<tr><td>逗号（,）</td></tr>
+</table>
+</div>
+
+<hr>
+<h2>数值/字符串/固定值</h2>
+
+<h4>■ 一览</h4>
+<div class=i>
+<a href="#MAX_VALUE">MAX_VALUE</a>,
+<a href="#MIN_VALUE">MIN_VALUE</a>,
+<a href="#NaN">NaN</a>,
+<a href="#NEGATIVE_INFINITY">NEGATIVE_INFINITY</a>,
+<a href="#newNumber">Number()</a>,
+<a href="#POSITIVE_INFINITY">POSITIVE_INFINITY</a>,
+<a href="#toString">toString(<i>radix</i>)</a>
+</div>
+
+<h4>■ <a name="shuzhi">数值</a></h4>
+<div class=i>
+<p>JavaScript 中可以使用10进制数、8进制数、16进制数、实数、浮点数。以 0 开头的整数是8进制数，以 0x 开头的整数是16进制数。</p>
+<pre class=c>
+12345    // 10进制数 12345
+1.23     // 实数 1.23
+1.23e4   // 1.23 × 10的4次方
+1.23E4   // 1.23 × 10的4次方
+012      // 8进制数12（10进制数的10）
+0x1b     // 16进制数1B（10进制数的27）
+</pre>
+<p>关于数值的详细内容请参考 <a href="jiben1.html">数值对象</a>。</p>
+</div>
+
+
+<h4>■ <a name="zifuchuan">字符串</a></h4>
+<div class=i>
+<p>字符串是由多个字符组成的有限序列文。JavaScript 里的字符串必须写在双引号（"）或单引号（'）之内。</p>
+<pre class=c>
+str = "这是字符串。";
+str = '这也是字符串。';
+</pre>
+<p>关于字符串的详细内容请参考 <a href="jiben2.html">字符串对象</a>。</p>
+</div>
+
+
+<h4>■ <a name="teshuzhi">特殊值</a></h4>
+<div class=item>◆ <a name="true">true</a></div>
+<div class=item>◆ <a name="false">false</a></div>
+<div class=i>
+<p>布尔值 true 代表“真”，false 代表“假”。关于布尔值的详细内容请参考 <a href="jiben3.html">布尔值（Boolean）</a>。</p>
+</div>
+
+<div class=item>◆ <a name="null">null</a></div>
+<div class=i>
+<p>表示“无值”的特殊值。</p>
+</div>
+
+<div class=item>◆ <a name="undefined">undefined</a></div>
+<div class=i>
+<p>表示“未定义”的特殊值。</p>
+</div>
+
+<div class=item>◆ <a name="NaN">NaN</a></div>
+<div class=i>
+<p>表示“非数值”(Not a Number)的特殊值。</p>
+</div>
+
+<div class=item>◆ <a name="Infinity">Infinity</a></div>
+<div class=i>
+<p>表示“无限”的特殊值。</p>
+</div>
+
+<hr>
+
+<h2>内置函数</h2>
+
+<h4>■ 一览</h4>
+<div class=i>
+<a href="#escape">escape()</a>,
+<a href="#eval">eval()</a>,
+<a href="#isFinite">isFinite()</a>,
+<a href="#isNaN">isNaN()</a>,
+<a href="#Number">Number()</a>,
+<a href="#parseFloat">parseFloat()</a>,
+<a href="#parseInt">parseInt()</a>,
+<a href="#String">String()</a>,
+<a href="#unescape">unescape()</a>
+</div>
+
+<h4>■ <a name="shuzhi">数值转换</a></h4>
+<div class=item>◆ <a name="Number">Number(<i>exp</i>)</a></div>
+<div class=i>
+<p>把 <i>exp</i> 转换成数值。如果 <i>exp</i> 是日期对象，则返回从1970年1月1日到此日期的毫秒数。转换失败时返回特殊值 NaN 。考虑到不支持 Number() 函数的骨灰浏览器，一般只要把字符串减去 0 就能变成数值。</p>
+<pre class=c>
+num = Number("123") + Number("456"); // num 的值为579
+num = ("123" - 0) + ("456" - 0);     // num 的值为579
+</pre>
+</div>
+
+<div class=item>◆ <a name="parseFloat">parseFloat(<i>string</i>)</a></div>
+<div class=i>
+<p>把字符串 <i>string</i> 转换为浮点数。转换失败时返回特殊值 NaN 。</p>
+<pre class=c>
+num = parseFloat("1.23");  // num 的值为1.23
+</pre>
+</div>
+
+<div class=item>◆ <a name="parseInt">parseInt(<i>string</i> <tt>[, <i>radix</i>]</tt>)</a></div>
+<div class=i>
+<p>把字符串 <i>string</i> 转换为整数，小数点以下被舍去。设定 <i>radix</i> 为 2, 8, 10, 16 的话，被转换的字符串被会解释为2, 8, 10, 16进制数。省略 <i>radix</i> 的时候，字符串以 "0x" 开头则解释为16进制数，以"0" 开头则解释为8进制数，其他情况为10进制数。转换失败时返回特殊值 NaN 。</p>
+<pre class=c>
+xx = parseInt("1.99");    // xx的值为1
+xx = parseInt("123abc");  // xx的值为123
+xx = parseInt("abc123");  // xx的值为NaN
+xx = parseInt("0xff");    // xx的值为255
+xx = parseInt("0777");    // xx的值为511
+xx = parseInt("ab", 16);  // xx的值为171
+</pre>
+</div>
+
+
+<h4>■ <a name="zifuchuan">字符串转换</a></h4>
+<div class=item>◆ <a name="String">String(<i>num</i>)</a></div>
+<div class=i>
+<p>把 <i>num</i> 转换成字符串。考虑到不支持 String() 函数的骨灰浏览器，一般只要把数值加上 "" 就能变成字符串。</p>
+<pre class=c>
+str = String(123) + String(456); // str的值为"123456"
+str = (123 + "") + (456 + "");   // str的值为"123456"
+</pre>
+</div>
+
+
+<h4>■ <a name="bianma">编码</a></h4>
+<div class=item>◆ <a name="escape">escape(<i>string</i>)</a></div>
+<div class=i>
+<p>对字符串进行编码，以便使其他计算机也能读取该字符串。比如要把汉字放在 URL 里，或者 Cookie 的参数里的时候用这个函数。</p>
+<pre class=c>
+str = escape("智融IT,先进的ETL/ESB工具");
+</pre>
+</div>
+
+<div class=item>◆ <a name="unescape">unescape(<i>string</i>)</a></div>
+<div class=i>
+<p>将被 escape() 编码的字符串进行解码。</p>
+<pre class=c>
+str = unescape("%u667A%u878DIT%2C%u5148%u8FDB%u7684ETL/ESB%u5DE5%u5177");
+</pre>
+</div>
+
+<h4><a name="panduan">■ 值的判断</a></h4>
+
+<div class=item>◆ <a name="isNaN">isNaN(<i>value</i>)</a></div>
+<div class=i>
+<p>判断 <i>value</i> 是否不为数值（NaN 是 Not a Number 的缩写）。当 <i>value</i> 为数值或是能解释为数值的字符串则返回 false ，其他情况返回 true 。</p>
+<pre class=c>
+if (isNaN(num = parseInt(str))) {
+    alert("不是数值。");
+}
+</pre>
+</div>
+
+<div class=item>◆ <a name="isFinite">isFinite(<i>num</i>)</a></div>
+<div class=i>
+<p>判断 <i>num</i> 是否为有限数值。有限数值返回 true ，无限数值返回 false 。</p>
+</div>
+
+<h4><a name="jiaoben">■ 执行脚本</a></h4>
+
+<div class=item>◆ <a name="eval">eval(<i>statements</i>)</a></div>
+<div class=i>
+<p>把 <i>statements</i> 当成 JavaScript 脚本来执行。此函数不常用。</p>
+<pre class=c>
+ans = eval("3 + (6 * 4)");  // ans的值为27
+</pre>
+</div>
+
+<hr>

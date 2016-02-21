@@ -1,0 +1,41 @@
+{
+    "name": "eeb-conductor-prj",
+    "version": "0.1.55",
+    "description": "EEB 中心控制端",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "start": "node index.js",
+        "install": "node install.js",
+        "prepublish": "node -e \"require('ver--1')();\""
+    },
+    "repository": {
+        "type": "git",
+        "url": "none"
+    },
+    "keywords": [
+        "etl",
+        "esb",
+        "bpm"
+    ],
+    "author": "yanming",
+    "license": "Commercial",
+    "dependencies": {
+        "auth-lib": "^0.1.5",
+        "configuration-lib": "^0.1.15",
+        "cookie": "^0.1.2",
+        "db3-lib": "^0.2.1",
+        "express": "^4.12.2",
+        "java": "^0.5.1",
+        "java-factory-lib": "*",
+        "kfk-lib": "^0.1.6",
+        "logger-lib": "*",
+        "masquerade-html-lib": "^0.1.13",
+        "mixer-lib": "^0.1.19",
+        "uuid-zy-lib": "^0.1.1",
+        "websocket-lib": "^0.1.10"
+    },
+    "devDependencies": {
+        "ver--1": "^0.1.13"
+    }
+}

@@ -1,0 +1,24 @@
+<!-- <create to='zy' server-s='http://192.168.7.21:8088/ui/paas/' /> -->
+<create to='zy' server-s='/eeb/ui/paas/' />
+
+<slice define='zy-js-env'>
+<script>
+zy.g.host.ui = "http://192.168.7.21:8088";
+zy.g.host.api = "http://192.168.7.21:8088/ds/";
+zy.g.comm.orgpath = 'paas';
+
+window.loadScript = function(src) {
+  var end = ['<', '/', 's', 'cript>'];
+  var jssrc = '<script src="' + zy.g.host.ui + '/t/paas/' + src + '">' + end.join('');
+  $(document.head).append(jssrc);
+  // console.log('load script:', jssrc);
+  // return jssrc;
+};
+
+zy.extend = {
+  msg: function(msg, type) {
+    eeb.show_msg_box(null, msg);
+  }
+};
+</script>
+</slice>

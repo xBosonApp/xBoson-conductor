@@ -1,0 +1,16 @@
+<div>
+<h2>关于 ESB JS 的说明</h2>
+
+<div class='well'>
+  <ul>
+  <li>未设置 manualOver() 时, 当脚本结束, 流中的数据会自动传递给下一个目标并启动.</li>
+  <li>如果设置了 manualOver(), 脚本结束, 下一个目标不会触发, 直到脚本中调用了 over(), 下一个目标才会启动, 适合异步回调中的情况.</li>
+  <li>流中是可以保存函数的, 可以连接两个 js 目标, 在目标中传递回调函数, 适合代码很多, 需要分开定义的情况</li> 
+  <li>注意: 一旦在流中传递了函数, 则无法在设计时测试.</li>
+  </ul>
+</div>
+
+<hr class='simple'/>
+
+<include src='prog-help/javascript-doc.htm'/>
+<div>

@@ -1,0 +1,111 @@
+
+<form id='___prog_config_page' class='smart-form'>
+  <input type='hidden' name='_type' value='none'/>
+
+    <p class="alert alert-info">JMS 输入</p>
+
+    <input name='name' label='名称' col='12'/>
+
+<hr class="simple" style="width:100%; clear:both;"/>
+
+    <input name='host' label='JMS 服务器地址' col='5'/>
+    <input name='port' label='服务器端口' col='3'/>
+
+    <select name='driver' label='驱动' col='4'>
+      <option value='OpenMQ' port='7676'   >GlassFish(tm) Server Message Queue</option>
+      <option value='ActiveMQ' port='61616'>Apache ActiveMQ</option>
+      <option value='HornetQ' port='5455'  >JBoss HornetQ</option>
+      <option value='ibmMQ' port='1414'    >IBM WebSphere MQ</option>
+      <option value='WebLogic' port='7001' >Oracle WebLogic MQ</option>
+    </select>
+
+    <input name='user' label='登录用户名' col='4'/>
+    <input name='pass' label='密码' col='4'/>
+    <input name='outvar' label='输出变量' col='4'/>
+
+<hr class="simple" style="width:100%; clear:both;"/>
+
+    <input name='qname' label='队列/订阅名称' col='4'/>
+    <input name='selector' label='消息过滤' col='4'/>
+
+    <select name='mode' label='模式' col='4'>
+      <option value='q'>队列</option>
+      <option value='s'>订阅</option>
+    </select>
+
+
+    <div class='subpage'>
+      <select name='shared' label='共享消息' col='4'>
+        <option value='y'>允许其他监听器消费消息</option>
+        <option value='n'>禁止其他监听器</option>
+      </select>
+
+      <select name='durable' label='持久化' col='4'>
+        <option value='y'>连接断开,服务器为监听器保留消息</option>
+        <option value='n'>断开后,监听器被删除</option>
+      </select>
+
+      <input name='lsn_name' label='监听器名称' col='4'/>
+    </div>
+
+    <input type='submit' value='应用' class='ok btn btn-primary' label='' col='4' />
+
+  <input type='hidden' name='retmessage' label='&nbsp' col='3'/>
+</form>
+
+
+<script src='js/dyn-row.js'/>
+
+
+<script>
+(function() {
+
+var root     = $('#___prog_config_page');
+var rc       = $('#program_config').data('run_config');
+var eeb_work = $('#program_config').data('eeb_work');
+var subpage  = root.find('.subpage');
+var port     = root.find('[name=port]');
+
+
+eeb.auto_form_ui('#___prog_config_page');
+
+
+var pb = eeb.create_bind(rc, '#___prog_config_page', function(_nouse, whoclick) {
+  eeb_work.check_config(function(err, data) {
+    console.log(err, data);
+  });
+});
+
+
+eeb_work.when_close(function() {
+  // eeb.zip(rc, 'pn', 'pv');
+});
+
+
+root.find('[name=driver]').change(change_drv).trigger('change');
+root.find('[name=mode]').change(change_mode).trigger('change');
+root.find('select').select2({width: '100%'});
+
+
+function change_mode() {
+  if (this.value == 's') {
+    subpage.show();
+  } else {
+    subpage.hide();
+  }
+}
+
+
+function change_drv() {
+  var sopt = this.options[this.selectedIndex];
+  if (sopt) {
+    if (!port.val()) {
+      port.val(sopt.getAttribute('port'));
+      port.trigger('change');
+    }
+  }
+}
+
+
+})();
+</script>

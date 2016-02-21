@@ -1,0 +1,68 @@
+
+<slice define='zy-body'>
+  <link rel="stylesheet" href="css/basic.css">
+<!-- 
+  <script src='js/lib/jquery-2.0.3.min.js'/>
+  <script src='js/lib/jquery.snippet.min.js'/>
+  <script src='js/lib/jquery-ui-1.10.3.min.js'/> 
+  <script src='js/lib/jtopo-0.4.8-min.js'/> -->
+
+  <script src="### zy.server###lib/html/zy_modal.js"/>
+  <script src="### zy.server###lib/html/zy_tabs.js"/>
+
+  <script src='js/export-fn.js'/>
+  <script src='js/dict-local.js'/>
+  <script src='js/tag-util.js'/>
+
+  <div class='head_inf mhide'>
+    <if var="__SLicE_save.title">
+      <slice ref='title'/>
+    </if>
+    <div style='color:#999; pedding: 80px 0 0 0; font-size:8px'>This is ETL/ESB Demo</div>
+  </div>
+
+  <div class='main_frame'>
+    <div class='tool_bar jtopo_toolbar' id='tool_bar'>
+      <slice ref='tool_bar'/>
+    </div>
+
+    <div class='user_operate'>
+      <if var='query.nomenu' not='true'>
+      <div class='left'>
+
+        <div class=" menujarviswidget jarviswidget-color-darken jarviswidget-sortable" id="wid-id-2" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="false" data-widget-fullscreenbutton="false" role="widget">
+
+          <header role="heading">
+            <div class="jarviswidget-ctrls" role="menu">   <a href="#" class="button-icon jarviswidget-toggle-btn" rel="tooltip" data-placement="bottom" data-original-title="" title=""><i class="fa fa-minus "></i></a>  
+            </div>
+            <span class="widget-icon"> 
+              <div style='padding-top: 15px; padding-left: 15px'>
+                <slice ref='menu'/> 
+              </div>   
+              <i class="fa fa-resize-vertical"></i> 
+            </span>
+          </header>
+
+          <div role="content"> <!-- not use --> </div>
+        </div>
+
+        <div class='functions'>
+          <slice ref='functions'/>
+        </div>
+      </div>
+      </if> <!-- 不显示菜单的开关 -->
+
+      <div class='right'>
+        <!-- <canvas id="canvas" width='800' height='560'></canvas>  -->
+        <slice ref='operator_content'/>
+      </div>
+    </div>
+
+    <div class='show_state alert alert-info fade in' id='__show_state__'>
+      state
+    </div>
+  </div>
+
+</slice>
+
+<include src='zy-index.htm' private='true'/>

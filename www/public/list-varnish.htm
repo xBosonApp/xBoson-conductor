@@ -1,0 +1,78 @@
+<ehtml>
+
+<slice define='title'>
+</slice>
+
+<slice define='tool_bar'>
+  <!-- <include src="tool_bar.htm"/> -->
+</slice>
+
+<slice define='menu'>
+  选择 特例配置
+</slice>
+
+<slice define='functions'>
+    <include src='chose-type.htm'/>
+</slice>
+
+<slice define='operator_content'>
+  <transfer_data id='__page_typename'>特例配置</transfer_data>
+
+  <form class='form_content'>
+    <div class='offline_disabled'> 
+      特例配置名称: <input name='name'/> <b></b> 
+      <input type='submit' class='btn btn-primary' value='查询'/>
+      <input type='reset'  class='btn btn-primary' value='清空'/>
+      <b></b> 
+
+      <input type='button' class='btn btn-primary' value='创建' id='create-varnish'/>
+      <input type='button' class='btn btn-primary' value='修改' id='edit-varnish'/>
+      <input type='button' class='btn btn-primary' value='删除' id='del-varnish'/>
+
+      <input type='button' class='btn btn-warning' value='设计' id='design-varnish'/>
+      <input type='button' class='btn btn-warning' value='返回作业' id='return-work'/>
+    </div>
+
+    <div class="dataTables_wrapper auto_width_container">
+      <table class='job_list table table-bordered table-striped no-footer dataTable' 
+             chose_row='true' url='/eeb/service?fn=varnish_list&t=1&wnid=###query.wnid###&id=###query.id###' role='grid'>
+      
+        <thead>
+        <tr>
+          <th val='VID' class='mhide select_job_id'>VID</th>
+          <th val='NAME'>特例名称</th>
+          <th val='RID' class='mhide'>RID</th>
+          <th val='RNAME'>模板名称</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        </tbody>
+      </table>
+    </div>
+    <!-- <div class='note instance_id'>读取中...</div> -->
+    <div class='pagination'></div>
+  </form>
+
+
+  <div class='mhide' id='input_name' style='width:300px; height: 200px;' title='输入'>
+    <form class='smart-form' onsubmit='return false'>
+      <section class="col col-md-12">
+        <label class='label'>输入一个特例名称</label>
+        <label class='input'><input name='name' placeholder="特例名称"/></label>
+      </section>
+      <section class="col col-md-12">
+        <label class='label'>选择一个配置模板</label>
+        <label class='select'><select name='rid' placeholder="配置"/></label>
+      </section>
+      <input type='hidden' name='wnid' value='###query.wnid###'/>
+      <input type='hidden' name='wid'  value='###query.wid###'/>
+    </form>
+    <div class='message'></div>
+  </div>
+
+  <script src='js/list-page.js'/>
+
+</slice>
+
+</ehtml>

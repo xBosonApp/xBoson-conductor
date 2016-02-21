@@ -1,0 +1,81 @@
+<!-- widget grid -->
+<section id="widget-grid" class="">
+  <!-- row -->
+  <div class="row">
+    <!-- NEW WIDGET START -->
+    <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+      <!-- Widget ID (each widget will need unique ID)-->
+      <div id="schedule_schedule_manage" class="jarviswidget jarviswidget-color-blueDark" data-widget-fullscreenbutton="false" data-widget-colorbutton="true" data-widget-togglebutton="false" data-widget-editbutton="false" data-widget-deletebutton="false">
+        <header>
+          <span class="widget-icon"> <i class="fa fa-table"></i> </span>
+          <h2>计划任务管理</h2>
+        </header>
+        <!-- widget div-->
+        <div>
+          <!-- widget edit box -->
+          <div class="jarviswidget-editbox">
+            <!-- This area used as dropdown edit box -->
+          </div>
+          <!-- end widget edit box -->
+          <!-- widget content -->
+          <div class="widget-body no-padding">
+            <div class="widget-body-toolbar">
+              <div class="row">
+                <form id="schedule_schedulelist_form" method="post" onsubmit="return false;" class="smart-form">
+                  <section class="col col-2">
+                    <label class="input">
+                      <input type="text" name="task_name" placeholder="任务名称" class="form-control">
+                    </label>
+                  </section>
+                  <section class="col col-2">
+                    <label class="input">
+                      <button id="schedule_schedulelist_search" class="btn btn-info btn-sm" type="submit"><i class="fa fa-search fa-1"></i>&emsp;查 询&emsp;</button>
+                    </label>
+                  </section>
+                </form>
+              </div>
+              <div class="btn-group">
+                <button id="schedule_schedulelist_add" class="btn btn-info btn-xs">&emsp;<i class="fa fa-magic"></i>&nbsp;添 加&emsp;
+                </button>
+                <button id="schedule_schedulelist_edit" class="btn btn-info btn-xs">&emsp;<i class="fa fa-edit"></i>&nbsp;修 改&emsp;
+                </button>
+                <!--<button id="schedule_schedulelist_delete" class="btn btn-info btn-xs">&emsp;<i class="fa fa-trash-o"></i>&nbsp;删 除&emsp;
+                </button>-->
+                <button id="schedule_schedulelist_go" class="btn btn-info btn-xs">&emsp;<i class="fa fa-book"></i>&nbsp;启动&emsp;
+                </button>
+                <button id="schedule_schedulelist_stop" class="btn btn-info btn-xs">&emsp;<i class="fa fa-book"></i>&nbsp;停止&emsp;
+                </button>
+                <button id="schedule_schedulelist_del" class="btn btn-info btn-xs">&emsp;<i class="fa fa-unlink"></i>&nbsp;删除&emsp;
+                </button>
+              </div>
+            </div>
+            <div class="dataTables_wrapper">
+              <table id="schedule_schedulelist_dt" class="table table-bordered table-striped">
+                <thead>
+                </thead>
+              </table>
+            </div>
+          </div>
+          <!-- end widget content -->
+          <div id="schedule_schedulelist_pagination"></div>        </div>
+        <!-- end widget div -->
+      </div>
+      <!-- end widget -->
+    </article>
+    <!-- WIDGET END -->
+  </div>
+  <!-- end row -->
+</section>
+<div id="dialog" title="提示" style="display:none;">正在执行任务...</div>
+<!-- end widget grid -->
+<div id="schedule_schedulelist_form2"></div>
+<div id="schedule_api"></div>
+<script src="lib/js/plugin/jquery-pagination/jqPaginator.js"></script>
+<script src="lib/html/zy_modal.js"></script>
+<script src="lib/html/zy_tabs.js"></script>
+<script src="schedule/schedule_manage/get_schedule_list.js"></script>
+<script type="text/javascript">
+  // DO NOT REMOVE : GLOBAL FUNCTIONS!
+  pageSetUp();
+  var schedule_app = new ScheduleList();
+</script>

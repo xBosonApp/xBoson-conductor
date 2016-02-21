@@ -1,0 +1,54 @@
+
+<form id='___prog_config_page' class='smart-form'>
+  <input type='hidden' name='_type' value='none'/>
+
+    <p class="alert alert-info _program_name">解析 MIME-TYPE</p>
+
+    <input name='name' label='名称' col='12'/>
+
+
+    <input name='fin' label='输入数据选择' col='6' 
+         group='1' readonly='true' rowname='fin'/>
+    <button type='button' class='btn btn-primary' flowdata_to_rowname='fin'
+            label='.' group='1'>从流中读取</button>
+
+    <input name='fout' label='输出到' col='6' 
+         group='2' rowname='fout'/>
+    <button type='button' class='btn btn-primary' flowdata_to_rowname='fout'
+            label='.' group='2'>从流中读取</button>
+
+
+    <hr class="simple" style="width:100%; clear:both;"/>
+    
+    <input type='submit' value='应用' class='ok btn btn-primary' label='' col='4' />
+
+  <input type='hidden' name='retmessage' label='&nbsp' col='3'/>
+</form>
+
+
+<script src='js/dyn-row.js'/>
+
+
+<script>
+(function() {
+
+var root     = $('#___prog_config_page');
+var rc       = $('#program_config').data('run_config');
+var eeb_work = $('#program_config').data('eeb_work');
+
+
+root.find('._program_name').html(rc._program_name);
+eeb.auto_form_ui('#___prog_config_page');
+eeb.select_field_from_flow(root, eeb_work);
+eeb.out_val_flow_in(root.find(':input[name=fin]'), root.find(':input[name=fout]'));
+
+
+var pb = eeb.create_bind(rc, '#___prog_config_page', function(_nouse, whoclick) {
+  eeb_work.check_config(function(err, data) {
+    console.log(err, data);
+  });
+});
+
+
+})();
+</script>

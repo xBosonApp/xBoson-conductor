@@ -1,0 +1,52 @@
+<div>
+  <h3>转换后的数据包</h3>
+  <pre>
+  {
+    content : null, // 依据目标转换格式, 存储转换后的数据
+    type    : null, // 转换后类型的描述字符串
+    ask     : {},   // 生成的应答数据
+  }
+  </pre>
+  <hr class='simple'/>
+  
+
+  <h3>JSON 数据的说明</h3>
+  <pre>
+  {
+  "xml": {                              // XML 头域
+    "$attr": {
+      "version": "1.0",
+      "encoding": "UTF-8"
+    }
+  },
+  "ADT_A04": {                          // 根节点
+    "$attr": {                          // 属性
+      "xmlns": "urn:hl7-org:v2xml"
+    },
+    "MSH": {                            // 子节点
+      "MSH.1": "|",                     // 字符串型子节点
+      "MSH.2": "^~\\&amp;",
+      "MSH.3": {
+        "HD.1": "NES"
+      },
+      ... (省略)
+  </pre>
+  <hr class='simple'/>
+
+
+  <h3>应答数据</h3>
+  <p>通过生成标准应答数据, 可以直接返回给发出请求的客户端
+  </p>
+  <hr class='simple'/>
+
+
+  <h3>参考资料</h3>
+  <pre><p></p>
+      <a href='http://wiki.hl7.org/index.php?title=Main_Page'>This is the Main Page of the HL7 Wiki</a>
+      <a href='http://www.ihe.net/'>Integrating the Healthcare Enterprise (IHE)</a>
+      <a href='http://www.ringholm.com/docs/04200_en.htm'>HL7 version 3: Message or CDA Document</a>
+      <a href='http://hl7api.sourceforge.net/'>HL7 application programming interface</a>
+      <a href='http://www.hl7.org/documentcenter/public_temp_119AAAC8-1C23-BA17-0C592E8BFBC5179D/wg/xml/drafts/v2xml.html'>XML encoding rules of HL7 v2 messages - v2.xml</a>
+  </pre>
+  
+</div>

@@ -1,0 +1,43 @@
+
+<form id='___prog_config_page' class='smart-form'>
+  <input type='hidden' name='_type' value='none'/>
+  <p class="alert alert-info">LLP 应答</p>
+
+  <input name='name' label='名称' col='12'/>
+
+  <input name='ret_field' label='应答数据' col='6' 
+         group='1' readonly='true' rowname='ret_field'/>
+  <button type='button' class='btn btn-primary' flowdata_to_rowname='ret_field'
+          label='.' group='1'>从流中读取</button>
+
+
+  <input type='submit' value='应用' class='ok btn btn-primary' label='' col='4' />
+
+  <input type='hidden' name='retmessage' label='&nbsp' col='3'/>
+</form>
+
+
+<script src='js/dyn-row.js'/>
+
+
+<script>
+(function() {
+
+var root     = $('#___prog_config_page');
+var rc       = $('#program_config').data('run_config');
+var eeb_work = $('#program_config').data('eeb_work');
+
+
+eeb.auto_form_ui('#___prog_config_page');
+eeb.select_field_from_flow(root, eeb_work);
+
+
+var pb = eeb.create_bind(rc, '#___prog_config_page', function(_nouse, whoclick) {
+  eeb_work.check_config(function(err, data) {
+    console.log(err, data);
+  });
+});
+
+
+})();
+</script>

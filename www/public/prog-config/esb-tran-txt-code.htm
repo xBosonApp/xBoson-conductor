@@ -1,0 +1,66 @@
+
+<form id='___prog_config_page' class='smart-form'>
+  <input type='hidden' name='_type' value='none'/>
+
+    <p class="alert alert-info">字符串编码转换</p>
+
+    <input name='name' label='名称' col='12'/>
+
+
+    <input name='fin' label='输入对象选择' col='6' 
+         group='1' readonly='true' rowname='fin'/>
+    <button type='button' class='btn btn-primary' flowdata_to_rowname='fin'
+            label='.' group='1'>从流中读取</button>
+
+    <input name='fout' label='输出到' col='6' 
+         group='2' rowname='fout'/>
+    <button type='button' class='btn btn-primary' flowdata_to_rowname='fout'
+            label='.' group='2'>从流中读取</button>
+
+    <select label='输入编码' name='codein' col='5'/>
+    <select label='输出编码' name='codeout' col='5'/>
+
+    <select label='输出类型' name='outtype' col='2'>
+      <option value='t'>字符串</option>
+      <option value='b'>二进制</option>
+    </select>
+
+
+    <hr class="simple" style="width:100%; clear:both;"/>
+    
+    <input type='submit' value='应用' class='ok btn btn-primary' label='' col='4' />
+
+  <input type='hidden' name='retmessage' label='&nbsp' col='3'/>
+</form>
+
+
+<script src='js/dyn-row.js'/>
+<script src='js/encoding-select.js'/>
+
+
+<script>
+(function() {
+
+var root     = $('#___prog_config_page');
+var rc       = $('#program_config').data('run_config');
+var eeb_work = $('#program_config').data('eeb_work');
+
+
+eeb.auto_form_ui('#___prog_config_page');
+eeb.select_field_from_flow(root, eeb_work);
+eeb.out_val_flow_in(root.find(':input[name=fin]'), root.find(':input[name=fout]'));
+
+
+var pb = eeb.create_bind(rc, '#___prog_config_page', function(_nouse, whoclick) {
+  eeb_work.check_config(function(err, data) {
+    console.log(err, data);
+  });
+});
+
+
+eeb.init_select_to_encoding(root.find('select[name=codein]'), rc.codein);
+eeb.init_select_to_encoding(root.find('select[name=codeout]'), rc.codeout);
+
+
+})();
+</script>

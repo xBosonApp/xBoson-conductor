@@ -1,0 +1,299 @@
+<style type="text/css">
+.wikitable td {
+  border-width: 2px 0;
+  border-color: #eee;
+}
+.wikitable {
+  border-width: 0;
+}
+</style>
+
+<div>
+  <h3>HTTP 请求时可用头域列表</h3>
+
+  <table class="wikitable sortable jquery-tablesorter" style="width: 100%; clear:right;">
+  <thead><tr>
+  <th class="headerSort" tabindex="0" role="columnheader button" title="Sort ascending">Header field name</th>
+  <th class="unsortable">Description</th>
+  <th class="unsortable">Example</th>
+  <th class="headerSort" tabindex="0" role="columnheader button" title="Sort ascending">Status</th>
+  </tr></thead><tbody>
+  <tr>
+  <td>Accept</td>
+  <td>Content-Types that are acceptable for the response. See <a  title="Content negotiation">Content negotiation</a>.</td>
+  <td><code>Accept: text/plain</code></td>
+  <td>Permanent</td>
+  </tr>
+  <tr>
+  <td>Accept-Charset</td>
+  <td>Character sets that are acceptable</td>
+  <td><code>Accept-Charset: utf-8</code></td>
+  <td>Permanent</td>
+  </tr>
+  <tr id="Accept-Encoding">
+  <td>Accept-Encoding</td>
+  <td>List of acceptable encodings. See <a  title="HTTP compression">HTTP compression</a>.</td>
+  <td><code>Accept-Encoding: gzip, deflate</code></td>
+  <td>Permanent</td>
+  </tr>
+  <tr id="Accept-Language">
+  <td>Accept-Language</td>
+  <td>List of acceptable human languages for response. See <a  title="Content negotiation">Content negotiation</a>.</td>
+  <td><code>Accept-Language: en-US</code></td>
+  <td>Permanent</td>
+  </tr>
+  <tr id="Accept-Datetime">
+  <td>Accept-Datetime</td>
+  <td>Acceptable version in time</td>
+  <td><code>Accept-Datetime: Thu, 31 May 2007 20:35:00 GMT</code></td>
+  <td>Provisional</td>
+  </tr>
+  <tr>
+  <td>Authorization</td>
+  <td>Authentication credentials for HTTP authentication</td>
+  <td><code>Authorization: Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==</code></td>
+  <td>Permanent</td>
+  </tr>
+  <tr>
+  <td><a  title="Cache-Control" class="mw-redirect">Cache-Control</a></td>
+  <td>Used to specify directives that <i>must</i> be obeyed by all caching mechanisms along the request-response chain</td>
+  <td><code>Cache-Control: no-cache</code></td>
+  <td>Permanent</td>
+  </tr>
+  <tr>
+  <td>Connection</td>
+  <td>Control options for the current connection and list of hop-by-hop request fields<sup id="cite_ref-rfc7230_connection_8-0" class="reference"><a ><span>[</span>8<span>]</span></a></sup></td>
+  <td><code>Connection: keep-alive</code>
+  <p><code><a  title="HTTP/1.1 Upgrade header">Connection: Upgrade</a></code></p>
+  </td>
+  <td>Permanent</td>
+  </tr>
+  <tr>
+  <td>Cookie</td>
+  <td>An <a  title="HTTP cookie">HTTP cookie</a> previously sent by the server with <tt><a >Set-Cookie</a></tt> (below)</td>
+  <td><code>Cookie: $Version=1; Skin=new;</code></td>
+  <td>Permanent: standard</td>
+  </tr>
+  <tr id="Content-Length">
+  <td>Content-Length</td>
+  <td>The length of the request body in <a  title="Octet (computing)">octets</a> (8-bit bytes)</td>
+  <td><code>Content-Length: 348</code></td>
+  <td>Permanent</td>
+  </tr>
+  <tr>
+  <td>Content-MD5</td>
+  <td>A <a  title="Base64">Base64</a>-encoded binary <a  title="MD5">MD5</a> sum of the content of the request body</td>
+  <td><code>Content-MD5: Q2hlY2sgSW50ZWdyaXR5IQ==</code></td>
+  <td>Obsolete<sup id="cite_ref-9" class="reference"><a ><span>[</span>9<span>]</span></a></sup></td>
+  </tr>
+  <tr>
+  <td>Content-Type</td>
+  <td>The <a  title="MIME type" class="mw-redirect">MIME type</a> of the body of the request (used with POST and PUT requests)</td>
+  <td><code>Content-Type: application/x-www-form-urlencoded</code></td>
+  <td>Permanent</td>
+  </tr>
+  <tr>
+  <td>Date</td>
+  <td>The date and time that the message was sent (in "HTTP-date" format as defined by <a rel="nofollow" class="external text" >RFC 7231 Date/Time Formats</a>)</td>
+  <td><code>Date: Tue, 15 Nov 1994 08:12:31 GMT</code></td>
+  <td>Permanent</td>
+  </tr>
+  <tr>
+  <td>Expect</td>
+  <td>Indicates that particular server behaviors are required by the client</td>
+  <td><code>Expect: 100-continue</code></td>
+  <td>Permanent</td>
+  </tr>
+  <tr>
+  <td>From</td>
+  <td>The email address of the user making the request</td>
+  <td><code>From: user@example.com</code></td>
+  <td>Permanent</td>
+  </tr>
+  <tr>
+  <td>Host</td>
+  <td>The domain name of the server (for <a  title="Virtual hosting">virtual hosting</a>), and the <a  title="List of TCP and UDP port numbers">TCP port</a> number on which the server is listening. The <a  title="Port (computer networking)">port</a> number may be omitted if the port is the standard port for the service requested.
+  <p><sup id="cite_ref-10" class="reference"><a ><span>[</span>10<span>]</span></a></sup> Mandatory since HTTP/1.1.</p>
+  </td>
+  <td><code>Host: en.wikipedia.org:80</code>
+  <p><code>Host: en.wikipedia.org</code></p>
+  </td>
+  <td>Permanent</td>
+  </tr>
+  <tr>
+  <td>If-Match</td>
+  <td>Only perform the action if the client supplied entity matches the same entity on the server. This is mainly for methods like PUT to only update a resource if it has not been modified since the user last updated it.</td>
+  <td><code>If-Match: "737060cd8c284d8af7ad3082f209582d"</code></td>
+  <td>Permanent</td>
+  </tr>
+  <tr>
+  <td>If-Modified-Since</td>
+  <td>Allows a <i>304 Not Modified</i> to be returned if content is unchanged</td>
+  <td><code>If-Modified-Since: Sat, 29 Oct 1994 19:43:31 GMT</code></td>
+  <td>Permanent</td>
+  </tr>
+  <tr>
+  <td>If-None-Match</td>
+  <td>Allows a <i>304 Not Modified</i> to be returned if content is unchanged, see <a  title="HTTP ETag">HTTP ETag</a></td>
+  <td><code>If-None-Match: "737060cd8c284d8af7ad3082f209582d"</code></td>
+  <td>Permanent</td>
+  </tr>
+  <tr>
+  <td>If-Range</td>
+  <td>If the entity is unchanged, send me the part(s) that I am missing; otherwise, send me the entire new entity</td>
+  <td><code>If-Range: "737060cd8c284d8af7ad3082f209582d"</code></td>
+  <td>Permanent</td>
+  </tr>
+  <tr>
+  <td style="white-space:nowrap">If-Unmodified-Since</td>
+  <td>Only send the response if the entity has not been modified since a specific time.</td>
+  <td><code>If-Unmodified-Since: Sat, 29 Oct 1994 19:43:31 GMT</code></td>
+  <td>Permanent</td>
+  </tr>
+  <tr>
+  <td>Max-Forwards</td>
+  <td>Limit the number of times the message can be forwarded through proxies or gateways.</td>
+  <td><code>Max-Forwards: 10</code></td>
+  <td>Permanent</td>
+  </tr>
+  <tr>
+  <td>Origin</td>
+  <td>Initiates a request for <a  title="Cross-origin resource sharing">cross-origin resource sharing</a> (asks server for an 'Access-Control-Allow-Origin' response field) .</td>
+  <td><code>Origin: http://www.example-social-network.com</code></td>
+  <td>Permanent: standard</td>
+  </tr>
+  <tr>
+  <td>Pragma</td>
+  <td>Implementation-specific fields that may have various effects anywhere along the request-response chain.</td>
+  <td><code><a >Pragma: no-cache</a></code></td>
+  <td>Permanent</td>
+  </tr>
+  <tr>
+  <td style="white-space:nowrap">Proxy-Authorization</td>
+  <td>Authorization credentials for connecting to a proxy.</td>
+  <td><code>Proxy-Authorization: Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==</code></td>
+  <td>Permanent</td>
+  </tr>
+  <tr id="range-request-header">
+  <td><span id="Range"></span> Range</td>
+  <td>Request only part of an entity. Bytes are numbered from 0. See <a  title="Byte serving">Byte serving</a>.</td>
+  <td><code>Range: bytes=500-999</code></td>
+  <td>Permanent</td>
+  </tr>
+  <tr>
+  <td><a  title="HTTP referer">Referer</a> [<i><a  title="Sic">sic</a></i>]</td>
+  <td>This is the address of the previous web page from which a link to the currently requested page was followed. (The word “referrer” has been misspelled in the RFC as well as in most implementations to the point that it has become standard usage and is considered correct terminology)</td>
+  <td><code>Referer: http://en.wikipedia.org/wiki/Main_Page</code></td>
+  <td>Permanent</td>
+  </tr>
+  <tr id="te-request-header">
+  <td>TE</td>
+  <td>The transfer encodings the user agent is willing to accept: the same values as for the response header field Transfer-Encoding can be used, plus the "trailers" value (related to the "<a  title="Chunked transfer encoding">chunked</a>" transfer method) to notify the server it expects to receive additional fields in the trailer after the last, zero-sized, chunk.</td>
+  <td><code>TE: trailers, <a  title="Deflate" class="mw-redirect">deflate</a></code></td>
+  <td>Permanent</td>
+  </tr>
+  <tr>
+  <td>User-Agent</td>
+  <td>The <a  title="User agent string" class="mw-redirect">user agent string</a> of the user agent</td>
+  <td><code>User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:12.0) Gecko/20100101 Firefox/21.0</code></td>
+  <td>Permanent</td>
+  </tr>
+  <tr>
+  <td><a  title="Upgrade header" class="mw-redirect">Upgrade</a></td>
+  <td>Ask the server to upgrade to another protocol.</td>
+  <td><code>Upgrade: HTTP/2.0, SHTTP/1.3, IRC/6.9, RTA/x11</code></td>
+  <td>Permanent</td>
+  </tr>
+  <tr>
+  <td>Via</td>
+  <td>Informs the server of proxies through which the request was sent.</td>
+  <td><code>Via: 1.0 fred, 1.1 example.com (Apache/1.1)</code></td>
+  <td>Permanent</td>
+  </tr>
+  <tr>
+  <td>Warning</td>
+  <td>A general warning about possible problems with the entity body.</td>
+  <td><code>Warning: 199 Miscellaneous warning</code></td>
+  <td>Permanent</td>
+  </tr>
+  </tbody><tfoot></tfoot></table>
+
+<hr class='simple'/>
+
+  <h3>HTTP 请求时扩展头域列表</h3>
+
+  <table class="wikitable sortable jquery-tablesorter" style="width: 100%; clear:right;">
+  <thead><tr>
+  <th class="headerSort" tabindex="0" role="columnheader button" title="Sort ascending">Field name</th>
+  <th class="unsortable">Description</th>
+  <th class="unsortable">Example</th>
+  </tr></thead><tbody>
+  <tr id="Requested-With">
+  <td style="white-space:nowrap">X-Requested-With</td>
+  <td>mainly used to identify <a  title="Ajax (programming)">Ajax</a> requests. Most <a  title="JavaScript framework" class="mw-redirect">JavaScript frameworks</a> send this field with value of <code>XMLHttpRequest</code></td>
+  <td><code>X-Requested-With: XMLHttpRequest</code></td>
+  </tr>
+  <tr>
+  <td><a  title="Do Not Track">DNT</a><sup id="cite_ref-11" class="reference"><a ><span>[</span>11<span>]</span></a></sup></td>
+  <td>Requests a web application to disable their tracking of a user. This is Mozilla's version of the X-Do-Not-Track header field (since <a  title="Mozilla Firefox 4" class="mw-redirect">Firefox 4.0</a> Beta 11). <a  title="Safari (web browser)">Safari</a> and <a  title="Internet Explorer 9">IE9</a> also have support for this field.<sup id="cite_ref-12" class="reference"><a ><span>[</span>12<span>]</span></a></sup> On March 7, 2011, a draft proposal was submitted to IETF.<sup id="cite_ref-13" class="reference"><a ><span>[</span>13<span>]</span></a></sup> The <a  title="World Wide Web Consortium">W3C</a> Tracking Protection Working Group is producing a specification.<sup id="cite_ref-14" class="reference"><a ><span>[</span>14<span>]</span></a></sup></td>
+  <td><code>DNT: 1 (Do Not Track Enabled)</code>
+  <p><code>DNT: 0 (Do Not Track Disabled)</code></p>
+  </td>
+  </tr>
+  <tr>
+  <td style="white-space:nowrap"><a  title="X-Forwarded-For">X-Forwarded-For</a><sup id="cite_ref-15" class="reference"><a ><span>[</span>15<span>]</span></a></sup></td>
+  <td>a <a  title="De facto standard"><i>de facto</i> standard</a> for identifying the originating IP address of a client connecting to a web server through an HTTP proxy or load balancer</td>
+  <td><code>X-Forwarded-For: client1, proxy1, proxy2</code>
+  <p><code>X-Forwarded-For: 129.78.138.66, 129.78.64.103</code></p>
+  </td>
+  </tr>
+  <tr>
+  <td>X-Forwarded-Host<sup id="cite_ref-16" class="reference"><a ><span>[</span>16<span>]</span></a></sup></td>
+  <td>a <a  title="De facto standard"><i>de facto</i> standard</a> for identifying the original host requested by the client in the <code>Host</code> HTTP request header, since the host name and/or port of the reverse proxy (load balancer) may differ from the origin server handling the request.</td>
+  <td><code>X-Forwarded-Host: en.wikipedia.org:80</code>
+  <p><code>X-Forwarded-Host: en.wikipedia.org</code></p>
+  </td>
+  </tr>
+  <tr>
+  <td>X-Forwarded-Proto<sup id="cite_ref-17" class="reference"><a ><span>[</span>17<span>]</span></a></sup></td>
+  <td>a <a  title="De facto standard"><i>de facto</i> standard</a> for identifying the originating protocol of an HTTP request, since a reverse proxy (load balancer) may communicate with a web server using HTTP even if the request to the reverse proxy is HTTPS. An alternative form of the header (X-ProxyUser-Ip) is used by Google clients talking to Google servers.</td>
+  <td><code>X-Forwarded-Proto: https</code></td>
+  </tr>
+  <tr>
+  <td>Front-End-Https<sup id="cite_ref-18" class="reference"><a ><span>[</span>18<span>]</span></a></sup></td>
+  <td>Non-standard header field used by Microsoft applications and load-balancers</td>
+  <td><code>Front-End-Https: on</code></td>
+  </tr>
+  <tr>
+  <td>X-Http-Method-Override<sup id="cite_ref-19" class="reference"><a ><span>[</span>19<span>]</span></a></sup></td>
+  <td>Requests a web application override the method specified in the request (typically POST) with the method given in the header field (typically PUT or DELETE). Can be used when a user agent or firewall prevents PUT or DELETE methods from being sent directly (note that this either a bug in the software component, which ought to be fixed, or an intentional configuration, in which case bypassing it may be the wrong thing to do).</td>
+  <td><code>X-HTTP-Method-Override: DELETE</code></td>
+  </tr>
+  <tr>
+  <td>X-ATT-DeviceId<sup id="cite_ref-20" class="reference"><a ><span>[</span>20<span>]</span></a></sup></td>
+  <td>Allows easier parsing of the MakeModel/Firmware that is usually found in the User-Agent String of AT&amp;T Devices</td>
+  <td><code>X-Att-Deviceid: GT-P7320/P7320XXLPG</code></td>
+  </tr>
+  <tr>
+  <td>X-Wap-Profile<sup id="cite_ref-21" class="reference"><a ><span>[</span>21<span>]</span></a></sup></td>
+  <td>Links to an XML file on the Internet with a full description and details about the device currently connecting. In the example to the right is an XML file for an AT&amp;T Samsung Galaxy S2.</td>
+  <td><code>x-wap-profile: <a rel="nofollow" class="external free" >http://wap.samsungmobile.com/uaprof/SGH-I777.xml</a></code></td>
+  </tr>
+  <tr>
+  <td>Proxy-Connection<sup id="cite_ref-22" class="reference"><a ><span>[</span>22<span>]</span></a></sup></td>
+  <td>Implemented as a misunderstanding of the HTTP specifications. Common because of mistakes in implementations of early HTTP versions. Has exactly the same functionality as standard Connection field.</td>
+  <td><code>Proxy-Connection: keep-alive</code></td>
+  </tr>
+  <tr>
+  <td>X-UIDH<sup id="cite_ref-23" class="reference"><a ><span>[</span>23<span>]</span></a></sup><sup id="cite_ref-24" class="reference"><a ><span>[</span>24<span>]</span></a></sup><sup id="cite_ref-25" class="reference"><a ><span>[</span>25<span>]</span></a></sup></td>
+  <td>Server-side <a  title="Deep packet inspection">deep packet insertion</a> of a unique ID identifying customers of <a  title="Verizon Wireless">Verizon Wireless</a>; also known as "perma-cookie" or "supercookie"</td>
+  <td><code>X-UIDH: ...</code></td>
+  </tr>
+  <tr>
+  <td>X-Csrf-Token<sup id="cite_ref-26" class="reference"><a ><span>[</span>26<span>]</span></a></sup></td>
+  <td>Used to prevent <a  title="Cross-site request forgery">cross-site request forgery</a>. Alternative header names are: <code>X-CSRFToken</code><sup id="cite_ref-27" class="reference"><a ><span>[</span>27<span>]</span></a></sup> and <code>X-XSRF-TOKEN</code><sup id="cite_ref-28" class="reference"><a ><span>[</span>28<span>]</span></a></sup></td>
+  <td><code>X-Csrf-Token: i8XNjC4b8KVok4uw5RftR38Wgp2BFwql</code></td>
+  </tr>
+  </tbody><tfoot></tfoot></table>
+
+</div>

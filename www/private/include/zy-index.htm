@@ -1,0 +1,141 @@
+<setenv/>
+
+<!DOCTYPE html>
+<html lang="en-us">
+
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="description" content="智云 - Web Portal">
+  <meta name="keywords" content="智融, 智云">
+  <meta name="author" content="智融IT">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>智云 - Web Portal - ETL ESB BPM</title>
+  <!-- FAVICONS -->
+  <link rel="shortcut icon" href="### zy.server###lib/img/favicon/favicon.ico" type="image/x-icon">
+  <link rel="icon" href="### zy.server###lib/img/favicon/favicon.ico" type="image/x-icon">
+
+  <!-- Basic Styles -->
+  <link rel="stylesheet" type="text/css" media="screen" 
+        href="### zy.server###lib/css/bootstrap.min.css">
+
+  <link rel="stylesheet" type="text/css" 
+        href="### zy.server###lib/js/plugin/bootstrap-datepicker/datepicker3.css">
+
+  <!-- 这个文件引用的字体文件不能跨域请求!!! -->
+  <link rel="stylesheet" type="text/css" media="screen" href="css/font-awesome.min.css">
+
+  <!-- SmartAdmin Styles : Please note (smartadmin-production.css) was created using LESS variables -->
+  <link rel="stylesheet" type="text/css" media="screen" href="### zy.server###lib/css/smartadmin-production.css">
+
+  <!-- GOOGLE FONT -->
+  <!--  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,300,400,700">-->
+
+  <!-- Specifying a Webpage Icon for Web Clip
+			 Ref: https://developer.apple.com/library/ios/documentation/AppleApplications/Reference/SafariWebContent/ConfiguringWebApplications/ConfiguringWebApplications.html -->
+  <link rel="apple-touch-icon" sizes="60x60" href="### zy.server###lib/img/splash/sptouch-icon-iphone.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="### zy.server###lib/img/splash/touch-icon-ipad.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="### zy.server###lib/img/splash/touch-icon-iphone-retina.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="### zy.server###lib/img/splash/touch-icon-ipad-retina.png">
+
+  <!-- iOS web-app metas : hides Safari UI Components and Changes Status Bar Appearance -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  <!-- Startup image for web apps -->
+  <link rel="apple-touch-startup-image" href="### zy.server###lib/img/splash/ipad-landscape.png" media="screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:landscape)">
+  <link rel="apple-touch-startup-image" href="### zy.server###lib/img/splash/ipad-portrait.png" media="screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:portrait)">
+  <link rel="apple-touch-startup-image" href="### zy.server###lib/img/splash/iphone.png" media="screen and (max-device-width: 320px)">
+
+  <link rel="stylesheet" type="text/css" media="screen" href="### zy.server###lib/css/smartadmin-production.css">
+  <link rel="stylesheet" type="text/css" media="screen" href="### zy.server###lib/css/smartadmin-skins.css">
+
+
+  <!-- zTree -->
+  <link rel="stylesheet" type="text/css" href="### zy.server###lib/js/plugin/ztreev35/zTreeStyle.css">
+  <style type="text/css">
+  .zy-logo {
+    width: 10px;
+    /*  background-color: #a0c2ce;*/
+    /*  overflow: hidden;*/
+  }
+  .zy-logo > a {
+    color: #A0C5E8;
+    overflow: hidden;
+    text-decoration: none;
+  }
+  .zy-logo > a:hover {
+    color: rgba(255, 255, 255, 0.75);
+    text-shadow: 0 1px white, 0 0 20px white;
+  }
+  .zy-logo .habra {
+    font: 800 32px Tahoma;
+    line-height: 35px;
+    text-shadow: 0px 0px #819da6, 1px 1px #819da6, 2px 2px #819da6, 3px 3px #819da6, 4px 4px #819da6, 5px 5px #819da6, 6px 6px #819da6, 7px 7px #819da6, 8px 8px #819da6, 9px 9px #819da6, 10px 10px #819da6, 11px 11px #819da6, 12px 12px #819da6, 13px 13px #819da6, 14px 14px #819da6, 15px 15px #819da6, 16px 16px #819da6, 17px 17px #819da6, 18px 18px #819da6, 19px 19px #819da6, 20px 20px #819da6, 21px 21px #819da6, 22px 22px #819da6, 23px 23px #819da6, 24px 24px #819da6, 25px 25px #819da6, 26px 26px #819da6, 27px 27px #819da6, 28px 28px #819da6;
+  }
+  </style>
+
+</head>
+
+<body class="">
+
+  <!-- PACE LOADER - turn this on if you want ajax loading to show (caution: uses lots of memory on iDevices) -->
+  <!--  <script data-pace-options='{ "restartOnRequestAfter": true }' src="lib/js/plugin/pace/pace.min.js"></script>-->
+
+  <!-- jQuery + jQueryUI -->
+  <script src="### zy.server###lib/js/libs/jquery-1.11.0.min.js"></script>
+  <!--[if !IE]> -->
+  <!--  <script src="lib/js/libs/jquery-2.0.3.min.js"></script>-->
+  <!-- <![endif]-->
+  <script src="### zy.server###lib/js/libs/jquery-ui-1.10.3.min.js"></script>
+
+  <!-- JS TOUCH : include this plugin for mobile drag / drop touch events -->
+  <script src="### zy.server###lib/js/plugin/jquery-touch/jquery.ui.touch-punch.min.js"></script>
+
+  <!-- BOOTSTRAP JS -->
+  <script src="### zy.server###lib/js/bootstrap/bootstrap.min.js"></script>
+
+  <!-- CUSTOM NOTIFICATION -->
+  <script src="### zy.server###lib/js/plugin/smart/SmartNotification.min.js"></script>
+
+  <!-- JARVIS WIDGETS -->
+  <script src="### zy.server###lib/js/plugin/smart/jarvis.widget.min.js"></script>
+
+  <!-- JQUERY COOKIE -->
+  <script src="### zy.server###lib/js/plugin/jquery-cookie/jquery.cookie.js"></script>
+
+  <!-- JQUERY Storage API -->
+  <script src="### zy.server###lib/js/plugin/jquery-storageapi/jquery.storageapi.min.js"></script>
+
+  <!-- JQUERY SELECT2 INPUT -->
+  <script src="### zy.server###lib/js/plugin/select2/select2.min.js"></script>
+
+  <!-- JQUERY DATA TABLES -->
+  <!--
+  <script src="### zy.server###lib/js/plugin/datatables/media/js/jquery.dataTables.min.js"></script>
+  -->
+
+  <!-- ZY Scripts -->
+  <script src="### zy.server###lib/js/zy/zy.js"></script>
+  
+  <!-- MAIN APP JS FILE 
+  <script src="### zy.server###lib/js/app_extend.js"></script>
+  <script src="### zy.server###lib/js/app.js"></script>
+  <script src="### zy.server###lib/html/zy_menu.js"></script>  
+-->
+  <!-- <script src="main.js"></script> -->
+  <!--<script src="lib/js/plugin/socket.io/node_modules/socket.io-client/socket.io.js"></script>-->
+  <!--<script src="bi/js/zy_alarm.js"></script>-->
+
+  <!--================================================== -->
+  <!--================================================== -->
+
+  <slice ref='zy-js-env'/>
+  <slice ref='zy-body'/>
+
+  <!--================================================== -->
+  <!--================================================== -->
+</body>
+
+</html>

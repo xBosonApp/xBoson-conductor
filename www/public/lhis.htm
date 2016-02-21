@@ -1,0 +1,122 @@
+
+<div id='lhis_table_0122554' class='mhide'>
+  <div class="dataTables_wrapper">
+    <table class="table table-bordered table-striped no-footer dataTable" 
+           chose_row="true" url="/eeb/service?fn=getlist&amp;t=1" role="grid">
+      <thead>
+      <tr>
+        <th>开始时间</th>
+        <th>结束时间</th>
+        <th>作业名称</th>
+        <th>消息</th>
+      </tr>
+      </thead>
+
+      <tbody class='lhis_content'>
+      </tbody>
+    </table>
+  </div>
+
+  <div class='pagination'></div>
+</div>
+
+
+<div id='lhis_table_0122554_log' class='mhide'>
+  <div class="dataTables_wrapper">
+  <table class="table table-bordered table-striped no-footer dataTable"
+         chose_row="true" url="/eeb/service?fn=getlist&amp;t=1" role="grid">
+    <thead>
+    <tr>
+      <th>时间</th>
+      <th>作业名</th>
+      <th>程序名</th>
+      <th>目标名</th>
+      <th>消息</th>
+      <th>数据</th>
+    </tr>
+    </thead>
+
+    <tbody class='lhis_content'>
+    </tbody>
+  </table>
+  </div>
+
+  <div class='pagination'></div>
+</div>
+
+
+<script>
+(function() {
+
+
+window.eeb.openhis = openhis;
+
+var dialog_map = {};
+
+
+function openhis(rid, page, type, _parent_dialog) {
+  if (!page) page = 1;
+  if (!type) type = 2; // 1:detail, 2:statistics
+
+  var progress = eeb.easy_progress();
+  var id = (type == 2) ? '#lhis_table_0122554' : '#lhis_table_0122554_log';
+  eeb.callService('lhis', {rid:rid, lt:type, p:page, wnid:1 }, create_log_dialog);
+
+
+  function create_log_dialog(data) {
+    var root = $(id).clone();
+    root.find('.lhis_content').html(data.html);
+    eeb.pagination(root.find('.pagination'), data.cpage, page, change_page);
+
+    var title   = (type==2) ? '作业执行记录概览' : '作业详细记录';
+    var buttons = (type == 2) && {'详细记录' : look_up_detail};
+    var jdialog = get_dialog(root, _parent_dialog, title, buttons);
+    var tsr     = eeb.table_select_row(root.find('table'));
+    progress.end();
+    
+
+    function look_up_detail() {
+      tsr.getSelectRow(function(selected_row) {
+        if (selected_row) {
+          var tkey = selected_row.attr('tkey');
+          if (tkey) {
+            openhis(tkey, 1, 1, jdialog);
+          }
+        } else {
+          eeb.show_msg_box(null, "选择一个概览项");
+        }
+      });
+    }
+
+    function change_page(_page_index) {
+      page = _page_index;
+      progress = eeb.easy_progress();
+
+      eeb.callService('lhis', {rid:rid, lt:type, p:_page_index}, function(d) {
+        jdialog.dialog('close');
+        create_log_dialog(d);
+      });
+    }
+  }
+}
+
+
+function get_dialog(jroot, _parent_dialog, title, buttons) {
+  // if (dialog_map[title]) {
+  //   return dialog_map[title];
+  // }
+
+  var opt = { 
+    title: title, 
+    width: '88%',
+    height: $(document.body).height() * 0.8,
+    buttons: buttons
+  };
+
+  var jdialog = eeb.easy_dialog(jroot, _parent_dialog, opt);
+  dialog_map[title] = jdialog;
+  return jdialog;
+}
+
+})();
+</script>

@@ -1,0 +1,148 @@
+<style>
+.w_timer span {
+  font-size: 23px;
+}
+.black_bg section {
+  background-color: #fcfcfc;
+}
+</style>
+
+<form id='___prog_config_page' class='smart-form'>
+  <input type='hidden' name='_type' value='none'/>
+
+    <p class="alert alert-info">定时器</p>
+    <input name='name' label='名称' col='12'/>
+
+  <hr class="simple" style="width:100%; clear:both;"/>
+    <div class='page1'></div>
+  <hr class="simple" style="width:100%; clear:both;"/>
+
+    <input type='button' value='每月' col='3' label='' 
+           class='timer ok btn btn-primary' mod='every' unit='month'/>
+    <input type='button' value='每日' col='3' label=''
+           class='timer ok btn btn-primary' mod='every' unit='day of the month'/>
+    <input type='button' value='每时' col='3' label=''
+           class='timer ok btn btn-primary' mod='every' unit='hours'/>
+    <input type='button' value='每分' col='3' label=''
+           class='timer ok btn btn-primary' mod='every' unit='min'/>
+    <input type='button' value='每秒' col='3' label=''
+           class='timer ok btn btn-primary' mod='every' unit='sec'/>
+    <input type='button' value='每周末' col='3' label='' disp='no_value'
+           class='timer ok btn btn-primary' mod='every' unit='weekend'/>
+    <input type='button' value='每工作日' col='3' label=''  disp='no_value'
+           class='timer ok btn btn-primary' mod='every' unit='weekday'/>
+    <input type='button' value='每当星期' col='3' label='' disp='swap_t_u'
+           class='timer ok btn btn-primary' mod='every' unit='day of the week'/>
+   
+
+  <hr class="simple" style="width:100%; clear:both;"/>
+
+    <input type='button' value='在月' col='3' label='' 
+           class='timer ok btn btn-primary' mod='on the' unit='month'/>
+    <input type='button' value='在日' col='3' label=''
+           class='timer ok btn btn-primary' mod='on the' unit='day of the month'/>
+    <input type='button' value='在时' col='3' label=''
+           class='timer ok btn btn-primary' mod='on the' unit='hours'/>
+    <input type='button' value='在分' col='3' label=''
+           class='timer ok btn btn-primary' mod='on the' unit='min'/>
+    <input type='button' value='在秒' col='3' label=''
+           class='timer ok btn btn-primary' mod='on the' unit='sec'/>
+    <input type='button' value='在周末' col='3' label='' disp='no_value'
+           class='timer ok btn btn-primary' mod='on the' unit='weekend'/>
+    <input type='button' value='在工作日' col='3' label='' disp='no_value'
+           class='timer ok btn btn-primary' mod='on the' unit='weekday'/>
+    <input type='button' value='在星期' col='3' label='' disp='swap_t_u'
+           class='timer ok btn btn-primary' mod='on the' unit='day of the week'/>
+    
+    <input type='submit' value='应用' class='ok btn btn-primary' 
+           label='' col='4' change_type='n'/>
+
+  <input type='hidden' name='retmessage' label='&nbsp' col='3'/>
+</form>
+
+
+<div class='mhide w_timer' id='__the_row'>
+  <input rowname='type' type='hidden'/>
+  <input rowname='unit' type='hidden'/>
+  <input rowname='disp' type='hidden'/>
+
+  <span  class='type'    label='&nbsp;' col='1'></span>
+  <input rowname='value' label='时间'   col='2' />
+  <span  class='unit'    label='&nbsp;' col='2'></span>
+  <input class='del'     label='操作'   col='1' value='X' type='button' />
+</div>
+
+
+<script src='js/dyn-row.js'/>
+
+
+<script>
+(function() {
+
+var root     = $('#___prog_config_page');
+var rc       = $('#program_config').data('run_config');
+var eeb_work = $('#program_config').data('eeb_work');
+
+var step = 1, pets = false;
+var dict = {
+  'every': '每', 'on the': '在', 'month': '月', 'day of the month': '日',
+  'hours': '时', 'min': '分',    'sec': '秒',   'weekend': '周末', 
+  'weekday': '工作日', 'day of the week': '星期'
+};
+
+
+eeb.auto_form_ui('#___prog_config_page');
+
+
+var pb = eeb.create_bind(rc, '#___prog_config_page', function(_nouse, whoclick) {
+  eeb_work.check_config(function(err, data) {
+    if (err) return console.log(err);
+  });
+});
+
+
+eeb_work.when_close(function() {
+  eeb.zip(rc, 'value', 'type', 'unit', 'disp');
+});
+
+
+eeb.dyn_row(rc, '#__the_row', root.find('.timer'), root.find('.page1'), pb, when_newrow);
+
+
+function when_newrow(row, _data, _id, rowdata) {
+  var whoclick = $(this);
+  var type = whoclick.attr('mod')  || rowdata.type;
+  var unit = whoclick.attr('unit') || rowdata.unit;
+  var disp = whoclick.attr('disp') || rowdata.disp;
+
+  row.find('[rowname=disp]').val(disp).trigger('change');
+  row.find('[rowname=type]').val(type).trigger('change');
+  row.find('[rowname=unit]').val(unit).trigger('change');
+  row.find('.type').html( dict[type] || type );
+  row.find('.unit').html( dict[unit] || unit );
+
+  var jvalue = row.find('[rowname=value]');
+
+
+  if (!jvalue.val()) {
+    jvalue.val('1').trigger('change');
+  }
+
+  switch (disp) {
+    case 'no_value':
+      jvalue.val('--').trigger('change').parents('section').css({ 'visibility': 'hidden' });
+      // Not break
+    case 'swap_t_u':
+      row.find('.unit').parents('section').after(jvalue.parents('section'));
+  }
+
+  if (!(--step)) {
+    step = pets ? 1 : 3;
+    pets = !pets;
+    row.addClass('black_bg');
+  }
+}
+
+
+})();
+</script>

@@ -1,0 +1,30 @@
+<ehtml>
+
+<slice define='title'>
+</slice>
+
+<slice define='tool_bar'>
+	<include src="tool_bar.htm"/>
+</slice>
+
+<slice define='menu'>
+	###query.title###
+	<div><a href='###query.rp###?wnid=###query.wnid###'>返回</a></div>
+</slice>
+
+<slice define='functions'>
+  <include src="flow-canvas.htm"/>
+  <script>
+  jQuery(document).ready(function() {
+    eeb.init_flow_canvas(function(show) {
+      show();
+    });
+  });
+  </script>
+</slice>
+
+<slice define='operator_content'>
+	<div class='canvas_content'></div>
+</slice>
+
+</ehtml>

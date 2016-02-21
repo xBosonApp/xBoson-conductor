@@ -1,0 +1,217 @@
+* {
+  /*font-size: 8px;*/
+}
+
+body {
+  margin: 0px;
+}
+
+table {
+  width: 100%;
+  border: 1px solid #888;
+}
+
+table td {
+  border: 1px solid #888;
+}
+
+table .selected_row {
+  background-color: #888;
+}
+
+form table, form td, .table_no_border, .table_no_border td {
+  border: 0;
+  width: auto;
+}
+
+textarea {
+  width: 541px;
+  height: 112px;
+}
+
+h6 {
+  margin: 10px 2px;
+}
+/*
+form label {
+  width: 80px;
+  display: inline-block;
+  margin-left: 20px;
+}*/
+/*
+form select, form input {
+  width: 180px;
+}
+*/
+.ui-dialog-title {
+  font-size: 15px;
+  margin: 10px !important; 
+}
+
+.ui-dialog-titlebar-close {
+}
+
+.ui-dialog-content {
+  margin: 15px;
+}
+
+.freemove {
+  position: absolute;
+}
+
+.mhide {
+  display: none;
+}
+
+.transfer_data, transfer_data {
+  display: none !important;
+}
+
+#canvas {
+  border: 3px solid #fff;
+  background-color: #EFF3F3;
+}
+
+.head_inf {
+  width: 1000px;
+  height: 40px;
+  background-color: #eec;
+}
+
+.main_frame {
+  width: 1000px;
+  height: 500px;
+  top: 0;
+  position: fixed;
+  /*background-color: red;*/
+}
+
+.tool_bar {
+  height: 35px;
+  background-color: #FBFBFB;
+  text-align: right;
+  padding: 5px;
+  padding-right: 15px;
+}
+
+.tool_bar .addbutton {
+  margin-left: 7px;
+}
+
+.user_operate {
+  width: 100%;
+}
+
+.user_operate .left {
+  float: left;
+  width: 200px;
+  overflow-y: auto;
+}
+
+.user_operate .left header a {
+  color: #FFB81D;
+}
+
+.user_operate .menu {
+  height: 60px;
+  background-color: #333;
+  color: #eee;
+}
+
+.user_operate .menu a {
+  color: #999;
+}
+
+.user_operate .functions {
+  height: 200px;
+  /*background-color: #ffe;*/
+}
+
+.user_operate .right {
+  float: left;
+  background-color: #eee;
+}
+
+.show_state {
+  clear: both;
+  width: 100%;
+  text-align: center;
+}
+
+.form_content {
+  padding: 25px;
+  color: #055;
+}
+
+.form_content b {
+  margin-right: 40px;
+}
+
+.form_content div {
+  padding-bottom: 20px;
+}
+
+.program_draggable img {
+  width: 22px;
+  height: 22px;
+}
+
+.page1, .page2, .page3, .page4 {
+  padding: 0 15px;
+  margin-bottom: 15px;
+}
+
+.ace_editor {
+  width: 100%; 
+  height: 220px;
+}
+
+.ace_editor.fullScreen {
+  height: auto;
+  width: auto;
+  border: 0;
+  margin: 0;
+  position: fixed !important;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 2000;
+}
+
+.fullScreenClose {
+  font-size: 20px;
+  padding: 9px;
+  margin: 10px;
+  position: fixed !important;
+  top: 2px;
+  right: 20px;
+  z-index: 2001;
+}
+
+/* 修正 JSON editor 按钮样式*/
+.jsoneditor-contextmenu .expand {
+  width: 30px !important;
+}
+
+.auto_width_container {
+  overflow: auto;
+  height: 50%;
+  width: 50%;
+  position: fixed !important;
+}
+
+.btn310 {
+  width: 31%;
+  height: 150px;
+  text-align: left;
+  margin: 2px;
+}
+
+.offline, .offline * {
+  color: #ddd;
+}
+
+#__function_list li {
+  margin: 6px 0;
+}

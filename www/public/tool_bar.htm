@@ -1,0 +1,33 @@
+
+<div class="btn-group node-edit-button">
+    <button type="button" name='modeRadio' class="btn btn-default btn-xs" value="normal" checked id="r1">
+        单选
+    </button>
+    <button type="button" name='modeRadio' class="btn btn-default btn-xs" value="select" id="r2">
+        框选
+    </button>
+    <button type="button" name='modeRadio' class="btn btn-default btn-xs" value="edit" id="r4">
+        编辑
+    </button>
+</div>
+
+<input type="button" id="centerButton" value="居中显示" class='btn btn-primary btn-xs'/>
+<input type="button" id="fullScreenButton" value="全屏显示" class='btn btn-primary btn-xs'/>
+<input type="button" id="zoomOutButton" value=" 放 大 "  class='btn btn-primary btn-xs'/>
+<input type="button" id="zoomInButton" value=" 缩 小 "  class='btn btn-primary btn-xs'/>
+<!-- 
+<input type="checkbox" id="zoomCheckbox"/>
+<label for="zoomCheckbox">鼠标缩放</label> 
+-->
+
+<input type="text" id="findText" value="" onkeydown="findButton.click()">
+<input type="button" id="findButton" value=" 查 询 "  class='btn btn-primary btn-xs'>
+<input type="button" id="exportButton" value="导出PNG"  class='btn btn-primary btn-xs'>
+
+
+<input readonly='true' id='__run_config_name' size='20'/>
+<button id='__save_run_config' class='btn btn-success btn-xs'>保存</button>
+<button id='__save_and_test' class='btn btn-success btn-xs'>保存&测试</button>
+<button id='__save_and_invoke' class='btn btn-success btn-xs'>保存&运行</button>
+<button id='__bt_stop' class='btn btn-warning btn-xs'>中止</button>
+<button id='__bt_history' class='btn btn-info btn-xs'>历史记录</button>

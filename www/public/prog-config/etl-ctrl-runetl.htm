@@ -1,0 +1,72 @@
+
+<form id='___prog_config_page' class='smart-form'>
+  <input type='hidden' name='_type' value='none'/>
+
+  <p class="alert alert-info">启动作业</p>
+
+  <input name='name' label='名称' col='12'/>
+
+  <select name='wid' label='ETL 集群节点' col='8'></select>
+  <input name='port' label='中心端 HTTP 端口' col='4'/>
+  <select name='jid' label='ETL 作业' col='8'></select>
+
+  <hr class="simple" style="width:100%; clear:both;"/>
+  <input type='submit' value='应用' class='ok btn btn-primary' label='' col='4' />
+
+  <input type='hidden' name='retmessage' label='&nbsp' col='3'/>
+</form>
+
+
+<script>
+(function() {
+
+var root     = $('#___prog_config_page');
+var rc       = $('#program_config').data('run_config');
+var eeb_work = $('#program_config').data('eeb_work');
+var selectw  = root.find('[name=wid]');
+var selectj  = root.find('[name=jid]');
+
+
+if (!rc.port) {
+  rc.port = eeb.parse_url_parm().port;
+}
+
+eeb.auto_form_ui('#___prog_config_page');
+selectw.change(create_jid_select);
+
+
+var pb = eeb.create_bind(rc, '#___prog_config_page', function(_nouse, whoclick) {
+  eeb_work.check_config(function(err, data) {
+    console.log(err, data);
+  });
+});
+
+
+eeb.callService('nodelist', {}, function(dat) {
+  var opts = eeb.createOptions();
+  dat.forEach(function(d) {
+    opts.push(d.ID, d.HOST + ' - ' + d.IP + ' [' + d.STATE + ']');
+  });
+  opts.setto(selectw);
+  selectw.val(rc.wid).trigger('change');
+  selectw.select2({width: '100%'});
+
+  selectj.val('').trigger('change');
+});
+
+
+function create_jid_select() {
+  eeb.callService('schelist', { t:1, id:selectw.val() }, function(dat) {
+    var opts = eeb.createOptions();
+    dat.forEach(function(d) {
+      opts.push(d.ID, d.NAME + ' - ' + d.RNAME + ' [' + d.CYCLE + ']');
+    });
+    opts.setto(selectj);
+    selectj.val(rc.jid).trigger('change');
+    selectj.select2({width: '100%'});
+  });
+}
+
+
+})();
+</script>

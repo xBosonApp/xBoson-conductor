@@ -1,0 +1,224 @@
+
+<form id='___prog_config_page' class='smart-form'>
+  <input type='hidden' name='_type' value='none'/>
+
+  <p class="alert alert-info">数据库</p>
+
+  <input name='name' label='名称' col='12'/>
+
+
+<!-- BEGIN 数据库连接 -->
+  <input name='conn.host' label='Host'/>
+
+  <select name='conn.driver' label='数据库类型'>
+    <option value='mysql' port='3306'>MySQL</option>
+    <option value='sqlserver' port='1433'>SQL Server</option>
+    <option value='oracle' port='1521'>Oracle</option>
+    <option value='db2' port='50000'>DB 2</option>
+  </select>
+
+  <input name='conn.port' label='端口'/>
+  <input name='conn.database' label='Database / SID'/>
+  <input name='conn.user' label='用户名'/>
+  <input name='conn.password' type='password' label='密码'/>
+<!-- END 数据库连接 -->
+  
+  <input name='fout' label='输出到' col='6' 
+         group='2' rowname='fout'/>
+    <button type='button' class='btn btn-primary' flowdata_to_rowname='fout'
+            label='.' group='2'>从流中读取</button>
+
+
+  <hr class="simple" style="width:100%; clear:both;"/>
+    <div class='page1'>
+      <label class="label">flow 可用的参数, 点击生成代码</label>
+    </div>
+
+  <hr class="simple" style="width:100%; clear:both;"/>
+
+  <section class="col col-md-12">
+    <label class="label">
+      <span>SQL</span>
+     <!--  <span style='float:right'>行限制 <input name='limit' value='100' size='4'/></span> -->
+    </label>
+    <label class="textarea">
+      <textarea name="sql" rows="7" placeholder="SQL" id='sql-editor-adv'>
+      </textarea>
+
+      <div style="float: right; padding: 2px 1px;">
+        <select class='sql_type' value='1' style='border-bottom-width: 5px'>
+          <option value='1'>SELECT</option>
+          <option value='2'>INSERT</option>
+          <option value='3'>UPDATE</option>
+          <option value='4'>DELETE</option>
+        </select>
+
+        <button type='submit' class='btn btn-default gen_sql' change_type='get_tables'
+                style='padding: 2px 5px' >生成 SQL</button>
+
+        <button type='button' class='btn btn-default fullScreen' 
+                style='padding: 2px 5px' >全屏编辑</button>
+      </div>
+    </label>
+  </section>
+  
+  <hr class="simple" style="width:100%; clear:both;"/>
+
+  <input type='submit' value='应用' class='ok btn btn-primary' 
+         label='' col='4' change_type='n'/>
+  <input type='submit' value='测试连接' class='tconn btn btn-primary' 
+         label='' col='4' change_type='check_conn' />
+
+
+  <input type='hidden' name='retmessage' popmsg='1'/>
+  <input type='hidden' name='table'/>
+  <input type='submit' class='mhide create_sql' change_type='gen_sql'/>
+</form>
+
+
+<script src='js/lib/dom.jsPlumb-1.7.4-min.js'/>
+<script src='js/fields-mapping.js'/>
+<script src='js/dyn-row.js'/>
+
+
+<script>
+(function() {
+
+var root     = $('#___prog_config_page');
+var rc       = $('#program_config').data('run_config');
+var eeb_work = $('#program_config').data('eeb_work');
+var page     = root.find('.page1');
+
+
+eeb.auto_form_ui(root);
+eeb.change_type_button(root, eeb_work, rc);
+eeb.select_field_from_flow(root, eeb_work);
+var sql_eidtor = eeb.create_ace_editor(rc, root, ':input[name=sql]', 'sql');
+
+root.find('.fullScreen').click(function() {
+  sql_eidtor.fullScreen();
+});
+
+
+eeb.create_bind(rc, '#___prog_config_page', function(_nouse, who) {
+  // console.log('config', _nouse)
+
+  eeb_work.check_config(function(err, data) {
+    who = $(who);
+
+    if (who.val() == '测试 SQL') {
+      // eeb_work.test();
+    }
+    else if (who.hasClass('gen_sql')) {
+      if (!err) {
+        eeb.build_tables_html(root, data, function(tname) {
+          input_val('table', tname);
+          root.find('.create_sql').trigger('click');
+        });
+        return 'no_succ_msg';
+      }
+    } 
+    else if (who.hasClass('create_sql')) {
+      if (!err) {
+        var sql = gen_sql(data, root.find('.sql_type').val());
+        input_val('sql', sql);
+        sql_eidtor.setValue(sql);
+        return 'no_succ_msg';
+      }
+    }
+  });
+});
+
+
+eeb_work.parent_data(function(err, flow) {
+  if (err) {
+    return eeb.easy_dialog(err.message || err, root);
+  }
+
+  var html = [];
+  eeb.json2treeui(html, flow.data);
+  page.append(html.join(''));
+  eeb.bind_tree_event(page);
+
+  page.find('a[truename]').click(function() {
+    sql_eidtor.insert( '{' + $(this).attr('truename') + '}' );
+  });
+});
+
+
+// 切换数据库, 填入端口号
+root.find(':input[name="conn.driver"]').change(function() {
+  var p = $('option[value="' + this.value + '"]').attr('port');
+  root.find(':input[name="conn.port"]').val(p).trigger('change');
+});
+
+
+//
+// 从 data 生成 sql, type = {1 select,2 insert,3 update,4 delete}
+//
+function gen_sql(data, type) {
+  var sql  = [];
+  var p    = function(t) { sql.push(t); return p; };
+  var sqls = create_sql_slice();
+
+  switch (type) {
+    case '1':
+      p('SELECT')(sqls.fields)("\n  FROM")(data.table);
+      p("\n WHERE")(sqls.where);
+      break;
+
+    case '2':
+      p('INSERT INTO')(data.table)("\n      (")( sqls.fields )(')');
+      p("\nVALUES")("\n      (")( sqls.values )(')');
+      break;
+
+    case '3':
+      p('UPDATE')(data.table)("\n   SET")(sqls.set);
+      p('\n WHERE')(sqls.where);
+      break;
+
+    case '4':
+      p('DELETE')("\n  FROM")(data.table);
+      p("\n WHERE")(sqls.where);
+      break;
+
+    default:
+      throw new Error('unknow sql type ' + type);
+  }
+
+  function create_sql_slice() {
+    var fields = [];
+    var values = [];
+    var where  = [];
+    var c = 0, nl = '';
+    var c2 = 0, nl2 = '';
+
+    data.columns.forEach(function(f, i) {
+      if (++c  > 2) { c  = 0; nl  = "\n      ";  }
+      if (++c2 > 6) { c2 = 0; nl2 = "\n      ";  }
+
+      fields.push(f.field + nl2);
+      values.push('{' + f.field + '}' + nl2);
+      where.push(f.field + " = '{" + f.field + "}'" + nl);
+      nl = nl2 = '';
+    });
+
+    return {
+      fields : fields.join(', '),
+      values : values.join(', '),
+      where  : where.join(' AND '),
+      set    : where.join(', ')
+    }
+  }
+
+  return sql.join(' ');
+}
+
+
+function input_val(iname, value) {
+  root.find(':input[name="' + iname + '"]').val(value).trigger('change');
+}
+
+
+})();
+</script>
