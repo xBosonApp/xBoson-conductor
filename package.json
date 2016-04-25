@@ -1,6 +1,6 @@
 {
     "name": "eeb-conductor-prj",
-    "version": "0.1.55",
+    "version": "0.1.57",
     "description": "EEB 中心控制端",
     "main": "index.js",
     "scripts": {

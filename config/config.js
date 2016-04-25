@@ -80,6 +80,7 @@ module.exports = {
       }
     },
 
+    // virtuoso 的参数必须与此相同, 才能连接成功
     ws_server  : {
       http_port: 8013,
       proxy_pw : '3n6$5432.fxnvfje3w'
