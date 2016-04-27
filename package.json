@@ -1,13 +1,12 @@
 {
     "name": "eeb-conductor-prj",
-    "version": "0.1.57",
+    "version": "0.1.60",
     "description": "EEB 中心控制端",
     "main": "index.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
         "start": "node index.js",
-        "install": "node install.js",
-        "prepublish": "node -e \"require('ver--1')();\""
+        "install": "node install.js"
     },
     "repository": {
         "type": "git",
@@ -36,6 +35,5 @@
         "websocket-lib": "^0.1.10"
     },
     "devDependencies": {
-        "ver--1": "^0.1.13"
     }
 }
