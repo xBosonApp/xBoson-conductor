@@ -9,6 +9,7 @@ var b_icon      = 'img/target-icon/';
 var HELP_DIR    = 'prog-help/';
 var icon_size   = 55;
 var GROUP_ITEM_SPACE = 3;
+var ERR_LINK_COLOR   = '100,0,0';
 
 // 程序配置页起始目录
 var b_config    = 'prog-config/';
@@ -146,6 +147,7 @@ function save_invoke_rc() {
 function save_config(next) {
   rc.offset_x = jtopo.scene.translateX;
   rc.offset_y = jtopo.scene.translateY;
+  // console.log('rc:', rc);
 
   eeb.postService('saverc', rc, function(r) {
     if (typeof next == 'function') {
@@ -178,10 +180,10 @@ function stop_task() {
 //
 function init_node_dialog() {
   node_dialog.tabs().dialog({
-    modal     : true, 
+    modal     : true,
     show      : true,
-    width     : 500, 
-    height    : 350, 
+    width     : 500,
+    height    : 350,
     autoOpen  : false,
     title     :'目标配置',
     buttons   : {},
@@ -246,7 +248,7 @@ function watch_running_change() {
       }
 
       revertid = setTimeout(_loop, 100);
-      
+
     }, stop_timeout);
   }
 }
@@ -321,13 +323,13 @@ function getAnimateNodePainter(oldpaint) {
     g.moveTo(0,0);
     g.fillStyle = 'rgba(22, 22, 255, 0.6)';
     g.arc(0, 0, this.width/1.5, beginDegree, beginDegree + beginDegree * percent);
-    g.fill();                
+    g.fill();
     g.closePath();
-    g.restore();  
-    
+    g.restore();
+
     if (oldpaint) {
       oldpaint.call(this, g);
-    } 
+    }
   };
 }
 
@@ -361,10 +363,11 @@ function render_config() {
   for (var tid in rc.dependent) {
     var from = nodeOnTarget[tid].node;
     var child = rc.dependent[tid].child;
+    var extid = nodeOnTarget[tid].conf.exception_tid;
 
     for (var i = child.length-1; i>=0; --i) {
-      var to = nodeOnTarget[child[i]].node;
-      create_link(from, to);
+      var to = nodeOnTarget[ child[i] ].node;
+      create_link(from, to,  child[i] == extid);
     }
   }
 
@@ -504,13 +507,13 @@ function select_road(curr_node, road_arr, rcb) {
   var options = {
     title : '选择一条上级任务路径',
     not_close_button: true,
-    buttons : {  
+    buttons : {
       "确定": __ok,
       "取消": __close,
     },
   };
 
-  var html = [ '<form>' ], 
+  var html = [ '<form>' ],
       _ = function(t) { html.push(t); return _; };
 
   // 检索所有父节点到当前节点的连线
@@ -570,7 +573,7 @@ function read_program_list() {
 
       if (pcu < 1) {
         console.log('is null group', groupname)
-        dom.pop(); dom.pop(); dom.pop(); 
+        dom.pop(); dom.pop(); dom.pop();
       } else {
         _('</ul>');
       }
@@ -624,7 +627,7 @@ function initCanvas() {
 
 //
 // 读取配置创建目标, 创建节点
-// rcb -- Function(obj), 数据结构由 fun721 绝对
+// rcb -- Function(obj), 数据结构由 fun721 决定
 //
 function create_target_conf_node(x, y, pid, rcb) {
   var prog = program[ pid ];
@@ -639,9 +642,10 @@ function create_target_conf_node(x, y, pid, rcb) {
       programID       : pid,
       run_config      : {/* 从接口取得 */},
       group_program   : prog.group_program,
+      exception_tid   : null,
 
       disp_config : {
-        x             : x, 
+        x             : x,
         y             : y,
         w             : icon_size,
         h             : icon_size,
@@ -702,7 +706,7 @@ function check_loop_link() {
 // 检查有效性并创建连线, 修改配置
 // 失败返回 true, 检查后会改变 rc.dependent 的结构
 //
-function check_create_link(from, to) {
+function check_create_link(from, to, errlink) {
   var fdep = getDep(from.__tid);
   var tdep = getDep(to.__tid);
 
@@ -723,7 +727,13 @@ function check_create_link(from, to) {
     return true;
   }
 
-  create_link(from, to);
+  if (errlink) {
+    var thisConfig = nodeOnTarget[from.__tid];
+    thisConfig.conf.exception_tid = to.__tid;
+  }
+
+  create_link(from, to, errlink);
+
   return false;
 
   function getDep(_tid) {
@@ -741,10 +751,10 @@ function check_create_link(from, to) {
 }
 
 //
-// 创建一个连线, 但不修改配置
+// 创建一个连线, 但不修改配置!
 // 从 thisConfig 保存/读取 link 的样式
 //
-function create_link(from, to) {
+function create_link(from, to, errlink) {
   var thisConfig = nodeOnTarget[from.__tid];
   var disp = thisConfig.conf.disp_config;
   var linkid = ++__linkid;
@@ -756,13 +766,19 @@ function create_link(from, to) {
   link.bundleOffset  = 60;
   link.bundleGap     = 20;
   link.textOffsetY   = 3;
-  link.lineWidth     = disp.lineWidth || 2;
+  link.lineWidth     = disp.lineWidth || 4;
   link.strokeColor   = disp.strokeColor || JTopo.util.randomColor();
   link.dashedPattern = isNaN(disp.dashedPattern) ? null : disp.dashedPattern
+
+  if (errlink) {
+    link.strokeColor = ERR_LINK_COLOR;
+    link.lineWidth = 10;
+    link.dashedPattern = 5;
+  } else {
+    disp.strokeColor = link.strokeColor;
+  }
+
   jtopo.scene.add(link);
-
-  disp.strokeColor = link.strokeColor;
-
   thisConfig.link.push(link);
 }
 
@@ -805,7 +821,7 @@ function create_program_group(node, config, cnext) {
   var i         = -1;
   var y_space   = icon_size * GROUP_ITEM_SPACE;
   var y         = disp.y + y_space;
-  
+
   container.add(node);
   nodeOnTarget[config.tid].onRemove(remove_all);
 
@@ -831,8 +847,8 @@ function create_program_group(node, config, cnext) {
       delete config.group_program;
       return cnext && cnext();
     }
-    
-    create_target_conf_node(disp.x, y + i*y_space, 
+
+    create_target_conf_node(disp.x, y + i*y_space,
         config.group_program[i], when_create_over);
   }
 
@@ -847,10 +863,10 @@ function create_program_group(node, config, cnext) {
   // 删除所有元素, 节点, 连线, 程序组
   //
   function remove_all(event_tid) {
-    var del = function(_tid) { 
+    var del = function(_tid) {
       var tobj = nodeOnTarget[_tid];
       if (tobj && (_tid != event_tid)) {
-        tobj.removeAll(); 
+        tobj.removeAll();
       }
     };
 
@@ -867,7 +883,7 @@ function create_program_group(node, config, cnext) {
 function createTarget(config, rcb_when_node) {
   var disp        = config.disp_config;
   var del_event   = $.Callbacks();
-  var node        = new JTopo.Node(); 
+  var node        = new JTopo.Node();
   node.text       = config.run_config.name || config.tname;
   node.fontColor  = '#333';
   node.__tid      = config.tid;
@@ -923,7 +939,7 @@ function createTarget(config, rcb_when_node) {
     var off = canvas.offset();
     if (jtopo.scene.scaleX == 1 && jtopo.scene.scaleY == 1) {
       off.left += jtopo.scene.translateX + disp.x  + disp.w + 8;
-      off.top  += jtopo.scene.translateY + disp.y;   
+      off.top  += jtopo.scene.translateY + disp.y;
     } else {
       off.left += e.offsetX + 20;
       off.top  += e.offsetY - 15;
@@ -935,10 +951,11 @@ function createTarget(config, rcb_when_node) {
     node_edit.find('.conf').click(hide_node_edit).click(_conf_node);
     node_edit.find('.link').click(hide_node_edit).click(_draw_link);
     node_edit.find('.del' ).click(hide_node_edit).click(_del_node);
+    node_edit.find('.err' ).click(hide_node_edit).click(errlink);
 
     // 生成 `删除连接` 的按钮
     nodeOnTarget[config.tid].link.forEach(function(lk, i) {
-      var thisid = config.tid, 
+      var thisid = config.tid,
           otheid = lk.nodeZ.__tid;
 
       // 当下一个节点已经被删除的时候, 这条连线已经失效了
@@ -957,6 +974,9 @@ function createTarget(config, rcb_when_node) {
         });
 
       function _remove_link() {
+        if (config.exception_tid == otheid) {
+          config.exception_tid = null;
+        }
         jtopo.scene.remove(lk);
         nodeOnTarget[config.tid].link.splice(i, 1);
         save_msg.change();
@@ -966,6 +986,14 @@ function createTarget(config, rcb_when_node) {
     ext_event.trigger('edit-node-menu-created', [node_edit]);
   });
 
+
+  function errlink() {
+    if (config.exception_tid) {
+      eeb.show_msg_box('错误', '请先删除已有的异常连接', null, 0);
+      return;
+    }
+    _draw_link(null, true);
+  }
 
   //
   // 节点配置对话框的初始化
@@ -996,14 +1024,14 @@ function createTarget(config, rcb_when_node) {
     buttons['取消']       = buttonCancel;
     buttons['初始化']     = buttonInit;
     buttons['测试运行']   = buttonTest;
-    
+
 
     _node_dialog.dialog({width: w, height: h, buttons: buttons})
-                .tabs("disable", '#target_run_result') 
+                .tabs("disable", '#target_run_result')
                 .tabs('disable', '#bizlog_config')
                 .tabs("option", "active", 0)
                 .dialog('open');
-    
+
     eeb.auto_form_ui(_node_dialog);
     eeb.fix_dialog_ui(_node_dialog);
     initBasicVal();
@@ -1154,7 +1182,7 @@ function createTarget(config, rcb_when_node) {
           eeb.json2treeui(html, ret.data, null, true);
 
         } else if (ret.className == 'etl_data') {
-          
+
           toPageData(ret);
           var _temp = eeb.createTableHtml(ret.head, ret.data, 'isArray', ret.type);
           html.push('<h6>数据</h6>');
@@ -1174,7 +1202,7 @@ function createTarget(config, rcb_when_node) {
           html.push("<div>未知的数据类型, " + JSON.stringify(ret) + "</div>");
         }
 
-        var jdom = 
+        var jdom =
             _node_dialog.tabs("enable", '#target_run_result')
                         .tabs("option", "active", activeTab)
                         .find('#target_run_result')
@@ -1218,16 +1246,16 @@ function createTarget(config, rcb_when_node) {
           test          : buttonTest,
 
           // Function(rcb), 返回父节点运行后的测试数据
-          // 如果有多个父节点, 会弹框, 出错会自动弹出消息, 
+          // 如果有多个父节点, 会弹框, 出错会自动弹出消息,
           // 回调可以忽略错误立即返回
           // rcb: Function(err, data)
           parent_data   : _getDataFromParent,
 
-          // Function(rcb), 对话框被关闭时回调 
+          // Function(rcb), 对话框被关闭时回调
           // rcb: Function()
           when_close    : _when_close,
 
-          // Function(rcb), 对程序话框被打开时回调 
+          // Function(rcb), 对程序话框被打开时回调
           // rcb: Function()
           when_open     : _when_open,
 
@@ -1246,7 +1274,7 @@ function createTarget(config, rcb_when_node) {
           adv.html(dom);
           _fixui();
         } catch(err) {
-          var msg = '加载目标页面 ' + b_config + prog.configPage 
+          var msg = '加载目标页面 ' + b_config + prog.configPage
                   + ' 时错误: <pre>' + err.stack + "</pre>";
           adv.html(msg);
           console.log(msg);
@@ -1310,12 +1338,12 @@ function createTarget(config, rcb_when_node) {
     // 这个方法被导出给配置页面, 调用后会检查配置有效性
     // 并把错误消息发送到页面
     //
-    // _handle 返回: 
-    //       'no_msg' 不弹出任何消息, 
-    //       'no_err_msg' 不弹出失败消息, 
+    // _handle 返回:
+    //       'no_msg' 不弹出任何消息,
+    //       'no_err_msg' 不弹出失败消息,
     //       'no_succ_msg' 不弹出成功消息
     //       什么都不返回则弹出所有消息
-    // _handle -- Function(err, retmsg) 
+    // _handle -- Function(err, retmsg)
     //
     function check_target_config(_handle) {
       var adv = _node_dialog.find('#program_config');
@@ -1340,11 +1368,11 @@ function createTarget(config, rcb_when_node) {
           p_handle(null, ret);
         }
 
-        if (ret_type == 'no_msg') 
+        if (ret_type == 'no_msg')
           return;
-        if (is_err && ret_type == 'no_err_msg') 
+        if (is_err && ret_type == 'no_err_msg')
           return;
-        if (is_err == false && ret_type == 'no_succ_msg') 
+        if (is_err == false && ret_type == 'no_succ_msg')
           return;
 
         if (typeof ret == 'string') {
@@ -1365,14 +1393,15 @@ function createTarget(config, rcb_when_node) {
 
   //
   // 点击连接的时候, 绘制一个临时线段, 指示要连接的节点
+  // 这是一个普通函数, 不支持 jquery.this
   //
-  function _draw_link() {
+  function _draw_link(_event, errlink) {
     var tempNodeZ = new JTopo.Node('点击一个节点.................');;
     tempNodeZ.setSize(1, 1);
     jtopo.scene.add(tempNodeZ);
 
     var link = new JTopo.Link(node, tempNodeZ);
-    link.arrowsRadius = 10; 
+    link.arrowsRadius = 10;
     link.dashedPattern = 5;
     jtopo.scene.add(link);
 
@@ -1386,7 +1415,7 @@ function createTarget(config, rcb_when_node) {
       }
       var tn = e.target;
       if (tn instanceof JTopo.Node && tn != node) {
-        check_create_link(node, tn);
+        check_create_link(node, tn, errlink);
         removeAll();
       }
       save_msg.change();
@@ -1414,14 +1443,21 @@ function createTarget(config, rcb_when_node) {
 
     delete nodeOnTarget[config.tid];
 
+    rc.dependent[config.tid].parent.forEach(function(p_id) {
+      var pc = nodeOnTarget[p_id].conf;
+      if (pc.exception_tid == config.tid) {
+        pc.exception_tid = null;
+      }
+    });
+
     _del_dependent(config.tid, 'child', 'parent');
     _del_dependent(config.tid, 'parent', 'child');
 
     delete rc.dependent[config.tid];
     delete rc.targets[config.tid];
-    
+
     del_event.fire(config.tid);
-    log('删除目标:', config.tname, '[', config.tid, ']');
+    // log('删除目标:', config.tname, '[', config.tid, ']');
   }
 
   //
