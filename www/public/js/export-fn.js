@@ -53,12 +53,12 @@ var eeb = window.eeb = {
 function easy_dialog(msg, _parent, _options) {
   var pd = _parent && _parent.parents('.ui-dialog');
   var z = pd && pd.css("z-index");
-  
+
   //
   // 不可以有默认 width, height, 因部分页面需要最小化显示
   //
   var defopt = {
-    modal   : true, 
+    modal   : true,
     show    : true,
     hide    : false,
     title   : '信息',
@@ -104,12 +104,12 @@ function easy_dialog(msg, _parent, _options) {
 
 //
 // 打开一个进度条
-// opt : 
+// opt :
 //    autoBegin : bool 自动启动进度条
 //    title : 标题
 //    label : 内容标签
 //
-// return : 
+// return :
 //    begin : 启动进度条
 //    end   : 结束进度条
 //
@@ -120,7 +120,7 @@ function easy_progress(opt) {
     label     : '正在努力加载: '
   }, opt);
 
-  var html = 
+  var html =
     "<div title='" + opt.title + "' class='border: 0'> \
       <div class='progress-label'>正在初始化...</div> \
       <div class='progress'> \
@@ -238,6 +238,7 @@ function createTableHtml(heads, datas, column_getter, heads2) {
 // rcb: Function(jsondata)
 //
 function callZyapi(option, rcb, err_cb) {
+  console.log('!!', new Error().stack)
   option.org = getOrg();
   option.openid = getOpenID();
   // 提供一个已经注册过的 sys, 如果当前 sys 尚未注册不能调用平台接口
@@ -248,19 +249,23 @@ function callZyapi(option, rcb, err_cb) {
   }
 
   eeb.callService('zy', option, function(data) {
-    var d = JSON.parse(data);
+    try {
+      var d = JSON.parse(data);
 
-    if (d.ret != 0) {
-      if (err_cb) {
-        err_cb(d);
-      } else {
-        eeb.log(d.msg, option);
-        eeb.show_msg_box(null, d.msg);
+      if (d.ret != 0) {
+        if (err_cb) {
+          err_cb(d);
+        } else {
+          eeb.log(d.msg, option);
+          eeb.show_msg_box(null, d.msg);
+        }
+        return;
       }
-      return;
-    }
 
-    rcb(d);
+      rcb(d);
+    } catch(e) {
+      err_cb(e);
+    }
   }, err_cb);
 }
 
@@ -382,7 +387,7 @@ function ret_message_to_form(jform, message_obj, cls) {
         var pos = thiz.offset();
 
         var m = '<p class="has-error" style="position:absolute">'
-              + '<span class="help-block ' + cls 
+              + '<span class="help-block ' + cls
               + '"><i class="fa fa-warning"></i> '
               + msg + '</span></p>';
 
@@ -417,9 +422,9 @@ function ret_message_to_form(jform, message_obj, cls) {
 function showBox(_title, _txt, _time, _type_idx, _when_hide) {
 
   var types = [
-    ['fa fa-warning shake animated', '#C46A69'], 
-    ['fa fa-bell swing animated', '#3276B1'], 
-    ['fa fa-shield fadeInLeft animated', '#C79121'], 
+    ['fa fa-warning shake animated', '#C46A69'],
+    ['fa fa-bell swing animated', '#3276B1'],
+    ['fa fa-shield fadeInLeft animated', '#C79121'],
     ['fa fa-check', '#739E73']
   ];
 
@@ -622,7 +627,7 @@ function postService(fnName, data, cb, err_cb) {
   }
 
   var search = 'fn=' + fnName + '&wnid=' + get_wnid(true);
-  
+
   $.post('/eeb/service?' + search, parm, function(data) {
     if (data.ret /* != 0 && notnull */) {
       log('错误:', data.msg);
@@ -678,7 +683,7 @@ function create_bind(data_module, form_selector, when_over) {
   var sub         = [];
   var click_time  = 1;
   var ret         = release;
-  
+
   ret.beginBind = _submit;
   ret.addSub    = _addsub;
   ret.removeSub = _removesub;
@@ -815,7 +820,7 @@ function create_bind(data_module, form_selector, when_over) {
 
 
 function createJTopoStage() {
-  var canvas = document.getElementById('canvas'); 
+  var canvas = document.getElementById('canvas');
   if (!canvas) return;
   // console.log(JTopo);
 
@@ -823,7 +828,7 @@ function createJTopoStage() {
   var scene = new JTopo.Scene(stage); // 创建一个场景对象
 
   // var node = new JTopo.Node("Hello");    // 创建一个节点
-  // node.setLocation(11,11);    // 设置节点坐标                    
+  // node.setLocation(11,11);    // 设置节点坐标
   // scene.add(node); // 放入到场景中
 
   showJTopoToobar(stage);
@@ -838,7 +843,7 @@ function createJTopoStage() {
 // 页面工具栏
 function showJTopoToobar(stage) {
   // 工具栏按钮处理
-  $(".jtopo_toolbar button[name='modeRadio']").click(function(){      
+  $(".jtopo_toolbar button[name='modeRadio']").click(function(){
     stage.mode = $(this).val();
   });
   $('.jtopo_toolbar #centerButton').click(function(){
@@ -868,14 +873,14 @@ function showJTopoToobar(stage) {
   $('.jtopo_toolbar #findButton').click(function(){
     var text = $('.jtopo_toolbar #findText').val().trim();
     var nodes = stage.find('node[text="'+text+'"]');
-    
+
     if(nodes.length > 0){
       var node = nodes[0];
       node.selected = true;
       var location = node.getCenterLocation();
       // 查询到的节点居中显示
       stage.setCenter(location.x, location.y);
-      
+
       function nodeFlash(node, n){
         if(n == 0) {
           node.selected = false;
@@ -886,7 +891,7 @@ function showJTopoToobar(stage) {
           nodeFlash(node, n-1);
         }, 300);
       }
-      
+
       // 闪烁几下
       //nodeFlash(node, 6);
     }
@@ -934,7 +939,7 @@ function relayout(_create_canvas) {
 
 
   function onresize() {
-    var h = win.height(),   
+    var h = win.height(),
         w = win.width() - 8;
 
     $('.head_inf, .tool_bar, .main_frame, .show_state').width(w);
@@ -1021,7 +1026,7 @@ function button_group(on_css, off_css) {
 
 //
 // 加载一个文件到页面上, 成功回调 rcb
-// 自动附加一个 dom 允许重复引入同一个文件, 
+// 自动附加一个 dom 允许重复引入同一个文件,
 // 重复加载同一个文件只保留最后的实例!
 //
 function load_file(pageurl, rcb, _fail_rcb) {
@@ -1041,7 +1046,7 @@ function load_file(pageurl, rcb, _fail_rcb) {
   $.ajax(pageurl, {
     dataType   : 'html',
     error      : _fail_rcb || _fail,
-    success    : _success, 
+    success    : _success,
     global     : false,
     async      : true,
     ifModified : true,
@@ -1088,9 +1093,9 @@ function pagination(_jroot, count, curr, change_page_fn) {
 
   _add('<li class="prev"><a href="#">前一页</a></li>', curr - 1);
 
-  var begin = Math.max(1, curr-5), 
+  var begin = Math.max(1, curr-5),
       end = Math.min(count, curr+5);
-      
+
   for (var i=begin; i<=end; ++i) {
     _add('<li><a href="#">' + i + '</a></li>', i);
   }
@@ -1136,7 +1141,7 @@ function pagination(_jroot, count, curr, change_page_fn) {
 function create_ace_editor(rc, jform_root, dom_selector, type) {
   var is_full_screen = false;
   var editors = [];
-  var js_file = [ 'js/lib/ace/ace.js', 
+  var js_file = [ 'js/lib/ace/ace.js',
                   'js/lib/ace/mode-' + type + '.js', ];
 
 
@@ -1237,7 +1242,7 @@ function create_ace_editor(rc, jform_root, dom_selector, type) {
         document.body.addEventListener('keydown', _check_key, true);
         closer.one('mousedown', _close);
         closer.one('click', _close);
-        
+
 
         function _check_key(ev) {
           switch (ev.keyCode || ev.which) {
@@ -1420,7 +1425,7 @@ function out_val_flow_in(jin, jout) {
 
 //
 // 在 _jroot 中寻找 含有 select_file 属性的 button 作为文件选择按钮
-// 当用户选择了文件后, 把文件名推入 name属性 与 select_file 相等的 
+// 当用户选择了文件后, 把文件名推入 name属性 与 select_file 相等的
 // input 对象中 (必须在同一个 dom 元素)
 //
 function select_file_from_pool(_jroot) {
@@ -1430,9 +1435,9 @@ function select_file_from_pool(_jroot) {
 
     eeb.load_file('file-pool.htm', function() {
       eeb.open_file_pool({
-        no_upload   : true, 
-        no_download : true, 
-        no_delete   : true, 
+        no_upload   : true,
+        no_download : true,
+        no_delete   : true,
         no_replace  : true,
         buttons     : { '选择文件' : select_file }
       });
@@ -1472,7 +1477,7 @@ function change_type_button(jroot, eeb_work, rc) {
 //
 function getParentFormParm(jdom) {
   var ret;
-  
+
   jdom.parents('form').each(function() {
     ret = ret || {};
     var form = $(this);
@@ -1484,7 +1489,7 @@ function getParentFormParm(jdom) {
       if (type == 'checkbox' || type == 'radio') {
         if (!input.prop('checked')) return;
       }
-      
+
       if (input.attr('name')) {
         ret[ input.attr('name') ] = input.val();
       }
@@ -1773,5 +1778,5 @@ function not_back_event() {
 
 
 var __ = '%A9%202014-2015%20%u667A%u878DIT%20%7C%20%20%u8FBDICP%u590715008303%u53F7';
-console.log(unescape(__)); 
+console.log(unescape(__));
 });

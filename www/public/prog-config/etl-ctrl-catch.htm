@@ -1,0 +1,63 @@
+
+<form id='___prog_config_page' class='smart-form'>
+	<input type='hidden' name='_type' value='none'/>
+
+	<p class="alert alert-info">捕获异常</p>
+
+	<input name='name' label='名称' col='8'/>
+
+  <select name='do_next' label='是否执行异常后的流程' col='6'>
+    <option value='1'>是</option>
+    <option value='2'>否</option>
+  </select>
+
+  <select name='do_next_data' label='传递给异常后流程的数据' col='6'>
+    <option value='1'>当前出错行</option>
+    <option value='2'>全部数据集</option>
+  </select>
+
+  <select name='do_recove' label='是否恢复异常, 返回出错的目标继续执行' col='6'>
+    <option value='1'>是</option>
+    <option value='2'>否</option>
+  </select>
+
+  <select name='do_recove_data' label='恢复异常时跳过异常数据行' col='6'>
+    <option value='1'>跳过一行</option>
+    <option value='2'>什么也不做</option>
+  </select>
+
+  <select name='rollback' label='回滚数据 (见帮助)' col='6'>
+    <option value='1'>是</option>
+    <option value='2'>否</option>
+  </select>
+
+  <select name='sendlog' label='记录调试日志' col='6'>
+    <option value='1'>是</option>
+    <option value='2'>否</option>
+  </select>
+
+	<input type='submit' value='应用' class='ok btn btn-primary' label='' col='4' />
+
+	<input type='hidden' name='retmessage' label='&nbsp' col='3'/>
+</form>
+
+
+<script>
+(function() {
+
+var root     = $('#___prog_config_page');
+var rc       = $('#program_config').data('run_config');
+var eeb_work = $('#program_config').data('eeb_work');
+
+
+eeb.auto_form_ui('#___prog_config_page');
+
+
+var pb = eeb.create_bind(rc, '#___prog_config_page', function(_nouse, whoclick) {
+  eeb_work.check_config(function(err, data) {
+    console.log(err, data);
+  });
+});
+
+})();
+</script>

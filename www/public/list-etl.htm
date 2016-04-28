@@ -22,7 +22,7 @@
 	<transfer_data id='__page_typename'>流程</transfer_data>
 
 	<form class='form_content'>
-		<div> 流程名称: <input name='name'/> <b></b> 
+		<div> 流程名称: <input name='name'/> <b></b>
 			<input type='submit' class='btn btn-primary'  value='查询'/>
 			<input type='reset' class='btn btn-primary'  value='清空'/>
 		</div>
@@ -41,20 +41,20 @@
 
 			<div style='display: inline-block; ' class='offline_disabled'>
 				<!--
-				<input type='button' class='btn btn-success update_job_list' 
+				<input type='button' class='btn btn-success update_job_list'
 							 value='设置计划' id='sche-etl'/>
-				<input type='button' class='btn btn-success update_job_list' 
+				<input type='button' class='btn btn-success update_job_list'
 							 value='启动计划' id='sche-start'/>
-				<input type='button' class='btn btn-success update_job_list' 
+				<input type='button' class='btn btn-success update_job_list'
 							 value='停止计划' id='sche-stop'/> 		-->
 			</div>
 
 			<div style='display: inline-block; padding: 0 15px 2px 0;'>
-				<input type='button' class='btn btn-warning' 
+				<input type='button' class='btn btn-warning'
 							 value='作业设置' id='sche-etl'/>
 <!-- <input type='button' class='btn btn-primary' value='计划历史' id='get-his'/> -->
-<!-- <input type='button' class='btn btn-primary' value='作业历史' id='lhis'/>-->
-				<input type='button' class='btn btn-warning offline_disabled' 
+<input type='button' class='btn btn-warning' value='流程历史' id='lhis'/>
+				<input type='button' class='btn btn-warning offline_disabled'
 							 value='文件池' id='file-pool'/>
 <!-- <a href='etl-group.htm' class='btn btn-warning'>采集点</a> -->
 <!-- <input type='button' class='btn btn-primary' value='目标历史' id='get-his2'/> -->
@@ -67,10 +67,10 @@
 		</div>
 
 		<div class="dataTables_wrapper auto_width_container">
-			<table class='job_list table table-bordered table-striped no-footer dataTable' 
+			<table class='job_list table table-bordered table-striped no-footer dataTable'
 					   chose_row='true' role='grid'
 data_url='/eeb/service?fn=joblist&t=1&wnid=###query.wnid###&id=###query.id###'>
-			
+
 				<thead>
 				<tr>
 					<th val='ID' class='mhide select_job_id key lhis_key'>ID</th>
@@ -88,7 +88,7 @@ data_url='/eeb/service?fn=joblist&t=1&wnid=###query.wnid###&id=###query.id###'>
 		</div>
 		<!-- <div class='note instance_id'>读取中...</div> -->
 	</form>
-	
+
 
 	<div class='mhide' id='input_name' style='width:300px; height: 200px;' title='输入'>
 		<form class='smart-form' onsubmit='return false'>
