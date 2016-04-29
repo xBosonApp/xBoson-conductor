@@ -1042,7 +1042,13 @@ function createTarget(config, rcb_when_node) {
 
     // 绑定释放数据的函数
     _node_dialog.data('releaseAll', function() {
-      releaseFn.forEach(function(fn) { fn(); });
+      releaseFn.forEach(function(fn) {
+        try {
+          fn();
+        } catch(e) {
+          log('releaseAll fail.', e);
+        }
+      });
       _node_dialog.removeData('releaseAll');
     });
 
@@ -1088,11 +1094,15 @@ function createTarget(config, rcb_when_node) {
       });
     }
 
+    // !!! 禁用 bizlog
     function initBizlog() {
       var bizconf = copy_rc.bizlog;
       var blbutton = _node_dialog.find('a[href="#bizlog_config"]');
+
+      return blbutton.hide(); //！！！！！！！！！！！！！
+
       if (!bizconf) {
-        blbutton.hide();
+        blbutton.hide()
         return;
       }
 
@@ -1275,7 +1285,8 @@ function createTarget(config, rcb_when_node) {
           _fixui();
         } catch(err) {
           var msg = '加载目标页面 ' + b_config + prog.configPage
-                  + ' 时错误: <pre>' + err.stack + "</pre>";
+                  + ' 时错误: <pre>' + err.stack + "</pre> 配置: <pre>"
+                  + JSON.stringify(copy_rc, 0, 2) + "</pre>";
           adv.html(msg);
           console.log(msg);
         }

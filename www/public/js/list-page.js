@@ -13,7 +13,7 @@ $('.job_list:not([url])').each(function() {
   // 复制这个属性, table_data_source 依赖
   thiz.attr('url', thiz.attr('data_url'));
 
-  eeb.table_data_source(thiz, 
+  eeb.table_data_source(thiz,
       update_run_state, update_run_state, when_node_offline);
 });
 
@@ -112,7 +112,7 @@ function update_run_state() {
       offline();
       rotate.stop();
       return true;
-    });  
+    });
   }
 
   function offline() {
@@ -171,11 +171,11 @@ $('#rename-etl').click(function() {
 
       eeb.callService('rename2', parm, function() {
         var parm = {name: newname, rid: rid, t: type, cid: newclusterid};
-      
+
         eeb.callService('rename', parm, function(data) {
           //_close();
           location.reload();
-        });  
+        });
       });
     }, clusterid);
   });
@@ -440,7 +440,7 @@ function create_work_node_select2(_def_val) {
       sel.push({
         id   : r.ID,
         text : r.HOST + ' / ' + r.IP,
-      }); 
+      });
     });
     workname.select2('val', _def_val);
   });
@@ -480,15 +480,19 @@ $('.auto_width_container').each(function() {
 
 
 $('#rc-out').click(function() {
-  getSelectRid(function(rid, name) { 
+  getSelectRid(function(rid, name) {
     eeb.callService('getrc2', { rid:rid, t:type, wnid:1 }, function(ret) {
       //
       // 从接口获取配置文件, 在本地进行下载
       //
-      var str  = JSON.stringify(ret, null, 2);
+      var filename = name + '-' + rid + '.eeb';
+      var str  = JSON.stringify(JSON.parse(ret), 2, 2);
       var data = new Blob([ str ], {type: "application/octet-binary"});
       var url  = URL.createObjectURL(data, {oneTimeOnly: true});
-      $(document.body).append('<iframe src="' + url + '" class="mhide"/>');
+      var a    = $('<a class="mhide"></a>');
+      a.attr({ href: url, download: filename });
+      a[0].click();
+      // $(document.body).append('<iframe src="' + url + '" class="mhide"/>');
     });
   });
 });
@@ -529,7 +533,7 @@ $('#rc-in').click(function() {
 
         if (rc.name && rc.rid && rc.className && rc.targets) {
           if (rc.className != type)
-            throw new Error('配置类型与当前系统不符, 切换到正确的系统后重试' + 
+            throw new Error('配置类型与当前系统不符, 切换到正确的系统后重试' +
               ' (不能在 ETL 中导入 ESB 配置, 或相反)');
 
           eeb.postService('importrc', rc, function(r) {
@@ -670,8 +674,8 @@ function open_edit_page(_rid) {
       break;
   }
 
-  open_url('edit-flow.htm?rid=' + _rid 
-          + "&t=" + type + "&title=" + title 
+  open_url('edit-flow.htm?rid=' + _rid
+          + "&t=" + type + "&title=" + title
           + "&rp=" + retpage
           + "&wnid=" + eeb.get_wnid() );
 }
@@ -706,12 +710,12 @@ function getSelectRid(rcb, def_msg, not_find) {
 
   if (length < 1) {
     var datatag = $('transfer_data#__page_typename').html();
-    var typename = def_msg 
+    var typename = def_msg
                 || datatag && ('请选择一个' + datatag)
                 || '请选择一个任务';
     if (not_find) {
       if (not_find() === 'not-msg') return;
-    } 
+    }
     eeb.show_msg_box(null, typename);
   }
 }

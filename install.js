@@ -106,6 +106,9 @@ var ddl = [
   "ALTER TABLE `sys_eeb_sche`               \
          ADD COLUMN `vid` VARCHAR(32) NULL COMMENT 'sys_eeb_varnish.vid'",
 
+  "ALTER TABLE sys_eeb_statistics                 \
+         CHANGE COLUMN msg msg TEXT NULL",
+
 ];
 
 
@@ -126,9 +129,9 @@ dirs.forEach(clib.mkdir);
 
 });
 
-/* ==== ==== ==== ==== ==== ==== ==== ==== ==== ==== ==== ==== ==== ==== 
+/* ==== ==== ==== ==== ==== ==== ==== ==== ==== ==== ==== ==== ==== ====
  * 扩展日志数据创建
- * ==== ==== ==== ==== ==== ==== ==== ==== ==== ==== ==== ==== ==== ==== 
+ * ==== ==== ==== ==== ==== ==== ==== ==== ==== ==== ==== ==== ==== ====
 
 use `eeb-jym-test`;
 

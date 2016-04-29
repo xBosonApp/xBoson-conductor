@@ -10,34 +10,22 @@
     <option value='1'>是</option>
     <option value='2'>否</option>
   </select>
-  <select name='do_next_data' label='传递给异常后流程的数据' col='6'>
-    <option value='1'>当前出错行</option>
-    <option value='2'>全部数据集</option>
-  </select>
-
-  <select name='use_err_col' label='传递当前出错行时,是否插入异常列' col='6'>
-    <option value='1'>是</option>
-    <option value='2'>否</option>
-  </select>
-  <input name='err_col_name' label='插入异常列名时使用的列名前缀' col='6'/>
-
-  <select name='do_recove' label='是否恢复异常, 返回出错的目标继续执行' col='6'>
-    <option value='1'>是</option>
-    <option value='2'>否</option>
-  </select>
-  <select name='do_recove_data' label='恢复异常时跳过异常数据行' col='6'>
-    <option value='1'>跳过一行</option>
-    <option value='2'>什么也不做</option>
-  </select>
-
-  <select name='rollback' label='回滚数据 (见帮助)' col='6'>
-    <option value='1'>是</option>
-    <option value='2'>否</option>
-  </select>
   <select name='sendlog' label='记录调试日志' col='6'>
     <option value='1'>是</option>
     <option value='2'>否</option>
   </select>
+
+  <select name='binddata' label='将异常附加在数据流中' col='6'>
+    <option value='1'>是</option>
+    <option value='2'>否</option>
+  </select>
+  <input name='dataname' label='附加时使用的属性名' col='6'/>
+
+  <select name='recover' label='是否在异常处理完成后,返回到异常错误流中' col='6'>
+    <option value='1'>是</option>
+    <option value='2'>否</option>
+  </select>
+
 
 	<input type='submit' value='应用' class='ok btn btn-primary' label='' col='4' />
 
