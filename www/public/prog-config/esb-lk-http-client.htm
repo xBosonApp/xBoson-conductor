@@ -16,14 +16,20 @@
 
 
     <input name='path' label='路径' col='6'/>
-    <input name='fout' label='应答输出到' col='3' group='2' rowname='fout'/>
-    <button type='button' class='btn btn-primary' flowdata_to_rowname='fout'
-            label='.' group='2'>从流中读取</button>
 
-    <select name='post_t' label='处理方式' col='3'>
+    <select name='post_t' label='处理方式' col='6'>
       <option value='t'>纯文本</option>
       <option value='b'>二进制</option>
     </select>
+
+
+    <input name='body_form' label='BODY 数据来源 (POST有效)' col='6' group='2b' rowname='body_form'/>
+    <button type='button' class='btn btn-primary' flowdata_to_rowname='body_form'
+            label='.' group='2b'>从流中读取</button>
+
+    <input name='fout' label='应答输出到' col='6' group='2a' rowname='fout'/>
+    <button type='button' class='btn btn-primary' flowdata_to_rowname='fout'
+            label='.' group='2a'>从流中读取</button>
 
     <hr class="simple" style="width:100%; clear:both;"/>
     <div class='page1'></div>
@@ -31,7 +37,7 @@
     <div class='page2'></div>
     <hr class="simple" style="width:100%; clear:both;"/>
 
-    
+
     <input type='button' value='添加参数' class='add btn btn-primary' label='' col='4' />
     <input type='button' value='添加头域' class='addh btn btn-primary' label='' col='4' />
     <input type='submit' value='应用' class='ok btn btn-primary' label='' col='4' />
