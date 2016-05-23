@@ -226,7 +226,9 @@ function create_file_selector(overfn) {
 
 
   function file_getter(rcb) {
+    filelist.splice(0,0,{t:'folder', mt:new Date(), n:'..', name:'..', type:DIR_TYPE });
     filelist.forEach(function(f) {
+      if (f.name == '..') return;
       f.t  = f.type == DIR_TYPE ? 'folder' : 'file';
       f.mt = f.date;
       f.n  = f.name;
