@@ -18,8 +18,12 @@
   <select name='mode' label='操作模式'>
     <option value='get'>下载</option>
     <option value='put'>上传</option>
+    <option value='mkdir'>创建目录</option>
+    <option value='mkdir-recursive'>创建目录(递归)</option>
     <option value='append'>附加到文件末尾</option>
     <option value='delete'>删除文件</option>
+    <option value='rmdir'>删除目录</option>
+    <option value='rmdir-recursive'>删除目录(递归)</option>
     <option value='rename'>重命名</option>
     <option value='list'>列出目录</option>
   </select>
@@ -135,6 +139,10 @@ root.find(':input[name=mode]').change(function() {
     case 'list':
       fout.show();
     case 'delete':
+    case 'mkdir':
+    case 'mkdir-recursive':
+    case 'rmdir':
+    case 'rmdir-recursive':
       file.show();
       break;
   }
