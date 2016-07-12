@@ -275,7 +275,22 @@ function getOrg() {
   try {
     org = zy.g.comm.org;
   } catch(err) { }
-  return org || 'a297dfacd7a84eab9656675f61750078';
+  
+  if (!org) {
+    try {
+      document.cookie.split(';').forEach(function(ck) {
+        ck = ck.split('=');
+        if (ck[0] == 'org') {
+          org = ck[1];
+        }
+      });
+    } catch(err) { }
+  }
+  
+  if (!org) {
+    org = 'a297dfacd7a84eab9656675f61750078';
+  }
+  return org;
 }
 
 

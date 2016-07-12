@@ -27,6 +27,7 @@ eeb.init_flow_canvas(function(show, rc, jtopo, ext_event) {
     node_edit.find('.link').remove();
     node_edit.find('.del').remove();
     node_edit.find('.add_link_div').remove();
+    node_edit.find('.err').remove();
   });
 
 
