@@ -1,5 +1,7 @@
 # EEB 中心控制端
 
+![screen1](./screenshot/s1.png)
+
 > 在 node 0.10 下运行会出现内存溢出或进程崩溃的情况
 > 不依赖中心端/运行节点的启动顺序
 
@@ -11,6 +13,7 @@
 
 ### 依赖
 
+* [EEB 任务执行节点, 边缘运算节点](https://github.com/yanmingsohu/xBoson-virtuoso)
 * [redis-server](http://www.redis.cn/)
 * [kafka-server](http://kafka.apache.org/documentation.html)
 * [zr-server](http://zr-i.com:8088/ui/login.html)
