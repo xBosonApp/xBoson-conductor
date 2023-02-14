@@ -15,6 +15,7 @@
     <option value='sqlserver' port='1433'>SQL Server</option>
     <option value='oracle' port='1521'>Oracle</option>
     <option value='db2' port='50000'>DB 2</option>
+    <option value='h3cmpp' port='5258'>H3C MPP</option>
   </select>
 
   <input name='conn.port' label='端口'/>
@@ -22,8 +23,8 @@
   <input name='conn.user' label='用户名'/>
   <input name='conn.password' type='password' label='密码'/>
 <!-- END 数据库连接 -->
-  
-  <input name='fout' label='输出到' col='6' 
+
+  <input name='fout' label='输出到' col='6'
          group='2' rowname='fout'/>
     <button type='button' class='btn btn-primary' flowdata_to_rowname='fout'
             label='.' group='2'>从流中读取</button>
@@ -56,17 +57,17 @@
         <button type='submit' class='btn btn-default gen_sql' change_type='get_tables'
                 style='padding: 2px 5px' >生成 SQL</button>
 
-        <button type='button' class='btn btn-default fullScreen' 
+        <button type='button' class='btn btn-default fullScreen'
                 style='padding: 2px 5px' >全屏编辑</button>
       </div>
     </label>
   </section>
-  
+
   <hr class="simple" style="width:100%; clear:both;"/>
 
-  <input type='submit' value='应用' class='ok btn btn-primary' 
+  <input type='submit' value='应用' class='ok btn btn-primary'
          label='' col='4' change_type='n'/>
-  <input type='submit' value='测试连接' class='tconn btn btn-primary' 
+  <input type='submit' value='测试连接' class='tconn btn btn-primary'
          label='' col='4' change_type='check_conn' />
 
 
@@ -117,7 +118,7 @@ eeb.create_bind(rc, '#___prog_config_page', function(_nouse, who) {
         });
         return 'no_succ_msg';
       }
-    } 
+    }
     else if (who.hasClass('create_sql')) {
       if (!err) {
         var sql = gen_sql(data, root.find('.sql_type').val());

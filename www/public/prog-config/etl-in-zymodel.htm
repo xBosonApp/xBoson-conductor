@@ -29,7 +29,7 @@
     <hr class="simple" style="width:100%; clear:both;"/>
     <div class='parmsql'></div>
     <hr class="simple" style="width:100%; clear:both;"/>
-    
+
     <input type='submit' value='应用' class='ok btn btn-primary' label='' col='4'/>
 
 
@@ -42,6 +42,7 @@
         <option value='sqlserver' port='1433'>SQL Server</option>
         <option value='oracle' port='1521'>Oracle</option>
         <option value='db2' port='50000'>DB 2</option>
+        <option value='h3cmpp' port='5258'>H3C MPP</option>
       </select>
 
       <input name='conn.port' label='端口'/>
@@ -100,10 +101,10 @@ zy_conn_select.change(function() {
 // 应用模型的 sql
 zy_model_select.change(function() {
   eeb.get_zy_model_sql(root, zy_model_select.val(), 'S', function(sql, parm) {
-    eeb.build_select_sql_bind_parm(parent_bind, rc, 
+    eeb.build_select_sql_bind_parm(parent_bind, rc,
         root.find(":input[name=sql]"), root.find(".parmsql"), sql, parm);
   });
-}); 
+});
 
 
 root.find('#update_zy_module').click(function() {

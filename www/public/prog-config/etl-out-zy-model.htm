@@ -41,6 +41,7 @@
         <option value='sqlserver' port='1433'>SQL Server</option>
         <option value='oracle' port='1521'>Oracle</option>
         <option value='db2' port='50000'>DB 2</option>
+        <option value='h3cmpp' port='5258'>H3C MPP</option>
       </select>
 
       <input name='conn.port' label='端口'/>
@@ -111,24 +112,24 @@ zy_model_select.change(function() {
     var fields = [];
 
     parm.type.forEach(function(t, i) {
-      fields.push({ 
-        field: i, 
-        typename: t.datatype, 
+      fields.push({
+        field: i,
+        typename: t.datatype,
         display: t.en && (t.cn + ' (' + t.en + ')')
       });
     });
 
     parm.search.forEach(function(t, i) {
       fields.push({
-        field: t.en, 
-        typename: t.datatype, 
-        display: (t.cn || t.en) + ' [查询条件]' 
+        field: t.en,
+        typename: t.datatype,
+        display: (t.cn || t.en) + ' [查询条件]'
       });
     });
 
     fieldsmap.clearAndSetFields(fields);
   });
-}); 
+});
 
 
 eeb_work.when_close(function() {

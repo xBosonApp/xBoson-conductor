@@ -16,6 +16,7 @@
       <option value='sqlserver' port='1433'>SQL Server</option>
       <option value='oracle' port='1521'>Oracle</option>
       <option value='db2' port='50000'>DB 2</option>
+			<option value='h3cmpp' port='5258'>H3C MPP</option>
     </select>
 
     <br style='width:100%; clear:both;'/>
@@ -61,13 +62,13 @@
 
 
     <br style='width:100%; clear:both;'/>
-		
-<!-- 		<input type='submit' value='测试映射' 
+
+<!-- 		<input type='submit' value='测试映射'
            class='check_table btn btn-primary' col='4' label=''/> -->
-    <input type='button' value='添加查询条件' 
+    <input type='button' value='添加查询条件'
            class='add btn btn-primary' col='4' label=''/>
 
-    <input type='submit' value='应用' 
+    <input type='submit' value='应用'
            class='ok btn btn-primary' col='4' label='' />
   </div>
 
@@ -79,7 +80,7 @@
 <div class='row mhide page2' id='__the_row'>
   <input rowname='field' label='目标表字段' class='get_src_fields'
          col='3' group='1' readonly='true' />
-  <button class='btn btn-primary get_src_fields_btn' type='submit' 
+  <button class='btn btn-primary get_src_fields_btn' type='submit'
           group='1' label='&nbsp;' >从数据库中读取</button>
 
   <select rowname='comp' label='比较' col='2'>
@@ -107,7 +108,7 @@
   </section>
 
   <section class="col col-md-2">
-    <label class="label">(或)值 <input type="radio" ctrl="f_val"> 
+    <label class="label">(或)值 <input type="radio" ctrl="f_val">
     </label>
     <label class="input f_val">
       <input rowname="f_val"/>
@@ -153,7 +154,7 @@ var pb = eeb.create_bind(rc, '#___prog_config_page', function(_nouse, whoclick) 
         return 'no_err_msg';
       }
     }
-    
+
     if (who.hasClass('get_tables')) {
     	if (err) {
         eeb.show_msg_box(null, '连接配置不正确');
