@@ -1,6 +1,6 @@
 {
-    "name": "eeb-conductor-prj",
-    "version": "0.2.2",
+    "name": "xBoson-conductor",
+    "version": "0.2.3",
     "description": "EEB 中心控制端",
     "main": "index.js",
     "scripts": {
@@ -10,30 +10,29 @@
     },
     "repository": {
         "type": "git",
-        "url": "none"
+        "url": "https://github.com/yanmingsohu/xBoson-conductor"
     },
     "keywords": [
-        "etl",
-        "esb",
-        "bpm"
+        "ETL",
+        "ESB",
+        "BPM"
     ],
     "author": "yanming",
-    "license": "Commercial",
+    "license": "Apache-2.0",
     "dependencies": {
         "auth-lib": "^0.1.5",
         "configuration-lib": "^0.1.15",
         "cookie": "^0.1.2",
         "db3-lib": "^0.2.1",
         "express": "^4.12.2",
-        "java": "^0.5.1",
+        "java": "^0.9",
         "java-factory-lib": "*",
         "kfk-lib": "^0.1.6",
         "logger-lib": "*",
         "masquerade-html-lib": "^0.1.13",
         "mixer-lib": "^0.1.19",
         "uuid-zy-lib": "^0.1.1",
-        "websocket-lib": "^0.1.10"
+        "@yanmingsohu/websocket-lib": "^0.1.10"
     },
-    "devDependencies": {
-    }
+    "devDependencies": {}
 }
